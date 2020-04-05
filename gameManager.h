@@ -52,9 +52,9 @@ public:
     std::shared_ptr<Chunk> pointToChunk(Point p);
 
     // Camera
-    Vector3 getCameraLocation() const;
-    Vector3 getCameraLookingAt() const;
-    Vector3 getCameraUp() const;
+    Point getCameraLocation() const;
+    Point getCameraLookingAt() const;
+    Point getCameraUp() const;
 
     // Mouse
     void reactToMouseMovement(double theta);

@@ -23,9 +23,9 @@ void initGL()
     glEnable(GL_DEPTH_TEST);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    Vector3 camLoc = manager.getCameraLocation();
-    Vector3 camLook = manager.getCameraLookingAt();
-    Vector3 camUp = manager.getCameraUp();
+    Point camLoc = manager.getCameraLocation();
+    Point camLook = manager.getCameraLookingAt();
+    Point camUp = manager.getCameraUp();
     gluLookAt(camLoc.x, camLoc.y, camLoc.z,  // eye position
               camLook.x, camLook.y, camLook.z,  // center position (not gaze direction)
               camUp.x, camUp.y, camUp.z); // up vector
@@ -66,9 +66,9 @@ void display()
     glPolygonMode(GL_FRONT, GL_FILL);
 
     // Update where the camera is
-    Vector3 camLoc = manager.getCameraLocation();
-    Vector3 camLook = manager.getCameraLookingAt();
-    Vector3 camUp = manager.getCameraUp();
+    Point camLoc = manager.getCameraLocation();
+    Point camLook = manager.getCameraLookingAt();
+    Point camUp = manager.getCameraUp();
     gluLookAt(camLoc.x, camLoc.y, camLoc.z,  // eye position
               camLook.x, camLook.y, camLook.z,  // center position (not gaze direction)
               camUp.x, camUp.y, camUp.z); // up vector

@@ -12,7 +12,7 @@ Player::Player()
     chunkSize = 512;
     currentChunkCoords = whatChunk();
 }
-Player::Player(Vector3 inputLocation, Vector3 inputLookingAt, Vector3 inputUp, double inputSpeed, int inputChunkSize)
+Player::Player(Point inputLocation, Point inputLookingAt, Point inputUp, double inputSpeed, int inputChunkSize)
 {
     location = inputLocation;
     lookingAt = inputLookingAt;
@@ -25,15 +25,15 @@ Player::Player(Vector3 inputLocation, Vector3 inputLookingAt, Vector3 inputUp, d
 }
 
 // Getters
-Vector3 Player::getLocation() const
+Point Player::getLocation() const
 {
     return location;
 }
-Vector3 Player::getLookingAt() const
+Point Player::getLookingAt() const
 {
     return lookingAt;
 }
-Vector3 Player::getUp() const
+Point Player::getUp() const
 {
     return up;
 }
@@ -51,15 +51,15 @@ int Player::getCurrentChunkInt() const
 }
 
 // Setters
-void Player::setLocation(Vector3 inputLocation)
+void Player::setLocation(Point inputLocation)
 {
     location = inputLocation;
 }
-void Player::setLookingAt(Vector3 inputLookingAt)
+void Player::setLookingAt(Point inputLookingAt)
 {
     lookingAt = inputLookingAt;
 }
-void Player::setUp(Vector3 inputUp)
+void Player::setUp(Point inputUp)
 {
     up = inputUp;
 }

@@ -179,15 +179,15 @@ std::shared_ptr<Chunk> GameManager::pointToChunk(Point p)
 
 
 // Camera
-Vector3 GameManager::getCameraLocation() const
+Point GameManager::getCameraLocation() const
 {
     return player.getLocation();
 }
-Vector3 GameManager::getCameraLookingAt() const
+Point GameManager::getCameraLookingAt() const
 {
     return player.getLookingAt();
 }
-Vector3 GameManager::getCameraUp() const
+Point GameManager::getCameraUp() const
 {
     return player.getUp();
 }
@@ -204,7 +204,7 @@ int mod(int a, int m)
 
 void GameManager::printPlayerBuildingDebug()
 {
-    Vector3 v = player.getLocation();
+    Point v = player.getLocation();
     std::cout << std::endl<< "Player location: " << v.x << "," << v.y << "," << v.z << std::endl;
     Point2D curPlayerChunk = player.whatChunk();
     std::shared_ptr<Chunk> c = allSeenChunks[pointToInt(curPlayerChunk)];
