@@ -27,7 +27,7 @@ file(GLOB SOURCE_FILES
         )
 
 add_executable(graphics graphics.h graphics.cpp gameManager.h gameManager.cpp player.h player.cpp
-        chunk.h chunk.cpp perlinNoiseGenerator.h perlinNoiseGenerator.cpp)
+        chunk.h chunk.cpp perlinNoiseGenerator.h perlinNoiseGenerator.cpp plot.cpp plot.h)
 
 if (WIN32)
     target_link_libraries (graphics ${OPENGL_LIBRARIES} freeglut)
