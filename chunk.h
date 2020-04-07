@@ -5,6 +5,7 @@
 
 
 #include "graphics.h"
+#include "player.h"
 //#include "building.h"
 #include <vector>
 #include <stdlib.h>
@@ -69,6 +70,9 @@ int pointToInt(Point2D p);
 // using the taxicab metric
 std::vector<int> getChunksAroundPoint(Point2D p, int radius);
 std::vector<Point2D> getChunksAroundPointByPoint(Point2D p, int radius);
+
+// Makes a call to GL's vertex3f function
+void drawPoint(const Point &p);
 
 
 #endif //RANDOM_3D_CITY_CHUNK_H
