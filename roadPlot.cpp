@@ -89,23 +89,94 @@ void RoadPlot::initializeYellowLines()
 }
 
 // Getters
-bool RoadPlot::getLeft() const;
-bool RoadPlot::getRight() const;
-bool RoadPlot::getUp() const;
-bool RoadPlot::getDown() const;
-std::experimental::optional<std::shared_ptr<RoadPlot>> RoadPlot::getLeftRoad() const;
-std::experimental::optional<std::shared_ptr<RoadPlot>> RoadPlot::getRightRoad() const;
-std::experimental::optional<std::shared_ptr<RoadPlot>> RoadPlot::getUpRoad() const;
-std::experimental::optional<std::shared_ptr<RoadPlot>> RoadPlot::getDownRoad() const;
+bool RoadPlot::getLeft() const
+{
+    return left;
+}
+bool RoadPlot::getRight() const
+{
+    return right;
+}
+bool RoadPlot::getUp() const
+{
+    return up;
+}
+bool RoadPlot::getDown() const
+{
+    return down;
+}
+std::experimental::optional<std::shared_ptr<RoadPlot>> RoadPlot::getLeftRoad() const
+{
+    return leftRoad;
+}
+std::experimental::optional<std::shared_ptr<RoadPlot>> RoadPlot::getRightRoad() const
+{
+    return rightRoad;
+}
+std::experimental::optional<std::shared_ptr<RoadPlot>> RoadPlot::getUpRoad() const
+{
+    return upRoad;
+}
+std::experimental::optional<std::shared_ptr<RoadPlot>> RoadPlot::getDownRoad() const
+{
+    return downRoad;
+}
 
 // Setters
-void RoadPlot::setLeft(bool inputLeft);
-void RoadPlot::setRight(bool inputRight);
-void RoadPlot::setUp(bool inputUp);
-void RoadPlot::setDown(bool inputDown);
-void RoadPlot::setLeftRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputLeftRoad);
-void RoadPlot::setRightRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputRightRoad);
-void RoadPlot::setUpRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputUpRoad);
-void RoadPlot::setDownRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputDownRoad);
+void RoadPlot::setLeft(bool inputLeft)
+{
+    left = inputLeft;
+}
+void RoadPlot::setRight(bool inputRight)
+{
+    right = inputRight;
+}
+void RoadPlot::setUp(bool inputUp)
+{
+    up = inputUp;
+}
+void RoadPlot::setDown(bool inputDown)
+{
+    down = inputDown;
+}
+void RoadPlot::setLeftRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputLeftRoad)
+{
+    leftRoad = inputLeftRoad;
+}
+void RoadPlot::setRightRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputRightRoad)
+{
+    rightRoad = inputRightRoad;
+}
+void RoadPlot::setUpRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputUpRoad)
+{
+    upRoad = inputUpRoad;
+}
+void RoadPlot::setDownRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputDownRoad)
+{
+    downRoad = inputDownRoad;
+}
 
-void draw();
+void RoadPlot::draw()
+{
+    // Draw the rectangles that form the road
+    glColor4f(0.5, 0.5, 0.5, 1);
+    glDisable(GL_CULL_FACE);
+    glBegin(GL_QUADS);
+    for(int i = 0; i < roadCorners.size()/4; i++)
+    {
+        drawPoint(roadCorners[i]);
+    }
+    glEnd();
+
+    // Draw the center lines
+    glColor4f(1.0, 1.0, 0.0, 1.0);
+    glBegin(GL_LINES);
+    for(Segment sgmt : yellowLines)
+    {
+        drawPoint(sgmt.p1);
+        drawPoint(sgmt.p2);
+    }
+    glEnd();
+
+    glEnable(GL_CULL_FACE);
+}
