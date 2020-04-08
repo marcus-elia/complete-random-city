@@ -158,9 +158,49 @@ void GameManager::updateCurrentChunks()
     for(Point2D p : chunksInRadius)
     {
         int index = pointToInt(p);
-        if(allSeenChunks.count(index) == 0) // if the chunk has never been seen before
+        if(allSeenChunks.count(index) == 0) // if the chunk has never been seen before, make a new one
         {
-            allSeenChunks[index] = std::make_shared<Chunk>(p, chunkSize, getPerlinValue(p));
+            // Check for adjacent chunks to get edge road indices
+            std::experimental::optional<std::vector<int>> inputLeftRoadIndices, inputRightRoadIndices,
+                                                          inputTopRoadIndices, inputBottomRoadIndices;
+            // Left border
+            if(allSeenChunks.count(pointToInt({p.x - 1, p.z})) > 0)
+            {
+                inputLeftRoadIndices = allSeenChunks[pointToInt({p.x - 1, p.z})]->getRightRoadIndices();
+            }
+            else
+            {
+                inputLeftRoadIndices = std::experimental::nullopt;
+            }
+            // Right border
+            if(allSeenChunks.count(pointToInt({p.x + 1, p.z})) > 0)
+            {
+                inputRightRoadIndices = allSeenChunks[pointToInt({p.x + 1, p.z})]->getLeftRoadIndices();
+            }
+            else
+            {
+                inputRightRoadIndices = std::experimental::nullopt;
+            }
+            // Top border
+            if(allSeenChunks.count(pointToInt({p.x, p.z - 1})) > 0)
+            {
+                inputTopRoadIndices = allSeenChunks[pointToInt({p.x, p.z - 1})]->getBottomRoadIndices();
+            }
+            else
+            {
+                inputTopRoadIndices = std::experimental::nullopt;
+            }
+            // Bottom border
+            if(allSeenChunks.count(pointToInt({p.x, p.z + 1})) > 0)
+            {
+                inputBottomRoadIndices = allSeenChunks[pointToInt({p.x, p.z + 1})]->getTopRoadIndices();
+            }
+            else
+            {
+                inputBottomRoadIndices = std::experimental::nullopt;
+            }
+            allSeenChunks[index] = std::make_shared<Chunk>(p, chunkSize, getPerlinValue(p), inputLeftRoadIndices,
+                    inputRightRoadIndices, inputTopRoadIndices, inputBottomRoadIndices);
         }
         currentChunks.push_back(allSeenChunks[index]);
     }
