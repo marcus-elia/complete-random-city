@@ -8,19 +8,82 @@ Chunk::Chunk()
     initializeCenter();
     propertySize = sideLength / 8;
 }
-Chunk::Chunk(Point2D inputBottomLeft, int inputSideLength,  double inputPerlinSeed)
+Chunk::Chunk(Point2D inputBottomLeft, int inputSideLength, double inputPerlinSeed,
+             std::experimental::optional<std::vector<int>> inputLeftRoadIndices,
+             std::experimental::optional<std::vector<int>> inputRightRoadIndices,
+             std::experimental::optional<std::vector<int>> inputTopRoadIndices,
+             std::experimental::optional<std::vector<int>> inputBottomRoadIndices)
 {
     bottomLeft = inputBottomLeft;
     sideLength = inputSideLength;
     perlinSeed = inputPerlinSeed;
     initializeCenter();
     propertySize = sideLength / 8;
+
+    // If the roads entering a side are specified, use them. If not, make them randomly
+    srand(time(NULL));
+    leftRoadIndices = inputLeftRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, 8));
+    rightRoadIndices = inputRightRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, 8));
+    topRoadIndices = inputTopRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, 8));
+    bottomRoadIndices = inputBottomRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, 8));
 }
 
 void Chunk::initializeCenter()
 {
     center = {sideLength*bottomLeft.x + sideLength/2, sideLength*bottomLeft.z - sideLength/2};
 }
+std::vector<int> Chunk::makeRandomRoadIndices(double seed, int size)
+{
+    std::vector<int> indices;
+    bool roadAtPrev = (rand() % 100) > 50;
+    for(int i = 0; i < size; i++)
+    {
+        // If there isn't a road adjacent to this one and a random value is less than
+        // the perlin seed, put a road entering there 4/5 of the time. This means that
+        // higher perlin seed means more roads.
+        if(!roadAtPrev && (rand() % 100) > 20 && (rand() % 100)/100.0 < seed)
+        {
+            indices.push_back(i);
+            roadAtPrev = true;
+        }
+        else
+        {
+            roadAtPrev = false;
+        }
+    }
+    return indices;
+}
+void Chunk::initializeRoadLocations()
+{
+    // Initialize the whole chunk to not having roads
+    for(int i = 0; i < 8; i++)
+    {
+        for(int j = 0; j < 8; j++)
+        {
+            roadLocations[i][j] = false;
+        }
+    }
+
+    // Add in roads on the edges
+    for(int i : topRoadIndices)
+    {
+        roadLocations[i][0] = true;
+    }
+    for(int i : bottomRoadIndices)
+    {
+        roadLocations[i][7] = true;
+    }
+    for(int j : leftRoadIndices)
+    {
+        roadLocations[0][j] = true;
+    }
+    for(int j : rightRoadIndices)
+    {
+        roadLocations[7][j] = true;
+    }
+}
+
+
 
 
 // Getters
@@ -125,4 +188,58 @@ std::vector<Point2D> getChunksAroundPointByPoint(Point2D p, int radius)
 void drawPoint(const Point &p)
 {
     glVertex3f(p.x, p.y, p.z);
+}
+
+bool makesSquareUpLeft(int i, int j, bool roadLocs[8][8])
+{
+    return roadLocs[i-1][j] && roadLocs[i-1][j-1] && roadLocs[i][j-1];
+}
+bool makesSquareUpRight(int i, int j, bool roadLocs[8][8])
+{
+    return roadLocs[i][j-1] && roadLocs[i+1][j-1] && roadLocs[i+1][j];
+}
+bool makesSquareDownRight(int i, int j, bool roadLocs[8][8])
+{
+    return roadLocs[i+1][j] && roadLocs[i+1][j+1] && roadLocs[i][j+1];
+}
+bool makesSquareDownLeft(int i, int j, bool roadLocs[8][8])
+{
+    return roadLocs[i][j+1] && roadLocs[i-1][j+1] && roadLocs[i-1][j];
+}
+bool makesSquare(int i, int j, bool roadLocs[8][8])
+{
+    if(i == 0 && j == 0)
+    {
+        return makesSquareDownRight(i, j, roadLocs);
+    }
+    if(i == 7 && j == 0)
+    {
+        return makesSquareDownLeft(i, j, roadLocs);
+    }
+    if(i == 7 && j == 7)
+    {
+        return makesSquareUpLeft(i, j, roadLocs);
+    }
+    if(i == 0 && j == 7)
+    {
+        return makesSquareUpRight(i, j, roadLocs);
+    }
+    if(j == 0)
+    {
+        return makesSquareDownLeft(i, j, roadLocs) || makesSquareDownRight(i, j, roadLocs);
+    }
+    if(i == 7)
+    {
+        return makesSquareUpLeft(i, j, roadLocs) || makesSquareDownLeft(i, j, roadLocs);
+    }
+    if(j == 7)
+    {
+        return makesSquareUpLeft(i, j, roadLocs) || makesSquareUpRight(i, j, roadLocs);
+    }
+    if(i == 0)
+    {
+        return makesSquareUpRight(i, j, roadLocs) || makesSquareDownRight(i, j, roadLocs);
+    }
+    return makesSquareUpRight(i, j, roadLocs) || makesSquareDownRight(i, j, roadLocs) ||
+            makesSquareUpLeft(i, j, roadLocs) || makesSquareDownLeft(i, j, roadLocs);
 }
