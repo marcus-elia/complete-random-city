@@ -33,5 +33,14 @@ struct Segment
     Point p2;
 };
 
+struct RGBAcolor
+{
+    double r;
+    double g;
+    double b;
+    double a;
+};
+
+
 
 #endif //COMPLETE_RANDOM_CITY_STRUCTS_H
