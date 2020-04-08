@@ -5,6 +5,7 @@
 #include "player.h"
 #include <experimental/optional>
 #include <memory>
+#include <vector>
 
 // A line segment specified by two points
 struct Segment
