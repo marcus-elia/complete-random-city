@@ -183,7 +183,7 @@ void Chunk::initializePlots()
     {
         if(roadLocations[i][0])
         {
-            plots[i][0] = std::make_shared<Plot>(RoadPlot({(double)i, 0},
+            plots[i][0] = std::make_shared<Plot>(RoadPlot({i, 0},
                     chunkCoordinatesToCenter(i, 0, bottomLeft, propertySize), propertySize,
                           roadLocations[i-1][0], roadLocations[i+1][0],
                           hasElement(topRoadIndices, i),roadLocations[i][1]));
@@ -198,7 +198,7 @@ void Chunk::initializePlots()
     {
         if(roadLocations[i][7])
         {
-            plots[i][7] = std::make_shared<Plot>(RoadPlot({(double)i, 7},
+            plots[i][7] = std::make_shared<Plot>(RoadPlot({i, 7},
                                chunkCoordinatesToCenter(i, 7, bottomLeft, propertySize), propertySize,
                                roadLocations[i-1][7], roadLocations[i+1][7],
                                roadLocations[i][6], hasElement(bottomRoadIndices, i)));
@@ -213,7 +213,7 @@ void Chunk::initializePlots()
     {
         if(roadLocations[0][j])
         {
-            plots[0][j] = std::make_shared<Plot>(RoadPlot({0, (double)j},
+            plots[0][j] = std::make_shared<Plot>(RoadPlot({0, j},
                                                           chunkCoordinatesToCenter(0, j, bottomLeft, propertySize), propertySize,
                                                           hasElement(leftRoadIndices,j), roadLocations[1][j],
                                                           roadLocations[0][j-1], roadLocations[0][j+1]));
@@ -228,7 +228,7 @@ void Chunk::initializePlots()
     {
         if(roadLocations[7][j])
         {
-            plots[7][j] = std::make_shared<Plot>(RoadPlot({7, (double)j},
+            plots[7][j] = std::make_shared<Plot>(RoadPlot({7, j},
                                                           chunkCoordinatesToCenter(7, j, bottomLeft, propertySize), propertySize,
                                                           roadLocations[6][j], hasElement(rightRoadIndices, j),
                                                           roadLocations[7][j-1], roadLocations[7][j+1]));
@@ -246,7 +246,7 @@ void Chunk::initializePlots()
         {
             if(roadLocations[i][j])
             {
-                plots[i][j] = std::make_shared<Plot>(RoadPlot({(double)i, (double)j},
+                plots[i][j] = std::make_shared<Plot>(RoadPlot({i, j},
                                      chunkCoordinatesToCenter(i, j, bottomLeft, propertySize), propertySize,
                                      roadLocations[i-1][j], roadLocations[i+1][j],
                                       roadLocations[i][j-1], roadLocations[i][j+1]));
@@ -458,7 +458,7 @@ bool hasElement(std::vector<Object> vec, Object obj)
     return false;
 }
 
-Point chunkCoordinatesToCenter(int i, int j, Point2D bottomLeft, int propertySize)
+Point2D chunkCoordinatesToCenter(int i, int j, Point2D bottomLeft, int propertySize)
 {
-    return {bottomLeft.x + i*propertySize + propertySize/2.0, 0, bottomLeft.z + j*propertySize + propertySize/2.0};
+    return {bottomLeft.x + i*propertySize + propertySize/2, bottomLeft.z + j*propertySize + propertySize/2};
 }

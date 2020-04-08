@@ -98,7 +98,7 @@ template <class Object>
 bool hasElement(std::vector<Object> vec, Object obj);
 
 // Converts indices of where a plot is the chunk to the center of the plot
-Point chunkCoordinatesToCenter(int i, int j, Point2D bottomLeft, int propertySize);
+Point2D chunkCoordinatesToCenter(int i, int j, Point2D bottomLeft, int propertySize);
 
 
 #endif //RANDOM_3D_CITY_CHUNK_H
