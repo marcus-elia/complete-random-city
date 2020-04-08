@@ -54,3 +54,8 @@ void Plot::draw()
     glEnd();
     glEnable(GL_CULL_FACE);
 }
+
+void drawPoint(const Point &p)
+{
+    glVertex3f(p.x, p.y, p.z);
+}

@@ -83,8 +83,6 @@ int pointToInt(Point2D p);
 std::vector<int> getChunksAroundPoint(Point2D p, int radius);
 std::vector<Point2D> getChunksAroundPointByPoint(Point2D p, int radius);
 
-// Makes a call to GL's vertex3f function
-void drawPoint(const Point &p);
 
 // Helper functions for filling in the road locations
 bool makesSquareUpLeft(int i, int j, bool roadLocs[8][8]);

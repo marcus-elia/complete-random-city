@@ -385,10 +385,7 @@ std::vector<Point2D> getChunksAroundPointByPoint(Point2D p, int radius)
     return result;
 }
 
-void drawPoint(const Point &p)
-{
-    glVertex3f(p.x, p.y, p.z);
-}
+
 
 bool makesSquareUpLeft(int i, int j, bool roadLocs[8][8])
 {
