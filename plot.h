@@ -31,6 +31,6 @@ public:
     void setCenter(Point2D inputCenter);
     void setSideLength(int inputSideLength);
 
-    virtual void draw() = 0;
+    virtual void draw();
 };
 #endif //COMPLETE_RANDOM_CITY_PLOT_H

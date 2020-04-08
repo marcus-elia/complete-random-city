@@ -42,3 +42,7 @@ void Plot::setSideLength(int inputSideLength)
 {
     sideLength = inputSideLength;
 }
+virtual void draw()
+{
+
+}
