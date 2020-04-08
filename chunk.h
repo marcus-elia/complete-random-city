@@ -7,6 +7,7 @@
 #include "graphics.h"
 //#include "player.h"
 #include "roadPlot.h"
+#include "emptyPlot.h"
 //#include "building.h"
 #include <vector>
 #include <stdlib.h>

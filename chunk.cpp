@@ -138,7 +138,8 @@ void Chunk::initializePlots()
     }
     else
     {
-        plots[0][0] = std::make_shared<Plot>();
+        plots[0][0] = std::make_shared<EmptyPlot>(EmptyPlot({0, 0},
+                chunkCoordinatesToCenter(0, 0, sideLength, bottomLeft, propertySize), propertySize));
     }
     // Top right
     if(roadLocations[7][0])
@@ -150,7 +151,8 @@ void Chunk::initializePlots()
     }
     else
     {
-        plots[7][0] = std::make_shared<Plot>();
+        plots[7][0] = std::make_shared<EmptyPlot>(EmptyPlot({7, 0},
+                       chunkCoordinatesToCenter(7, 0, sideLength, bottomLeft, propertySize), propertySize));
     }
     // Bottom right
     if(roadLocations[7][7])
@@ -162,7 +164,8 @@ void Chunk::initializePlots()
     }
     else
     {
-        plots[7][7] = std::make_shared<Plot>();
+        plots[7][7] = std::make_shared<EmptyPlot>(EmptyPlot({7, 7},
+                chunkCoordinatesToCenter(7, 7, sideLength, bottomLeft, propertySize), propertySize));
     }
     // Bottom left
     if(roadLocations[0][7])
@@ -174,7 +177,8 @@ void Chunk::initializePlots()
     }
     else
     {
-        plots[0][7] = std::make_shared<Plot>();
+        plots[0][7] = std::make_shared<EmptyPlot>(EmptyPlot({0, 7},
+                chunkCoordinatesToCenter(0, 7, sideLength, bottomLeft, propertySize), propertySize));
     }
 
     // ----------------------- Edges ---------------------------------
@@ -190,7 +194,8 @@ void Chunk::initializePlots()
         }
         else
         {
-            plots[i][0] = std::make_shared<Plot>();
+            plots[i][0] = std::make_shared<EmptyPlot>(EmptyPlot({i, 0},
+                    chunkCoordinatesToCenter(i, 0, sideLength, bottomLeft, propertySize), propertySize));
         }
     }
     // Bottom row
@@ -205,7 +210,8 @@ void Chunk::initializePlots()
         }
         else
         {
-            plots[i][7] = std::make_shared<Plot>();
+            plots[i][7] = std::make_shared<EmptyPlot>(EmptyPlot({i, 7},
+                    chunkCoordinatesToCenter(i, 7, sideLength, bottomLeft, propertySize), propertySize));
         }
     }
     // Left row
@@ -220,7 +226,8 @@ void Chunk::initializePlots()
         }
         else
         {
-            plots[0][j] = std::make_shared<Plot>();
+            plots[0][j] = std::make_shared<EmptyPlot>(EmptyPlot({0, j},
+                    chunkCoordinatesToCenter(0, j, sideLength, bottomLeft, propertySize), propertySize));
         }
     }
     // Right row
@@ -235,7 +242,8 @@ void Chunk::initializePlots()
         }
         else
         {
-            plots[7][j] = std::make_shared<Plot>();
+            plots[7][j] = std::make_shared<EmptyPlot>(EmptyPlot({7, j},
+                    chunkCoordinatesToCenter(7, j, sideLength, bottomLeft, propertySize), propertySize));
         }
     }
 
@@ -253,7 +261,8 @@ void Chunk::initializePlots()
             }
             else
             {
-                plots[i][j] = std::make_shared<Plot>();
+                plots[i][j] = std::make_shared<EmptyPlot>(EmptyPlot({i, j},
+                        chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize));
             }
         }
     }
@@ -294,7 +303,7 @@ std::vector<int> Chunk::getBottomRoadIndices() const
 
 void Chunk::draw() const
 {
-    /*glBegin(GL_QUADS);
+    glBegin(GL_QUADS);
     if((bottomLeft.x + bottomLeft.z) % 2 == 0)
     {
         glColor4f(1, 1, 0.3, 1);
@@ -303,14 +312,14 @@ void Chunk::draw() const
     {
         glColor4f(0, 1, 0.8, 1);
     }
-    glColor4f(perlinSeed, 0, 1, 1);
+    //glColor4f(perlinSeed, 0, 1, 1);
     //glColor4f(0.0, 1, 0.0, 1);
     glVertex3f(sideLength*bottomLeft.x,-5, sideLength*bottomLeft.z);
     glVertex3f(sideLength*bottomLeft.x,-5, sideLength*bottomLeft.z + sideLength);
     glVertex3f(sideLength*bottomLeft.x + sideLength,-5, sideLength*bottomLeft.z + sideLength);
     glVertex3f(sideLength*bottomLeft.x + sideLength,-5, sideLength*bottomLeft.z);
 
-    glEnd();*/
+    glEnd();
 
     for(int i = 0; i < 8; i++)
     {
