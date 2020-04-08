@@ -87,7 +87,7 @@ void Solid::setLineColor(RGBAcolor inputLineColor)
 
 void Solid::draw()
 {
-    
+
 }
 
 double distance2d(Point p1, Point p2)
