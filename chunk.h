@@ -12,21 +12,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-// int points used for the chunks
-// in the xz plane
-struct Point2D
-{
-    int x;
-    int z;
-    bool operator ==(const Point2D& p1)
-    {
-        return x == p1.x && z == p1.z;
-    }
-    bool operator !=(const Point2D& p1)
-    {
-        return x != p1.x || z != p1.z;
-    }
-};
+
 
 
 class Chunk

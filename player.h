@@ -4,12 +4,6 @@
 #include "graphics.h"
 #include "chunk.h"
 
-struct Point
-{
-    double x;
-    double y;
-    double z;
-};
 
 
 class Player
