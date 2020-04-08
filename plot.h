@@ -3,6 +3,7 @@
 
 #include "graphics.h"
 #include "structs.h"
+#include "recPrism.h"
 
 
 enum PlotType {Road, Building, Empty};
@@ -36,6 +37,5 @@ public:
     virtual void draw();
 };
 
-// Makes a call to GL's vertex3f function
-void drawPoint(const Point &p);
+
 #endif //COMPLETE_RANDOM_CITY_PLOT_H
