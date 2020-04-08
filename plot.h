@@ -1,6 +1,8 @@
 #ifndef COMPLETE_RANDOM_CITY_PLOT_H
 #define COMPLETE_RANDOM_CITY_PLOT_H
 
+#include "graphics.h"
+
 // int points used for the chunks
 // in the xz plane
 struct Point2D

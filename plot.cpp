@@ -42,7 +42,15 @@ void Plot::setSideLength(int inputSideLength)
 {
     sideLength = inputSideLength;
 }
-virtual void draw()
+void Plot::draw()
 {
-
+    glDisable(GL_CULL_FACE);
+    glColor3f(1,0,0);
+    glBegin(GL_QUADS);
+    glVertex3f(center.x + 5, 0, center.z + 5);
+    glVertex3f(center.x - 5, 0, center.z + 5);
+    glVertex3f(center.x- 5, 0, center.z - 5);
+    glVertex3f(center.x + 5, 0, center.z - 5);
+    glEnd();
+    glEnable(GL_CULL_FACE);
 }
