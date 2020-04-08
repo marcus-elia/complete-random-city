@@ -47,7 +47,9 @@ private:
     // Plots and roads
 
     // A 2d vector of the plots
-    std::vector<std::vector<shared_ptr<Plot>>> plots;
+    //std::vector<std::vector<std::shared_ptr<Plot>>> plots;
+    std::shared_ptr<Plot>[8][8] plots;
+
 
     // where roads are
     bool[8][8] roadLocations;
@@ -104,6 +106,13 @@ bool makesSquareUpRight(int i, int j, bool roadLocs[8][8]);
 bool makesSquareDownRight(int i, int j, bool roadLocs[8][8]);
 bool makesSquareDownLeft(int i, int j, bool roadLocs[8][8]);
 bool makesSquare(int i, int j, bool roadLocs[8][8]);
+
+// Vector containment
+template <class Object>
+bool hasElement(std::vector<Object> vec, Object obj);
+
+// Converts indices of where a plot is the chunk to the center of the plot
+Point chunkCoordinatesToCenter(int i, int j, Point2D bottomLeft, int propertySize);
 
 
 #endif //RANDOM_3D_CITY_CHUNK_H

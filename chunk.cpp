@@ -26,6 +26,9 @@ Chunk::Chunk(Point2D inputBottomLeft, int inputSideLength, double inputPerlinSee
     rightRoadIndices = inputRightRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, 8));
     topRoadIndices = inputTopRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, 8));
     bottomRoadIndices = inputBottomRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, 8));
+
+    initializeRoadLocations();
+    initializePlots();
 }
 
 void Chunk::initializeCenter()
@@ -81,6 +84,179 @@ void Chunk::initializeRoadLocations()
     {
         roadLocations[7][j] = true;
     }
+
+    // Now extend the roads as far as they go
+    for(int i : topRoadIndices)
+    {
+        int j = 1;
+        while(j < 8 && !makesSquare(i, j, roadLocations))
+        {
+            roadLocations[i][j] = true;
+            j++;
+        }
+    }
+    for(int j : rightRoadIndices)
+    {
+        int i = 6;
+        while(i >= 0 && !makesSquare(i, j, roadLocations))
+        {
+            roadLocations[i][j] = true;
+            i--;
+        }
+    }
+    for(int i : bottomRoadIndices)
+    {
+        int j = 6;
+        while(j >= 0 && !makesSquare(i, j, roadLocations))
+        {
+            roadLocations[i][j] = true;
+            j--;
+        }
+    }
+    for(int j : leftRoadIndices)
+    {
+        int i = 0;
+        while(i < 8 && !makesSquare(i, j, roadLocations))
+        {
+            roadLocations[i][j] = true;
+            i++;
+        }
+    }
+}
+void Chunk::initializePlots()
+{
+    // ------------------- Corners ------------------------------
+    // Top left corner
+    //plots.push_back(std::vector<std::shared_ptr<Plot>>()); // initialize column 0
+    if(roadLocations[0][0])
+    {
+        //plots[0].push_back(std::make_shared<RoadPlot>(RoadPlot({0,0}, chunkCoordinatesToCenter(0, 0, bottomLeft, propertySize), propertySize,
+        //        hasElement(leftRoadIndices, 0), roadLocations[1][0], hasElement(topRoadIndices,0), roadLocations[0][1])));
+        plots[0][0] = std::make_shared<Plot>(RoadPlot({0, 0}, chunkCoordinatesToCenter(0, 0, bottomLeft, propertySize), propertySize,
+                         hasElement(leftRoadIndices, 0), roadLocations[1][0], hasElement(topRoadIndices, 0),
+                         roadLocations[0][1]));
+    }
+    else
+    {
+        plots[0][0] = std::make_shared<Plot>();
+    }
+    // Top right
+    if(roadLocations[7][0])
+    {
+        plots[7][0] = std::make_shared<Plot>(RoadPlot({7, 0},
+                chunkCoordinatesToCenter(7, 0, bottomLeft, propertySize), propertySize,
+                roadLocations[6][0], hasElement(rightRoadIndices, 0),
+                hasElement(topRoadIndices, 7), roadLocations[7][1]));
+    }
+    else
+    {
+        plots[7][0] = std::make_shared<Plot>();
+    }
+    // Bottom right
+    if(roadLocations[7][7])
+    {
+        plots[7][7] = std::make_shared<Plot>(RoadPlot({7, 7},
+                           chunkCoordinatesToCenter(7, 7, bottomLeft, propertySize), propertySize,
+                           roadLocations[6][7], hasElement(rightRoadIndices, 7),
+                           roadLocations[7][6], hasElement(bottomRoadIndices, 7)));
+    }
+    else
+    {
+        plots[7][7] = std::make_shared<Plot>();
+    }
+    // Bottom left
+    if(roadLocations[0][7])
+    {
+        plots[0][7] = std::make_shared<Plot>(RoadPlot({0, 7},
+                         chunkCoordinatesToCenter(0, 7, bottomLeft, propertySize), propertySize,
+                          hasElement(leftRoadIndices, 7),roadLocations[1][7],
+                          roadLocations[0][6], hasElement(bottomRoadIndices, 0)));
+    }
+    else
+    {
+        plots[0][7] = std::make_shared<Plot>();
+    }
+
+    // ----------------------- Edges ---------------------------------
+    // Top row
+    for(int i = 1; i < 7; i++)
+    {
+        if(roadLocations[i][0])
+        {
+            plots[i][0] = std::make_shared<Plot>(RoadPlot({(double)i, 0},
+                    chunkCoordinatesToCenter(i, 0, bottomLeft, propertySize), propertySize,
+                          roadLocations[i-1][0], roadLocations[i+1][0],
+                          hasElement(topRoadIndices, i),roadLocations[i][1]));
+        }
+        else
+        {
+            plots[i][0] = std::make_shared<Plot>();
+        }
+    }
+    // Bottom row
+    for(int i = 1; i < 7; i++)
+    {
+        if(roadLocations[i][7])
+        {
+            plots[i][7] = std::make_shared<Plot>(RoadPlot({(double)i, 7},
+                               chunkCoordinatesToCenter(i, 7, bottomLeft, propertySize), propertySize,
+                               roadLocations[i-1][7], roadLocations[i+1][7],
+                               roadLocations[i][6], hasElement(bottomRoadIndices, i)));
+        }
+        else
+        {
+            plots[i][7] = std::make_shared<Plot>();
+        }
+    }
+    // Left row
+    for(int j = 1; j < 7; j++)
+    {
+        if(roadLocations[0][j])
+        {
+            plots[0][j] = std::make_shared<Plot>(RoadPlot({0, (double)j},
+                                                          chunkCoordinatesToCenter(0, j, bottomLeft, propertySize), propertySize,
+                                                          hasElement(leftRoadIndices,j), roadLocations[1][j],
+                                                          roadLocations[0][j-1], roadLocations[0][j+1]));
+        }
+        else
+        {
+            plots[0][j] = std::make_shared<Plot>();
+        }
+    }
+    // Right row
+    for(int j = 1; j < 7; j++)
+    {
+        if(roadLocations[7][j])
+        {
+            plots[7][j] = std::make_shared<Plot>(RoadPlot({7, (double)j},
+                                                          chunkCoordinatesToCenter(7, j, bottomLeft, propertySize), propertySize,
+                                                          roadLocations[6][j], hasElement(rightRoadIndices, j),
+                                                          roadLocations[7][j-1], roadLocations[7][j+1]));
+        }
+        else
+        {
+            plots[7][j] = std::make_shared<Plot>();
+        }
+    }
+
+    // ----------------------------- Inside Elements -------------------------------------------
+    for(int i = 1; i < 7; i++)
+    {
+        for(int j = 1; j < 7; j++)
+        {
+            if(roadLocations[i][j])
+            {
+                plots[i][j] = std::make_shared<Plot>(RoadPlot({(double)i, (double)j},
+                                     chunkCoordinatesToCenter(i, j, bottomLeft, propertySize), propertySize,
+                                     roadLocations[i-1][j], roadLocations[i+1][j],
+                                      roadLocations[i][j-1], roadLocations[i][j+1]));
+            }
+            else
+            {
+                plots[i][j] = std::make_shared<Plot>();
+            }
+        }
+    }
 }
 
 
@@ -99,6 +275,22 @@ Point2D Chunk::getCenter() const
 {
     return center;
 }
+std::vector<int> Chunk::getLeftRoadIndices() const
+{
+    return leftRoadIndices;
+}
+std::vector<int> Chunk::getRightRoadIndices() const
+{
+    return rightRoadIndices;
+}
+std::vector<int> Chunk::getTopRoadIndices() const
+{
+    return topRoadIndices;
+}
+std::vector<int> Chunk::getBottomRoadIndices() const
+{
+    return bottomRoadIndices;
+}
 
 void Chunk::draw() const
 {
@@ -112,13 +304,21 @@ void Chunk::draw() const
         glColor4f(0, 1, 0.8, 1);
     }*/
     //glColor4f(perlinSeed, 0, 1, 1);
-    glColor4f(0.5, 0.5, 0.5, 1);
+    glColor4f(0.0, 1, 0.0, 1);
     glVertex3f(sideLength*bottomLeft.x,0, sideLength*bottomLeft.z);
     glVertex3f(sideLength*bottomLeft.x,0, sideLength*bottomLeft.z + sideLength);
     glVertex3f(sideLength*bottomLeft.x + sideLength,0, sideLength*bottomLeft.z + sideLength);
     glVertex3f(sideLength*bottomLeft.x + sideLength,0, sideLength*bottomLeft.z);
 
     glEnd();
+
+    for(int i = 0; i < 8; i++)
+    {
+        for(int j = 0; j < 8; j++)
+        {
+            plots[i][j]->draw();
+        }
+    }
 }
 
 int Chunk::chunkToInt() const
@@ -242,4 +442,23 @@ bool makesSquare(int i, int j, bool roadLocs[8][8])
     }
     return makesSquareUpRight(i, j, roadLocs) || makesSquareDownRight(i, j, roadLocs) ||
             makesSquareUpLeft(i, j, roadLocs) || makesSquareDownLeft(i, j, roadLocs);
+}
+
+// Check if the vector contains the given element
+template <class Object>
+bool hasElement(std::vector<Object> vec, Object obj)
+{
+    for(Object o : vec)
+    {
+        if(o == obj)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+Point chunkCoordinatesToCenter(int i, int j, Point2D bottomLeft, int propertySize)
+{
+    return {bottomLeft.x + i*propertySize + propertySize/2.0, 0, bottomLeft.z + j*propertySize + propertySize/2.0};
 }
