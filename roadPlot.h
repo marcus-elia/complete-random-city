@@ -5,6 +5,7 @@
 #include <experimental/optional>
 #include <memory>
 #include <vector>
+#include <cmath>
 
 class RoadPlot : public Plot
 {
@@ -12,12 +13,15 @@ private:
     // Whether this roadplot has a road in each direction
     bool left, right, up, down;
 
+    bool culDeSac; // If the road dead ends, make a circle
+
     // The actual road in each direction, or nullopt
     std::experimental::optional<std::shared_ptr<RoadPlot>> leftRoad, rightRoad, upRoad, downRoad;
 
     // For drawing
     std::vector<Point> roadCorners;
     std::vector<Segment> yellowLines;
+    std::vector<Point> circlePoints;
 public:
     RoadPlot();
     RoadPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength,

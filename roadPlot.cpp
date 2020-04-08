@@ -18,14 +18,11 @@ RoadPlot::RoadPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inp
 
 void RoadPlot::initializeRoadCorners()
 {
-    // Center intersection
-    roadCorners.push_back({center.x + sideLength/4.0, 0, center.z + sideLength/4.0});
-    roadCorners.push_back({center.x - sideLength/4.0, 0, center.z + sideLength/4.0});
-    roadCorners.push_back({center.x - sideLength/4.0, 0, center.z - sideLength/4.0});
-    roadCorners.push_back({center.x + sideLength/4.0, 0, center.z - sideLength/4.0});
+    int numDirections = 0; // for deciding if we should have a circle
 
     if(left)
     {
+        numDirections++;
         roadCorners.push_back({center.x - 3.0*sideLength/8 + sideLength/8.0, 0, center.z + sideLength/4.0});
         roadCorners.push_back({center.x - 3.0*sideLength/8 - sideLength/8.0, 0, center.z + sideLength/4.0});
         roadCorners.push_back({center.x - 3.0*sideLength/8 - sideLength/8.0, 0, center.z - sideLength/4.0});
@@ -33,6 +30,7 @@ void RoadPlot::initializeRoadCorners()
     }
     if(right)
     {
+        numDirections++;
         roadCorners.push_back({center.x + 3.0*sideLength/8 + sideLength/8.0, 0, center.z + sideLength/4.0});
         roadCorners.push_back({center.x + 3.0*sideLength/8 - sideLength/8.0, 0, center.z + sideLength/4.0});
         roadCorners.push_back({center.x + 3.0*sideLength/8 - sideLength/8.0, 0, center.z - sideLength/4.0});
@@ -40,6 +38,7 @@ void RoadPlot::initializeRoadCorners()
     }
     if(up)
     {
+        numDirections++;
         roadCorners.push_back({center.x + sideLength/4.0, 0, center.z - 3.0*sideLength/8 + sideLength/8.0});
         roadCorners.push_back({center.x - sideLength/4.0, 0, center.z - 3.0*sideLength/8 + sideLength/8.0});
         roadCorners.push_back({center.x - sideLength/4.0, 0, center.z - 3.0*sideLength/8 - sideLength/8.0});
@@ -47,10 +46,32 @@ void RoadPlot::initializeRoadCorners()
     }
     if(down)
     {
+        numDirections++;
         roadCorners.push_back({center.x + sideLength/4.0, 0, center.z + 3.0*sideLength/8 + sideLength/8.0});
         roadCorners.push_back({center.x - sideLength/4.0, 0, center.z + 3.0*sideLength/8 + sideLength/8.0});
         roadCorners.push_back({center.x - sideLength/4.0, 0, center.z + 3.0*sideLength/8 - sideLength/8.0});
         roadCorners.push_back({center.x + sideLength/4.0, 0, center.z + 3.0*sideLength/8 - sideLength/8.0});
+    }
+
+    // Make circle if we need a cul de sac
+    culDeSac = (numDirections == 1);
+    if(culDeSac)
+    {
+        int smoothness = 20;
+        double x, z;
+        for(int i = 0; i < smoothness; i++)
+        {
+            x = sideLength*0.354 * cos(2*PI* i / smoothness);
+            z = sideLength*0.354 * sin(2*PI* i / smoothness);
+            circlePoints.push_back({center.x + x, 0, center.z + z});
+        }
+    }
+    else // Otherwise, put a square in the center
+    {
+        roadCorners.push_back({center.x + sideLength/4.0, 0, center.z + sideLength/4.0});
+        roadCorners.push_back({center.x - sideLength/4.0, 0, center.z + sideLength/4.0});
+        roadCorners.push_back({center.x - sideLength/4.0, 0, center.z - sideLength/4.0});
+        roadCorners.push_back({center.x + sideLength/4.0, 0, center.z - sideLength/4.0});
     }
 }
 void RoadPlot::initializeYellowLines()
@@ -76,12 +97,12 @@ void RoadPlot::initializeYellowLines()
                                {(double)center.x, 0, center.z + sideLength/4.0}});
     }
     // For a road with no intersections, either draw horizontal or vertical line through the center
-    if(!up && !down)
+    if(!up && !down && !culDeSac)
     {
         yellowLines.push_back({{center.x - sideLength/4.0, 0, (double)center.z},
                                {center.x + sideLength/4.0, 0, (double)center.z}});
     }
-    if(!left && !right)
+    if(!left && !right && !culDeSac)
     {
         yellowLines.push_back({{(double)center.x, 0, center.z - sideLength/4.0},
                                {(double)center.x, 0, center.z + sideLength/4.0}});
@@ -170,6 +191,19 @@ void RoadPlot::draw()
         }
     }
     glEnd();
+
+    if(culDeSac)
+    {
+        glBegin(GL_TRIANGLE_FAN);
+        drawPoint({(double)center.x, 0, (double)center.z});
+        for(Point &p : circlePoints)
+        {
+            drawPoint(p);
+        }
+        drawPoint(circlePoints[0]);
+        glEnd();
+    }
+
 
     // Draw the center lines
     glColor4f(1.0, 1.0, 0.0, 1.0);
