@@ -164,7 +164,10 @@ void RoadPlot::draw()
     glBegin(GL_QUADS);
     for(int i = 0; i < roadCorners.size()/4; i++)
     {
-        drawPoint(roadCorners[i]);
+        for(int j = 0; j < 4; j++)
+        {
+            drawPoint(roadCorners[4*i + j]);
+        }
     }
     glEnd();
 
