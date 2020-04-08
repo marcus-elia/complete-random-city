@@ -34,11 +34,11 @@ private:
 
     // A 2d vector of the plots
     //std::vector<std::vector<std::shared_ptr<Plot>>> plots;
-    std::shared_ptr<Plot>[8][8] plots;
+    std::shared_ptr<Plot> plots[8][8];
 
 
     // where roads are
-    bool[8][8] roadLocations;
+    bool roadLocations[8][8];
 
     // Where there are roads leaving/entering this chunk
     std::vector<int> leftRoadIndices, rightRoadIndices, topRoadIndices, bottomRoadIndices;
