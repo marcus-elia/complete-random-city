@@ -3,6 +3,7 @@
 
 #include "graphics.h"
 #include "chunk.h"
+#include "structs.h"
 
 
 

@@ -7,13 +7,6 @@
 #include <memory>
 #include <vector>
 
-// A line segment specified by two points
-struct Segment
-{
-    Point p1;
-    Point p2;
-};
-
 class RoadPlot : public Plot
 {
 private:
