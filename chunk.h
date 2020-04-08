@@ -1,11 +1,11 @@
-#ifndef RANDOM_3D_CITY_CHUNK_H
-#define RANDOM_3D_CITY_CHUNK_H
+#ifndef COMPLETE_RANDOM_CITY_CHUNK_H
+#define COMPLETE_RANDOM_CITY_CHUNK_H
 
 
 
 
 #include "graphics.h"
-#include "player.h"
+//#include "player.h"
 #include "roadPlot.h"
 //#include "building.h"
 #include <vector>
@@ -101,4 +101,4 @@ bool hasElement(std::vector<Object> vec, Object obj);
 Point2D chunkCoordinatesToCenter(int i, int j, Point2D bottomLeft, int propertySize);
 
 
-#endif //RANDOM_3D_CITY_CHUNK_H
+#endif //COMPLETE_RANDOM_CITY_CHUNK_H

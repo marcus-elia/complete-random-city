@@ -2,7 +2,6 @@
 #define COMPLETE_RANDOM_CITY_ROADPLOT_H
 
 #include "plot.h"
-#include "player.h"
 #include <experimental/optional>
 #include <memory>
 #include <vector>
