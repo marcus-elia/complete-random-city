@@ -266,6 +266,73 @@ void Chunk::initializePlots()
             }
         }
     }
+
+    // Now turn some empty plots into Buildings
+    for(int i = 0; i < 8; i++)
+    {
+        for(int j = 0; j < 8; j++)
+        {
+            if(plots[i][j]->getPlotType() == Empty)
+            {
+                double r1 = (double)(rand() % 100) / 100;
+                double r2 = (double)(rand() % 100) / 100;
+
+                // Make a building if r says yes, more likely when perlin noise is high
+                if(r1 < perlinSeed && r2 > 0.8)
+                {
+                    Point2D topLeftOfBuilding = {bottomLeft.x*sideLength + i*propertySize,
+                                                 (bottomLeft.z + 1)*sideLength - (j+1)*propertySize};
+                    // What type of building is it? How high is it?
+                    typeOfBuilding buildingType;
+                    int height;
+                    if(perlinSeed < 0.25 || (perlinSeed < 0.5 && r1 < 0.1))
+                    {
+                        buildingType = House;
+                        height = propertySize/2;
+                    }
+                    else if(r1 > 0.85 && perlinSeed > 0.75)
+                    {
+                        buildingType = Skyscraper;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    else if(0.55 < r1 && r1 < 0.6 && perlinSeed > 0.4)
+                    {
+                        buildingType = Pyramid;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    else if(0.7 < r1 && r1 < 0.75 && perlinSeed > 0.65)
+                    {
+                        buildingType = Hourglass;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    else if(0.1 < r1  && r1 < 0.15 && perlinSeed > 0.65)
+                    {
+                        buildingType = Empire;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    else if(0.45 < r1 && r1 < 0.5 && perlinSeed > 0.65)
+                    {
+                        buildingType = UFO;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    else if(perlinSeed > 0.95 && r1 < 0.05 && r2 > 0.9)
+                    {
+                        buildingType = CN;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    else
+                    {
+                        buildingType = Plain;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    plots[i][j] = std::make_shared<BuildingPlot>(BuildingPlot({i,j},
+                            chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize,
+                            Building(topLeftOfBuilding, propertySize, height,
+                                                 {r1, 0, perlinSeed, 1}, {1,1,1,1}, buildingType)));
+                }
+            }
+        }
+    }
 }
 
 

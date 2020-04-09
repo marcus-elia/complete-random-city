@@ -8,7 +8,8 @@
 //#include "player.h"
 #include "roadPlot.h"
 #include "emptyPlot.h"
-//#include "building.h"
+#include "buildingPlot.h"
+#include "building.h"
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
