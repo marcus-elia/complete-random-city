@@ -39,11 +39,11 @@ void Building::initializeSolids()
     else if(buildingType == House)
     {
         Point center = {(double)topLeft.x + sideLength/2, (double)height/2, (double)topLeft.z + sideLength/2};
-        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, color,
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, {.8, .8, .1, 1},
                                                              sideLength - 5, height, sideLength - 5,
                                                              edgeColor)));
         Point roofCenter = {center.x, center.y + 3*height/4, center.z};
-        solids.push_back(std::make_shared<TriPrism>(TriPrism(roofCenter, color,
+        solids.push_back(std::make_shared<TriPrism>(TriPrism(roofCenter, {.3, .1, .1,1},
                                                              sideLength, height/2, sideLength, edgeColor)));
     }
     else if(buildingType == Skyscraper)
