@@ -325,10 +325,13 @@ void Chunk::initializePlots()
                         buildingType = Plain;
                         height =  (int)(perlinSeed*180 + r1*80 + r2*80);
                     }
+                    //plots[i][j] = std::make_shared<BuildingPlot>(BuildingPlot({i,j},
+                    //        chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize,
+                    //        Building(topLeftOfBuilding, propertySize, height,
+                    //                             {r1, 0, perlinSeed, 1},
+                    //                             {1,1,1,1}, buildingType)));
                     plots[i][j] = std::make_shared<BuildingPlot>(BuildingPlot({i,j},
-                            chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize,
-                            Building(topLeftOfBuilding, propertySize, height,
-                                                 {r1, 0, perlinSeed, 1}, {1,1,1,1}, buildingType)));
+                            chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize, perlinSeed));
                 }
             }
         }
