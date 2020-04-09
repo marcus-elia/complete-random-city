@@ -127,6 +127,32 @@ void Building::initializeSolids()
                                                            sideLength, height/10.0, sideLength, edgeColor,
                                                            sideLength/20.0, sideLength/20.0)));
     }
+    else if(buildingType == Church)
+    {
+        RGBAcolor brick = {176.0/256, 74.0/256, 58.0/256, 1};
+        RGBAcolor roof = {114.0/256, 130.0/256, 124.0/256, 1};
+        // Main rectangle
+        Point center = {(double)topLeft.x + sideLength, 30.0, (double)topLeft.z + sideLength};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, brick,
+                                                             2*sideLength, 60, sideLength, edgeColor)));
+        // Wings
+        center = {(double)topLeft.x + 4*sideLength/3.0, 30.0, (double)topLeft.z + sideLength/4.0};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, brick,
+                                                             sideLength/2, 60, sideLength/2, edgeColor)));
+        center = {center.x, center.y, (double)topLeft.z + 7*sideLength/4.0};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, brick,
+                                                             sideLength/2, 60, sideLength/2, edgeColor)));
+        // Main roof
+        center = {(double)topLeft.x + sideLength, 75.0, (double)topLeft.z + sideLength};
+        solids.push_back(std::make_shared<Frustum>(Frustum(center, roof,
+                                                             sideLength, 30.0, sideLength/2.0, edgeColor,
+                                                             2*sideLength, 2)));
+        // Wing roof
+        center = {(double)topLeft.x + 4*sideLength/3.0, center.y, center.x};
+        solids.push_back(std::make_shared<Frustum>(Frustum(center, roof,
+                                                           sideLength/4.0, 30.0, 2*sideLength, edgeColor,
+                                                           2, 2*sideLength)));
+    }
 }
 
 std::vector<std::shared_ptr<Solid>> Building::getSolids() const

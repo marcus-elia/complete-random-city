@@ -9,9 +9,10 @@
 #include <vector>
 #include <memory>
 
-enum typeOfBuilding {Plain, House, Skyscraper, Empire, UFO, CN, Hourglass, Pyramid};
+enum typeOfBuilding {Plain, House, Skyscraper, Empire, UFO, CN, Hourglass, Pyramid, Church, Mansion};
 
-class Building {
+class Building
+{
 protected:
     std::vector<std::shared_ptr<Solid>> solids;
 
