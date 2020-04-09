@@ -374,20 +374,27 @@ std::vector<int> Chunk::getBottomRoadIndices() const
 void Chunk::draw() const
 {
     glBegin(GL_QUADS);
-    if((bottomLeft.x + bottomLeft.z) % 2 == 0)
+    /*if((bottomLeft.x + bottomLeft.z) % 2 == 0)
     {
         glColor4f(1, 1, 0.3, 1);
     }
     else
     {
         glColor4f(0, 1, 0.8, 1);
-    }
+    }*/
     //glColor4f(perlinSeed, 0, 1, 1);
-    //glColor4f(0.0, 1, 0.0, 1);
-    glVertex3f(sideLength*bottomLeft.x,-5, sideLength*bottomLeft.z);
-    glVertex3f(sideLength*bottomLeft.x,-5, sideLength*bottomLeft.z + sideLength);
-    glVertex3f(sideLength*bottomLeft.x + sideLength,-5, sideLength*bottomLeft.z + sideLength);
-    glVertex3f(sideLength*bottomLeft.x + sideLength,-5, sideLength*bottomLeft.z);
+    if(perlinSeed < 0.25)
+    {
+        glColor4f(0, 0.7, 0.1, 1);
+    }
+    else
+    {
+        glColor4f(0.7, 0.7, 0.7, 1);
+    }
+    glVertex3f(sideLength*bottomLeft.x,-1, sideLength*bottomLeft.z);
+    glVertex3f(sideLength*bottomLeft.x,-1, sideLength*bottomLeft.z + sideLength);
+    glVertex3f(sideLength*bottomLeft.x + sideLength,-1, sideLength*bottomLeft.z + sideLength);
+    glVertex3f(sideLength*bottomLeft.x + sideLength,-1, sideLength*bottomLeft.z);
 
     glEnd();
 
