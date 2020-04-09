@@ -18,7 +18,7 @@ BuildingPlot::BuildingPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter,
 
 void BuildingPlot::makeBuilding(double seed)
 {
-    building = Building({center.x - sideLength, center.z - sideLength}, sideLength,
+    building = Building({center.x - sideLength/2, center.z - sideLength/2}, sideLength,
             100, {1,0,0,1}, {1,1,1,1}, Plain);
 }
 
