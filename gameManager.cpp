@@ -5,7 +5,7 @@ GameManager::GameManager()
     perlinSize = 10;
     png = PerlinNoiseGenerator(10, 10, 1);
     chunkSize = 512;
-    renderRadius = 5;
+    renderRadius = 3;
     updateCurrentChunks();
 }
 GameManager::GameManager(int inputChunkSize, int inputRenderRadius, int inputPerlinSize)
