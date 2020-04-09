@@ -191,6 +191,62 @@ void Building::initializeSolids()
                                                              sideLength/2.5, 40, sideLength/2.5, edgeColor,
                                                              1, 1)));
     }
+    else if(buildingType == Mansion)
+    {
+        RGBAcolor cream = {245.0/256, 239.0/256, 159.0/256, 1};
+        RGBAcolor roof = {0.1, 0.1, 0.1,1};
+        // Front Right
+        Point center = {(double)topLeft.x + sideLength/4.0, 30, (double)topLeft.z + 7*sideLength/4.0};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, cream,
+                                                             sideLength/2.0, 60, sideLength/2.0, edgeColor)));
+        center = {center.x, center.y + 30 + 15, center.z};
+        solids.push_back(std::make_shared<Frustum>(Frustum(center, roof,
+                                                             sideLength/2.0, 30, sideLength/2.0, edgeColor,
+                                                             sideLength/2.0, 0)));
+
+        // Front Left
+        center = {(double)topLeft.x + sideLength/4.0, 30, (double)topLeft.z + 3*sideLength/4.0};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, cream,
+                                                             sideLength/2.0, 60, sideLength/2.0, edgeColor)));
+        center = {center.x, center.y + 30 + 15, center.z};
+        solids.push_back(std::make_shared<Frustum>(Frustum(center, roof,
+                                                           sideLength/2.0, 30, sideLength/2.0, edgeColor,
+                                                           sideLength/2.0, 0)));
+
+        // Main building
+        center = {(double)topLeft.x + 7*sideLength/8.0, 30, (double)topLeft.z + 5*sideLength/4.0};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, cream,
+                                                             3*sideLength/4.0, 60, 3*sideLength/2.0, edgeColor)));
+        center = {center.x, center.y + 30 + 20, center.z};
+        solids.push_back(std::make_shared<Frustum>(Frustum(center, roof,
+                                                           3*sideLength/4.0, 40, 3*sideLength/2.0, edgeColor,
+                                                           0, 3*sideLength/4.0)));
+
+        // Garage
+        center = {(double)topLeft.x + sideLength/2.0, 15, (double)topLeft.z + sideLength/4.0};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, cream,
+                                                             sideLength, 30, sideLength/2.0, edgeColor)));
+        center = {center.x, center.y + 15 + 10, center.z};
+        solids.push_back(std::make_shared<Frustum>(Frustum(center, roof,
+                                                           sideLength, 20, sideLength/2.0, edgeColor,
+                                                           sideLength, 0)));
+
+        // Fence
+        center = {(double)topLeft.x + 3*sideLength/2.0, 8, (double)topLeft.z + 1};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, {1,1,1,1},
+                                                             sideLength, 16, 2, edgeColor)));
+        center = {(double)topLeft.x + 2*sideLength - 1, 8, (double)topLeft.z + sideLength};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, {1,1,1,1},
+                                                             2, 16, 2*sideLength, edgeColor)));
+        center = {(double)topLeft.x + 13*sideLength/8.0, 8, (double)topLeft.z + 2*sideLength - 1};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, {1,1,1,1},
+                                                             3*sideLength/4.0, 16, 2, edgeColor)));
+
+        // Pool
+        center = {(double)topLeft.x + 13*sideLength/8.0, 0.5, (double)topLeft.z + 3*sideLength/2};
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, {0.4,0.5,1,1},
+                                                             3*sideLength/4.0-2, 1, sideLength-2, edgeColor)));
+    }
 }
 
 std::vector<std::shared_ptr<Solid>> Building::getSolids() const

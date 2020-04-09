@@ -273,6 +273,7 @@ void Chunk::initializePlots()
     // Now every plot is either a Road or an EmptyPlot
     // Look for spots to put a FourPlot
     bool churchMade = false;
+    bool mansionMade = false;
     for(int i = 0; i < 7; i++)
     {
         for(int j = 0; j < 7; j++)
@@ -280,7 +281,7 @@ void Chunk::initializePlots()
             if(plots[i][j]->getPlotType() == Empty && plots[i+1][j]->getPlotType() == Empty &&
                     plots[i+1][j+1]->getPlotType() == Empty && plots[i][j+1]->getPlotType() == Empty)
             {
-                if(perlinSeed > 0.8 && !churchMade && rand() % 100 > 0.25)
+                if(perlinSeed > 0.8 && !churchMade && rand() % 100 > 50)
                 {
                     Point2D topLeftOfBuilding = {bottomLeft.x*sideLength + i*propertySize,
                                                  bottomLeft.z*sideLength + j*propertySize};
@@ -299,7 +300,25 @@ void Chunk::initializePlots()
                     plots[i][j+1] = std::make_shared<FourPlot>(FourPlot({i,j+1},
                                                                         chunkCoordinatesToCenter(i, j+1, sideLength, bottomLeft, propertySize), propertySize,
                                                                         DownLeft));
-                    break;
+                }
+                if(perlinSeed < 0.25 && !mansionMade && rand() % 100 > 50)
+                {
+                    Point2D topLeftOfBuilding = {bottomLeft.x*sideLength + i*propertySize,
+                                                 bottomLeft.z*sideLength + j*propertySize};
+                    plots[i][j] = std::make_shared<BuildingPlot>(BuildingPlot({i,j},
+                                                chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize,
+                                                Building(topLeftOfBuilding, propertySize, 60,
+                                                 {1, 1, 1, 1}, {1,1,1,1}, Mansion)));
+                    mansionMade = true;
+                    plots[i+1][j] = std::make_shared<FourPlot>(FourPlot({i+1,j},
+                                                                        chunkCoordinatesToCenter(i+1, j, sideLength, bottomLeft, propertySize), propertySize,
+                                                                        UpRight));
+                    plots[i+1][j+1] = std::make_shared<FourPlot>(FourPlot({i+1,j+1},
+                                                                          chunkCoordinatesToCenter(i+1, j+1, sideLength, bottomLeft, propertySize), propertySize,
+                                                                          DownRight));
+                    plots[i][j+1] = std::make_shared<FourPlot>(FourPlot({i,j+1},
+                                                                        chunkCoordinatesToCenter(i, j+1, sideLength, bottomLeft, propertySize), propertySize,
+                                                                        DownLeft));
                 }
             }
         }
