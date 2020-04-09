@@ -132,26 +132,64 @@ void Building::initializeSolids()
         RGBAcolor brick = {176.0/256, 74.0/256, 58.0/256, 1};
         RGBAcolor roof = {114.0/256, 130.0/256, 124.0/256, 1};
         // Main rectangle
-        Point center = {(double)topLeft.x + sideLength, 30.0, (double)topLeft.z + sideLength};
+        Point center = {(double)topLeft.x + sideLength, 40.0, (double)topLeft.z + sideLength};
         solids.push_back(std::make_shared<RecPrism>(RecPrism(center, brick,
-                                                             2*sideLength, 60, sideLength, edgeColor)));
+                                                             2*sideLength, 80, sideLength, edgeColor)));
         // Wings
-        center = {(double)topLeft.x + 4*sideLength/3.0, 30.0, (double)topLeft.z + sideLength/4.0};
+        center = {(double)topLeft.x + 4*sideLength/3.0, 40.0, (double)topLeft.z + sideLength/4.0};
         solids.push_back(std::make_shared<RecPrism>(RecPrism(center, brick,
-                                                             sideLength/2, 60, sideLength/2, edgeColor)));
+                                                             sideLength/2, 80, sideLength/2, edgeColor)));
         center = {center.x, center.y, (double)topLeft.z + 7*sideLength/4.0};
         solids.push_back(std::make_shared<RecPrism>(RecPrism(center, brick,
-                                                             sideLength/2, 60, sideLength/2, edgeColor)));
+                                                             sideLength/2, 80, sideLength/2, edgeColor)));
         // Main roof
-        center = {(double)topLeft.x + sideLength, 75.0, (double)topLeft.z + sideLength};
+        center = {(double)topLeft.x + sideLength, 100.0, (double)topLeft.z + sideLength};
         solids.push_back(std::make_shared<Frustum>(Frustum(center, roof,
-                                                             sideLength, 30.0, sideLength/2.0, edgeColor,
+                                                             2*sideLength, 40.0, sideLength, edgeColor,
                                                              2*sideLength, 2)));
         // Wing roof
-        center = {(double)topLeft.x + 4*sideLength/3.0, center.y, center.x};
+        center = {(double)topLeft.x + 4*sideLength/3.0, center.y, center.z};
         solids.push_back(std::make_shared<Frustum>(Frustum(center, roof,
-                                                           sideLength/4.0, 30.0, 2*sideLength, edgeColor,
+                                                           sideLength/2.0, 40.0, 2*sideLength, edgeColor,
                                                            2, 2*sideLength)));
+        // Right tower
+        center = {(double)topLeft.x + sideLength/8.0, 45.0, (double)topLeft.z + 13*sideLength/8.0};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, brick,
+                                                             sideLength/4.0, 90, sideLength/4.0, edgeColor)));
+        center = {center.x, center.y + 45 + 5, center.z};
+        solids.push_back(std::make_shared<Frustum>(Frustum(center, brick,
+                                                           sideLength/4.0, 10, sideLength/4.0, edgeColor,
+                                                           sideLength/5.0, sideLength/5.0)));
+        center = {center.x, center.y + 5 + 10, center.z};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, brick,
+                                                             sideLength/5.0, 20, sideLength/5.0, edgeColor)));
+        center = {center.x, center.y + 10 + 15, center.z};
+        solids.push_back(std::make_shared<Frustum>(Frustum(center, roof,
+                                                           sideLength/5.0, 30, sideLength/5.0, edgeColor,
+                                                           1, 1)));
+        // Left tower
+        center = {(double)topLeft.x + sideLength/4.0, 60.0, (double)topLeft.z + sideLength/4.0};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, brick,
+                                                             sideLength/2.0, 120, sideLength/2.0, edgeColor)));
+        center = {center.x, center.y + 60 + 25, center.z};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, brick,
+                                                             sideLength/2.5, 50, sideLength/2.5, edgeColor)));
+        center = {center.x + sideLength/4 - 5, center.y + 5, center.z + sideLength/4 - 5};
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, brick,
+                                                             10, 60, 10, edgeColor)));
+        center = {center.x - sideLength/2 + 10, center.y, center.z};
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, brick,
+                                                             10, 60, 10, edgeColor)));
+        center = {center.x, center.y, center.z - sideLength/2 + 10};
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, brick,
+                                                             10, 60, 10, edgeColor)));
+        center = {center.x + sideLength/2 - 10, center.y, center.z};
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, brick,
+                                                             10, 60, 10, edgeColor)));
+        center = {(double)topLeft.x + sideLength/4.0, 190, (double)topLeft.z + sideLength/4.0};
+        solids.push_back(std::make_shared<Frustum>(Frustum(center, roof,
+                                                             sideLength/2.5, 40, sideLength/2.5, edgeColor,
+                                                             1, 1)));
     }
 }
 
