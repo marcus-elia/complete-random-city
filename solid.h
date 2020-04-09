@@ -44,7 +44,7 @@ public:
     void setZWidth(double inputZWidth);
     void setLineColor(RGBAcolor inputLineColor);
 
-    virtual void draw();
+    virtual void draw() const = 0;
 
     // If the p is within buffer of this shape, a corrected position
     // is returned. returns nullopt otherwise.
