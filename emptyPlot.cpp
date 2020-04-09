@@ -2,12 +2,12 @@
 
 EmptyPlot::EmptyPlot()
 {
-
+    plotType = Empty;
 }
 EmptyPlot::EmptyPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength) :
 Plot(inputTopLeftChunkCoords, inputCenter, inputSideLength)
 {
-
+    plotType = Empty;
 }
 
 void EmptyPlot::draw()

@@ -2,11 +2,12 @@
 
 BuildingPlot::BuildingPlot()
 {
-
+    plotType = Buildings;
 }
 BuildingPlot::BuildingPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength, double seed) :
 Plot(inputTopLeftChunkCoords, inputCenter, inputSideLength)
 {
+    plotType = Buildings;
     makeBuilding(seed);
 }
 BuildingPlot::BuildingPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength, Building b) :

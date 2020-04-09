@@ -2,12 +2,13 @@
 
 RoadPlot::RoadPlot() : Plot()
 {
-
+    plotType = Road;
 }
 RoadPlot::RoadPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength,
                    bool inputLeft, bool inputRight, bool inputUp, bool inputDown) :
                    Plot(inputTopLeftChunkCoords, inputCenter, inputSideLength)
 {
+    plotType = Road;
     left = inputLeft;
     right = inputRight;
     up = inputUp;
