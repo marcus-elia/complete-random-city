@@ -403,14 +403,185 @@ void Chunk::setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chun
                          std::experimental::optional<std::shared_ptr<Chunk>> topChunk,
                          std::experimental::optional<std::shared_ptr<Chunk>> bottomChunk)
 {
-    // The top
-    if(leftChunk)
+    for(int i = 0; i < 8; i++)
     {
-        for(int i = 0; i < 8; i++)
+        for(int j = 0; j < 8; j++)
         {
-            if(plots[i][0]->getPlotType() == Road && leftChunk.value()->)
+            if(getPlotAt(i,j)->getPlotType() == Road)
+            {
+                auto rpl = getRoadPlotAt(i, j);
+                std::experimental::optional<RoadPlot*> up, down, left, right;
+                // Check for a road above this one
+                if(rpl->getUp())
+                {
+                    if(j == 0) // If we are in the top row, look at the chunk above
+                    {
+                        if(topChunk && topChunk.value()->getPlotAt(i,7)->getPlotType() == Road)
+                        {
+                            up = topChunk.value()->getRoadPlotAt(i,7);
+                        }
+                        else
+                        {
+                            up = std::experimental::nullopt;
+                        }
+                    }
+                    else // If not in the top row, just look up one entry
+                    {
+                        if(plots[i][j-1]->getPlotType() == Road)
+                        {
+                            up = getRoadPlotAt(i, j-1);
+                        }
+                        else
+                        {
+                            up = std::experimental::nullopt;
+                        }
+                    }
+                    // Now have the roads point to each other
+                    if(up)
+                    {
+                        rpl->setUpRoad(up.value());
+                        up.value()->setDownRoad(rpl);
+                    }
+                }
+                // Check for a road below this one
+                if(rpl->getDown())
+                {
+                    if(j == 7) // If we are in the bottom row, look at the chunk below
+                    {
+                        if(bottomChunk && bottomChunk.value()->getPlotAt(i,0)->getPlotType() == Road)
+                        {
+                            down = bottomChunk.value()->getRoadPlotAt(i,0);
+                        }
+                        else
+                        {
+                            down = std::experimental::nullopt;
+                        }
+                    }
+                    else // If not in the bottom row, just look down one entry
+                    {
+                        if(plots[i][j+1]->getPlotType() == Road)
+                        {
+                            down = getRoadPlotAt(i, j+1);
+                        }
+                        else
+                        {
+                            down = std::experimental::nullopt;
+                        }
+                    }
+                    // Now have the roads point to each other
+                    if(down)
+                    {
+                        rpl->setDownRoad(down.value());
+                        down.value()->setUpRoad(rpl);
+                    }
+                }
+                // Check for a road left of this one
+                if(rpl->getLeft())
+                {
+                    if(i == 0) // If we are in the left column, look at the chunk to the left
+                    {
+                        if(leftChunk && leftChunk.value()->getPlotAt(7,j)->getPlotType() == Road)
+                        {
+                            left = leftChunk.value()->getRoadPlotAt(7,j);
+                        }
+                        else
+                        {
+                            left = std::experimental::nullopt;
+                        }
+                    }
+                    else // If not in the left column, just look left one entry
+                    {
+                        if(plots[i-1][j]->getPlotType() == Road)
+                        {
+                            left = getRoadPlotAt(i-1, j);
+                        }
+                        else
+                        {
+                            left = std::experimental::nullopt;
+                        }
+                    }
+                    // Now have the roads point to each other
+                    if(left)
+                    {
+                        rpl->setLeftRoad(left.value());
+                        left.value()->setRightRoad(rpl);
+                    }
+                }
+                // Check for a road right of this one
+                if(rpl->getRight())
+                {
+                    if(i == 7) // If we are in the right column, look at the chunk to the righ
+                    {
+                        if(rightChunk && rightChunk.value()->getPlotAt(0,j)->getPlotType() == Road)
+                        {
+                            right = rightChunk.value()->getRoadPlotAt(0,j);
+                        }
+                        else
+                        {
+                            right = std::experimental::nullopt;
+                        }
+                    }
+                    else // If not in the right column, just look right one entry
+                    {
+                        if(plots[i+1][j]->getPlotType() == Road)
+                        {
+                            right = getRoadPlotAt(i+1, j);
+                        }
+                        else
+                        {
+                            right = std::experimental::nullopt;
+                        }
+                    }
+                    // Now have the roads point to each other
+                    if(right)
+                    {
+                        rpl->setRightRoad(right.value());
+                        right.value()->setLeftRoad(rpl);
+                    }
+                }
+            }
+
         }
     }
+    // Top left corner
+    /*if(plots[0][0]->getPlotType() == Road)
+    {
+        auto rpl = dynamic_cast<RoadPlot*>(plots[0][0].get());
+        if(rpl->getUp() && topChunk && hasElement(topChunk.value()->getBottomRoadIndices(), 0))
+        {
+            rpl->setUpRoad(dynamic_cast<RoadPlot *>(topChunk.value()->getPlotAt(0, 7)));
+            topChunk.value()->setBottomRoad(0, 7, rpl);
+        }
+        if(rpl->getLeft() && leftChunk && hasElement(leftChunk.value()->getRightRoadIndices(), 0))
+        {
+            rpl->setLeftRoad(dynamic_cast<RoadPlot *>(topChunk.value()->getPlotAt(7, 0)));
+            leftChunk.value()->setRightRoad(7, 0, rpl);
+        }
+        if(rpl->getDown() && plots[0][1]->getPlotType() == Road)
+        {
+            rpl->setDownRoad(dynamic_cast<RoadPlot*>(plots[0][1].get()));
+            setTopRoad(0, 1, rpl);
+        }
+        if(rpl->getDown() && plots[0][1]->getPlotType() == Road)
+        {
+            rpl->setDownRoad(dynamic_cast<RoadPlot*>(plots[0][1].get()));
+            setTopRoad(0, 1, rpl);
+        }
+    }
+    // The top row
+    for(int i = 0; i < 8; i++)
+    {
+        if(plots[i][0]->getPlotType() == Road)
+        {
+            auto rpl = dynamic_cast<RoadPlot*>(plots[i][0].get());
+            if(rpl->getUp() && topChunk && hasElement(topChunk.value()->getBottomRoadIndices(), i))
+            {
+                rpl->setUpRoad(dynamic_cast<RoadPlot *>(topChunk.value()->getPlotAt(i, 0)));
+                topChunk.value()->setBottomRoad(i, 0, rpl);
+            }
+            if(rpl->ge)
+         }
+    }*/
 }
 
 
@@ -444,6 +615,15 @@ std::vector<int> Chunk::getBottomRoadIndices() const
 {
     return bottomRoadIndices;
 }
+Plot* Chunk::getPlotAt(int i, int j)
+{
+    return plots[i][j].get();
+}
+RoadPlot* Chunk::getRoadPlotAt(int i, int j)
+{
+    return dynamic_cast<RoadPlot *>(plots[i][j].get());
+}
+
 
 void Chunk::setBottomRoad(int i, int j, RoadPlot *road)
 {

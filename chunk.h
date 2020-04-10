@@ -72,6 +72,8 @@ public:
     std::vector<int> getRightRoadIndices() const;
     std::vector<int> getTopRoadIndices() const;
     std::vector<int> getBottomRoadIndices() const;
+    Plot* getPlotAt(int i, int j);
+    RoadPlot* getRoadPlotAt(int i, int j);  // casts to a RoadPlot*
 
     // Set the road pointers for the given roadplot
     void setBottomRoad(int i, int j, RoadPlot *road);
