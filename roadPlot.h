@@ -16,7 +16,7 @@ private:
     bool culDeSac; // If the road dead ends, make a circle
 
     // The actual road in each direction, or nullopt
-    std::experimental::optional<std::shared_ptr<RoadPlot>> leftRoad, rightRoad, upRoad, downRoad;
+    RoadPlot *leftRoad, *rightRoad, *upRoad, *downRoad;
 
     // For drawing
     std::vector<Point> roadCorners;
@@ -35,20 +35,20 @@ public:
     bool getRight() const;
     bool getUp() const;
     bool getDown() const;
-    std::experimental::optional<std::shared_ptr<RoadPlot>> getLeftRoad() const;
-    std::experimental::optional<std::shared_ptr<RoadPlot>> getRightRoad() const;
-    std::experimental::optional<std::shared_ptr<RoadPlot>> getUpRoad() const;
-    std::experimental::optional<std::shared_ptr<RoadPlot>> getDownRoad() const;
+    RoadPlot* getLeftRoad() const;
+    RoadPlot* getRightRoad() const;
+    RoadPlot* getUpRoad() const;
+    RoadPlot* getDownRoad() const;
 
     // Setters
     void setLeft(bool inputLeft);
     void setRight(bool inputRight);
     void setUp(bool inputUp);
     void setDown(bool inputDown);
-    void setLeftRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputLeftRoad);
-    void setRightRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputRightRoad);
-    void setUpRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputUpRoad);
-    void setDownRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputDownRoad);
+    void setLeftRoad(RoadPlot* inputLeftRoad);
+    void setRightRoad(RoadPlot* inputRightRoad);
+    void setUpRoad(RoadPlot* inputUpRoad);
+    void setDownRoad(RoadPlot* inputDownRoad);
 
     void draw();
 };

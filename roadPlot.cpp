@@ -127,19 +127,19 @@ bool RoadPlot::getDown() const
 {
     return down;
 }
-std::experimental::optional<std::shared_ptr<RoadPlot>> RoadPlot::getLeftRoad() const
+RoadPlot* RoadPlot::getLeftRoad() const
 {
     return leftRoad;
 }
-std::experimental::optional<std::shared_ptr<RoadPlot>> RoadPlot::getRightRoad() const
+RoadPlot* RoadPlot::getRightRoad() const
 {
     return rightRoad;
 }
-std::experimental::optional<std::shared_ptr<RoadPlot>> RoadPlot::getUpRoad() const
+RoadPlot* RoadPlot::getUpRoad() const
 {
     return upRoad;
 }
-std::experimental::optional<std::shared_ptr<RoadPlot>> RoadPlot::getDownRoad() const
+RoadPlot* RoadPlot::getDownRoad() const
 {
     return downRoad;
 }
@@ -161,19 +161,19 @@ void RoadPlot::setDown(bool inputDown)
 {
     down = inputDown;
 }
-void RoadPlot::setLeftRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputLeftRoad)
+void RoadPlot::setLeftRoad(RoadPlot* inputLeftRoad)
 {
     leftRoad = inputLeftRoad;
 }
-void RoadPlot::setRightRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputRightRoad)
+void RoadPlot::setRightRoad(RoadPlot* inputRightRoad)
 {
     rightRoad = inputRightRoad;
 }
-void RoadPlot::setUpRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputUpRoad)
+void RoadPlot::setUpRoad(RoadPlot* inputUpRoad)
 {
     upRoad = inputUpRoad;
 }
-void RoadPlot::setDownRoad(std::experimental::optional<std::shared_ptr<RoadPlot>> inputDownRoad)
+void RoadPlot::setDownRoad(RoadPlot* inputDownRoad)
 {
     downRoad = inputDownRoad;
 }
