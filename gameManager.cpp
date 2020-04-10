@@ -161,44 +161,54 @@ void GameManager::updateCurrentChunks()
         if(allSeenChunks.count(index) == 0) // if the chunk has never been seen before, make a new one
         {
             // Check for adjacent chunks to get edge road indices
+            std::experimental::optional<std::shared_ptr<Chunk>> leftChunk, rightChunk, topChunk, bottomChunk;
             std::experimental::optional<std::vector<int>> inputLeftRoadIndices, inputRightRoadIndices,
                                                           inputTopRoadIndices, inputBottomRoadIndices;
             // Left border
             if(allSeenChunks.count(pointToInt({p.x - 1, p.z})) > 0)
             {
-                inputLeftRoadIndices = allSeenChunks[pointToInt({p.x - 1, p.z})]->getRightRoadIndices();
+                leftChunk = allSeenChunks[pointToInt({p.x - 1, p.z})];
+                inputLeftRoadIndices = leftChunk.value()->getRightRoadIndices();
             }
             else
             {
+                leftChunk = std::experimental::nullopt;
                 inputLeftRoadIndices = std::experimental::nullopt;
             }
             // Right border
             if(allSeenChunks.count(pointToInt({p.x + 1, p.z})) > 0)
             {
-                inputRightRoadIndices = allSeenChunks[pointToInt({p.x + 1, p.z})]->getLeftRoadIndices();
+                rightChunk = allSeenChunks[pointToInt({p.x + 1, p.z})];
+                inputRightRoadIndices = rightChunk.value()->getLeftRoadIndices();
             }
             else
             {
+                rightChunk = std::experimental::nullopt;
                 inputRightRoadIndices = std::experimental::nullopt;
             }
             // Top border
             if(allSeenChunks.count(pointToInt({p.x, p.z - 1})) > 0)
             {
-                inputTopRoadIndices = allSeenChunks[pointToInt({p.x, p.z - 1})]->getBottomRoadIndices();
+                topChunk = allSeenChunks[pointToInt({p.x, p.z - 1})];
+                inputTopRoadIndices = topChunk.value()->getBottomRoadIndices();
             }
             else
             {
+                topChunk = std::experimental::nullopt;
                 inputTopRoadIndices = std::experimental::nullopt;
             }
             // Bottom border
             if(allSeenChunks.count(pointToInt({p.x, p.z + 1})) > 0)
             {
-                inputBottomRoadIndices = allSeenChunks[pointToInt({p.x, p.z + 1})]->getTopRoadIndices();
+                bottomChunk = allSeenChunks[pointToInt({p.x, p.z + 1})];
+                inputBottomRoadIndices = bottomChunk.value()->getTopRoadIndices();
             }
             else
             {
+                bottomChunk = std::experimental::nullopt;
                 inputBottomRoadIndices = std::experimental::nullopt;
             }
+            // Make the new chunk
             allSeenChunks[index] = std::make_shared<Chunk>(p, chunkSize, getPerlinValue(p), inputLeftRoadIndices,
                     inputRightRoadIndices, inputTopRoadIndices, inputBottomRoadIndices);
         }
