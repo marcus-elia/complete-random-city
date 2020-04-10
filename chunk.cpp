@@ -398,6 +398,21 @@ void Chunk::initializePlots()
 }
 
 
+void Chunk::setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chunk>> leftChunk,
+                         std::experimental::optional<std::shared_ptr<Chunk>> rightChunk,
+                         std::experimental::optional<std::shared_ptr<Chunk>> topChunk,
+                         std::experimental::optional<std::shared_ptr<Chunk>> bottomChunk)
+{
+    // The top
+    if(leftChunk)
+    {
+        for(int i = 0; i < 8; i++)
+        {
+            if(plots[i][0]->getPlotType() == Road && leftChunk.value()->)
+        }
+    }
+}
+
 
 
 // Getters
@@ -428,6 +443,27 @@ std::vector<int> Chunk::getTopRoadIndices() const
 std::vector<int> Chunk::getBottomRoadIndices() const
 {
     return bottomRoadIndices;
+}
+
+void Chunk::setBottomRoad(int i, int j, RoadPlot *road)
+{
+    Plot* pl = plots[i][j].get();
+    dynamic_cast<RoadPlot*>(pl)->setDownRoad(road);
+}
+void Chunk::setTopRoad(int i, int j, RoadPlot *road)
+{
+    Plot* pl = plots[i][j].get();
+    dynamic_cast<RoadPlot*>(pl)->setUpRoad(road);
+}
+void Chunk::setRightRoad(int i, int j, RoadPlot *road)
+{
+    Plot* pl = plots[i][j].get();
+    dynamic_cast<RoadPlot*>(pl)->setRightRoad(road);
+}
+void Chunk::setLeftRoad(int i, int j, RoadPlot *road)
+{
+    Plot* pl = plots[i][j].get();
+    dynamic_cast<RoadPlot*>(pl)->setLeftRoad(road);
 }
 
 void Chunk::draw() const

@@ -58,6 +58,11 @@ public:
     std::vector<int> makeRandomRoadIndices(double seed, int size);
     void initializeRoadLocations();
     void initializePlots();
+    // Have roads point to each other
+    void setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chunk>> leftChunk,
+                             std::experimental::optional<std::shared_ptr<Chunk>> rightChunk,
+                             std::experimental::optional<std::shared_ptr<Chunk>> topChunk,
+                             std::experimental::optional<std::shared_ptr<Chunk>> bottomChunk);
 
     // Getters
     Point2D getBottomLeft() const;
@@ -67,6 +72,12 @@ public:
     std::vector<int> getRightRoadIndices() const;
     std::vector<int> getTopRoadIndices() const;
     std::vector<int> getBottomRoadIndices() const;
+
+    // Set the road pointers for the given roadplot
+    void setBottomRoad(int i, int j, RoadPlot *road);
+    void setTopRoad(int i, int j, RoadPlot *road);
+    void setRightRoad(int i, int j, RoadPlot *road);
+    void setLeftRoad(int i, int j, RoadPlot *road);
 
     void draw() const;
 
