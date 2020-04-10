@@ -33,8 +33,8 @@ public:
     void setSpeed(double inputSpeed);
     void setVelocity(Point inputVelocity);
 
-    void move(double deltaX, double deltaY, double deltaZ);
-    void rotate(double thetaX, double thetaY, double thetaZ);
+    virtual void move(double deltaX, double deltaY, double deltaZ);
+    virtual void rotate(double thetaX, double thetaY, double thetaZ);
 
     virtual void tick() = 0;
 
