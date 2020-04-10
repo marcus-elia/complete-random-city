@@ -65,16 +65,19 @@ void Movable::setVelocity(Point inputVelocity)
 
 void Movable::move(double deltaX, double deltaY, double deltaZ)
 {
-    location.x += deltaX;
-    lookingAt.x += deltaX;
-    location.y += deltaY;
-    lookingAt.y += deltaY;
-    location.z += deltaZ;
-    lookingAt.z += deltaZ;
+    movePoint(location, deltaX, deltaY, deltaZ);
+    movePoint(lookingAt, deltaX, deltaY, deltaZ);
 }
 void Movable::rotate(double thetaX, double thetaY, double thetaZ)
 {
     rotatePointAroundPoint(lookingAt, location, thetaX, thetaY, thetaZ);
+}
+
+void movePoint(Point &p, double deltaX, double deltaY, double deltaZ)
+{
+    p.x += deltaX;
+    p.y += deltaY;
+    p.z += deltaZ;
 }
 
 

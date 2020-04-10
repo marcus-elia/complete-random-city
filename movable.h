@@ -41,6 +41,8 @@ public:
     virtual void draw() const = 0;
 };
 
+// Translates Point p
+void movePoint(Point &p, double deltaX, double deltaY, double deltaZ);
 
 // Rotates p around pBase in 3D space
 void rotatePointAroundPoint(Point &p, const Point &pBase, double thetaX, double thetaY, double thetaZ);
