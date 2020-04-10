@@ -19,6 +19,26 @@ Solid::Solid(Point inputCenter, RGBAcolor inputColor,
     zWidth = inputZWidth;
     lineColor = inputLineColor;
     initializeCorners();
+    location = center;
+    lookingAt = {0,0,0};
+    speed = 0;
+    velocity = {0,0,0};
+    ownerCenter = &center;
+}
+
+Solid::Solid(Point inputCenter, RGBAcolor inputColor,
+             double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
+             Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
+             Point* inputOwnerCenter) : MovableComponent(inputLocation, inputLookingAt, inputSpeed,
+                     inputVelocity, inputOwnerCenter)
+{
+    center = inputCenter;
+    color = inputColor;
+    xWidth = inputXWidth;
+    yWidth = inputYWidth;
+    zWidth = inputZWidth;
+    lineColor = inputLineColor;
+    initializeCorners();
 }
 
 void Solid::initializeCorners()

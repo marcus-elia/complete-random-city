@@ -3,11 +3,12 @@
 
 #include "structs.h"
 #include "graphics.h"
+#include "movableComponent.h"
 #include <vector>
 #include <experimental/optional>
 #include <cmath>
 
-class Solid
+class Solid : public MovableComponent
 {
 protected:
     Point center;
@@ -22,6 +23,10 @@ public:
     Solid();
     Solid(Point inputCenter, RGBAcolor inputColor,
           double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor);
+    Solid(Point inputCenter, RGBAcolor inputColor,
+          double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
+          Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
+          Point* inputOwnerCenter);
 
     // Initialization
     virtual void initializeCorners();
