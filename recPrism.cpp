@@ -11,6 +11,15 @@ RecPrism::RecPrism(Point inputCenter, RGBAcolor inputColor,
     initializeCorners();
 }
 
+RecPrism::RecPrism(Point inputCenter, RGBAcolor inputColor,
+double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
+Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
+Point* inputOwnerCenter) : Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor,
+        inputLocation, inputLookingAt, inputSpeed, inputVelocity, inputOwnerCenter)
+{
+    initializeCorners();
+}
+
 void RecPrism::initializeCorners()
 {
     corners.push_back({center.x + xWidth/2, center.y + yWidth/2, center.z + zWidth/2});
@@ -26,12 +35,33 @@ void RecPrism::initializeCorners()
 
 void RecPrism::move(double deltaX, double deltaY, double deltaZ)
 {
-
+    movePoint(center, deltaX, deltaY, deltaZ);
+    movePoint(location, deltaX, deltaY, deltaZ);
+    movePoint(lookingAt, deltaX, deltaY, deltaZ);
+    for(Point &p : corners)
+    {
+        movePoint(p, deltaX, deltaY, deltaZ);
+    }
 }
 
 void RecPrism::rotate(double thetaX, double thetaY, double thetaZ)
 {
+    for(Point &p : corners)
+    {
+        rotatePointAroundPoint(p, center, thetaX, thetaY, thetaZ);
+    }
+}
 
+void RecPrism::rotateAroundOwner(double thetaX, double thetaY, double thetaZ)
+{
+    rotatePointAroundPoint(center, *ownerCenter, thetaX, thetaY, thetaZ);
+    rotatePointAroundPoint(location, *ownerCenter, thetaX, thetaY, thetaZ);
+    rotatePointAroundPoint(lookingAt, *ownerCenter, thetaX, thetaY, thetaZ);
+    for(Point &p : corners)
+    {
+        rotatePointAroundPoint(p, *ownerCenter, thetaX, thetaY, thetaZ);
+    }
+    rotate(thetaX, thetaY, thetaZ);
 }
 
 void RecPrism::lookAt(Point &p)

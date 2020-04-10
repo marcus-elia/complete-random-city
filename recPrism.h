@@ -10,12 +10,18 @@ public:
     RecPrism();
     RecPrism(Point inputCenter, RGBAcolor inputColor,
              double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor);
+    RecPrism(Point inputCenter, RGBAcolor inputColor,
+             double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
+             Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
+             Point* inputOwnerCenter);
 
     void initializeCorners();
 
     void move(double deltaX, double deltaY, double deltaZ);
 
     void rotate(double thetaX, double thetaY, double thetaZ);
+
+    void rotateAroundOwner(double thetaX, double thetaY, double thetaZ);
 
     void lookAt(Point &p);
 
