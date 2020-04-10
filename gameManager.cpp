@@ -211,6 +211,8 @@ void GameManager::updateCurrentChunks()
             // Make the new chunk
             allSeenChunks[index] = std::make_shared<Chunk>(p, chunkSize, getPerlinValue(p), inputLeftRoadIndices,
                     inputRightRoadIndices, inputTopRoadIndices, inputBottomRoadIndices);
+            // Update the road pointers
+            allSeenChunks[index]->setRoadPlotPointers(leftChunk, rightChunk, topChunk, bottomChunk);
         }
         currentChunks.push_back(allSeenChunks[index]);
     }
