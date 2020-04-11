@@ -73,12 +73,19 @@ void Movable::rotate(double thetaX, double thetaY, double thetaZ)
     rotatePointAroundPoint(lookingAt, location, thetaX, thetaY, thetaZ);
 }
 
+void Movable::tick()
+{
+
+}
+
 void movePoint(Point &p, double deltaX, double deltaY, double deltaZ)
 {
     p.x += deltaX;
     p.y += deltaY;
     p.z += deltaZ;
 }
+
+
 
 
 void rotatePointAroundPoint(Point &p, const Point &pBase, double thetaX, double thetaY, double thetaZ)

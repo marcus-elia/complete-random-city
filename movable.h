@@ -36,7 +36,7 @@ public:
     virtual void move(double deltaX, double deltaY, double deltaZ);
     virtual void rotate(double thetaX, double thetaY, double thetaZ);
 
-    virtual void tick() = 0;
+    virtual void tick();
 
     virtual void draw() const = 0;
 };
