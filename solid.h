@@ -49,6 +49,12 @@ public:
     void setZWidth(double inputZWidth);
     void setLineColor(RGBAcolor inputLineColor);
 
+
+    // Moving
+    void move(double deltaX, double deltaY, double deltaZ);
+    void rotate(double thetaX, double thetaY, double thetaZ);
+    void rotateAroundOwner(double thetaX, double thetaY, double thetaZ);
+
     virtual void draw() const = 0;
 
     // If the p is within buffer of this shape, a corrected position

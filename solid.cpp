@@ -105,6 +105,44 @@ void Solid::setLineColor(RGBAcolor inputLineColor)
     lineColor = inputLineColor;
 }
 
+
+
+
+void Solid::move(double deltaX, double deltaY, double deltaZ)
+{
+    movePoint(center, deltaX, deltaY, deltaZ);
+    movePoint(location, deltaX, deltaY, deltaZ);
+    movePoint(lookingAt, deltaX, deltaY, deltaZ);
+    for(Point &p : corners)
+    {
+        movePoint(p, deltaX, deltaY, deltaZ);
+    }
+}
+
+void Solid::rotate(double thetaX, double thetaY, double thetaZ)
+{
+    for(Point &p : corners)
+    {
+        rotatePointAroundPoint(p, center, thetaX, thetaY, thetaZ);
+    }
+}
+
+void Solid::rotateAroundOwner(double thetaX, double thetaY, double thetaZ)
+{
+    rotatePointAroundPoint(center, *ownerCenter, thetaX, thetaY, thetaZ);
+    rotatePointAroundPoint(location, *ownerCenter, thetaX, thetaY, thetaZ);
+    rotatePointAroundPoint(lookingAt, *ownerCenter, thetaX, thetaY, thetaZ);
+    for(Point &p : corners)
+    {
+        rotatePointAroundPoint(p, *ownerCenter, thetaX, thetaY, thetaZ);
+    }
+    rotate(thetaX, thetaY, thetaZ);
+}
+
+
+
+
+
 double distance2d(Point p1, Point p2)
 {
     return sqrt((p1.x - p2.x)*(p1.x - p2.x) + (p1.z - p2.z)*(p1.z - p2.z));
