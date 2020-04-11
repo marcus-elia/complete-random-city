@@ -2,7 +2,6 @@
 #define COMPLETE_RANDOM_CITY_MOVABLE_H
 
 #include "structs.h"
-#include "solid.h"
 #include <vector>
 #include <memory>
 #include <cmath>
