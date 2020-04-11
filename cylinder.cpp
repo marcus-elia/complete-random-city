@@ -2,6 +2,8 @@
 
 Cylinder::Cylinder() : Solid()
 {
+    topXWidth = xWidth;
+    topZWidth = zWidth;
     smoothness = 25;
     initializeCorners();
 }
@@ -9,6 +11,18 @@ Cylinder::Cylinder(Point inputCenter, RGBAcolor inputColor,
                    double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor) :
         Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor)
 {
+    topXWidth = xWidth;
+    topZWidth = zWidth;
+    smoothness = 25;
+    initializeCorners();
+}
+Cylinder::Cylinder(Point inputCenter, RGBAcolor inputColor,
+                double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
+                double inputTopXWidth, double inputTopZWidth) :
+                Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor)
+{
+    topXWidth = inputTopXWidth;
+    topZWidth = inputTopZWidth;
     smoothness = 25;
     initializeCorners();
 }
@@ -18,18 +32,36 @@ Cylinder::Cylinder(Point inputCenter, RGBAcolor inputColor,
         Point* inputOwnerCenter) : Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor,
                                          inputLocation, inputLookingAt, inputSpeed, inputVelocity, inputOwnerCenter)
 {
+    topXWidth = xWidth;
+    topZWidth = zWidth;
+    smoothness = 25;
+    initializeCorners();
+}
+Cylinder::Cylinder(Point inputCenter, RGBAcolor inputColor,
+        double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
+        double inputTopXWidth, double inputTopZWidth,
+        Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
+        Point* inputOwnerCenter) :
+        Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor,
+              inputLocation, inputLookingAt, inputSpeed, inputVelocity, inputOwnerCenter)
+{
+    topXWidth = inputTopXWidth;
+    topZWidth = inputTopZWidth;
     smoothness = 25;
     initializeCorners();
 }
 
+
 void Cylinder::initializeCorners()
 {
-    double x, z;
+    double x, z, xTop, zTop;
     for(int i = 0; i < smoothness; i++)
     {
         x = xWidth/2 * cos(2*PI* i / smoothness);
         z = zWidth/2 * sin(2*PI* i / smoothness);
-        corners.push_back({center.x + x, center.y + yWidth/2, center.z + z}); // upper face
+        xTop = topXWidth/2 * cos(2*PI* i / smoothness);
+        zTop = topZWidth/2 * sin(2*PI* i / smoothness);
+        corners.push_back({center.x + xTop, center.y + yWidth/2, center.z + zTop}); // upper face
         corners.push_back({center.x + x, center.y - yWidth/2, center.z + z}); // lower face
     }
 }

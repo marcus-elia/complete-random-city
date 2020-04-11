@@ -11,16 +11,35 @@ class Cylinder : public Solid
 {
 private:
     int smoothness;
+    double topXWidth;
+    double topZWidth;
 public:
     Cylinder();
     Cylinder(Point inputCenter, RGBAcolor inputColor,
              double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor);
     Cylinder(Point inputCenter, RGBAcolor inputColor,
+             double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
+             double inputTopXWidth, double inputTopZWidth);
+    Cylinder(Point inputCenter, RGBAcolor inputColor,
             double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
             Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
             Point* inputOwnerCenter);
+    Cylinder(Point inputCenter, RGBAcolor inputColor,
+             double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
+             double inputTopXWidth, double inputTopZWidth,
+             Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
+             Point* inputOwnerCenter);
 
     void initializeCorners();
+
+    // Getters
+    double getTopXWidth() const;
+    double getTopZWidth() const;
+
+    // Setters
+    void setTopXWidth(double inputTopXWidth);
+    void setTopZWidth(double inputTopZWidth);
+
 
     void move(double deltaX, double deltaY, double deltaZ);
 
