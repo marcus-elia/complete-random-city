@@ -13,6 +13,7 @@ Plot(inputTopLeftChunkCoords, inputCenter, inputSideLength)
 BuildingPlot::BuildingPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength, Building b) :
         Plot(inputTopLeftChunkCoords, inputCenter, inputSideLength)
 {
+    plotType = Buildings;
     building = b;
 }
 
