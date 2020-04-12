@@ -123,6 +123,7 @@ void Chunk::initializeRoadLocations()
         }
     }
 }
+
 void Chunk::initializePlots()
 {
     // First, iterate through the whole chunk, adding in roads where they are specified by
@@ -543,50 +544,15 @@ void Chunk::setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chun
 
         }
     }
-    // Top left corner
-    /*if(plots[0][0]->getPlotType() == Road)
-    {
-        auto rpl = dynamic_cast<RoadPlot*>(plots[0][0].get());
-        if(rpl->getUp() && topChunk && hasElement(topChunk.value()->getBottomRoadIndices(), 0))
-        {
-            rpl->setUpRoad(dynamic_cast<RoadPlot *>(topChunk.value()->getPlotAt(0, 7)));
-            topChunk.value()->setBottomRoad(0, 7, rpl);
-        }
-        if(rpl->getLeft() && leftChunk && hasElement(leftChunk.value()->getRightRoadIndices(), 0))
-        {
-            rpl->setLeftRoad(dynamic_cast<RoadPlot *>(topChunk.value()->getPlotAt(7, 0)));
-            leftChunk.value()->setRightRoad(7, 0, rpl);
-        }
-        if(rpl->getDown() && plots[0][1]->getPlotType() == Road)
-        {
-            rpl->setDownRoad(dynamic_cast<RoadPlot*>(plots[0][1].get()));
-            setTopRoad(0, 1, rpl);
-        }
-        if(rpl->getDown() && plots[0][1]->getPlotType() == Road)
-        {
-            rpl->setDownRoad(dynamic_cast<RoadPlot*>(plots[0][1].get()));
-            setTopRoad(0, 1, rpl);
-        }
-    }
-    // The top row
-    for(int i = 0; i < 8; i++)
-    {
-        if(plots[i][0]->getPlotType() == Road)
-        {
-            auto rpl = dynamic_cast<RoadPlot*>(plots[i][0].get());
-            if(rpl->getUp() && topChunk && hasElement(topChunk.value()->getBottomRoadIndices(), i))
-            {
-                rpl->setUpRoad(dynamic_cast<RoadPlot *>(topChunk.value()->getPlotAt(i, 0)));
-                topChunk.value()->setBottomRoad(i, 0, rpl);
-            }
-            if(rpl->ge)
-         }
-    }*/
 }
 
 
 
-// Getters
+// ==============================================
+//
+//                  Getters
+//
+// ==============================================
 Point2D Chunk::getBottomLeft() const
 {
     return bottomLeft;
@@ -623,8 +589,26 @@ RoadPlot* Chunk::getRoadPlotAt(int i, int j)
 {
     return dynamic_cast<RoadPlot *>(plots[i][j].get());
 }
+std::experimental::optional<RoadPlot*> Chunk::getRandomRoadPlot()
+{
+    int numTrials = 30;
+    for(int x = 0; x < numTrials; x++)
+    {
+        int i = rand() % 8;
+        int j = rand() % 8;
+        if(plots[i][j]->getPlotType() == Road)
+        {
+            return getRoadPlotAt(i, j);
+        }
+    }
+    return std::experimental::nullopt;
+}
 
-
+// ==============================================
+//
+//                  Setters
+//
+// ==============================================
 void Chunk::setBottomRoad(int i, int j, RoadPlot *road)
 {
     Plot* pl = plots[i][j].get();

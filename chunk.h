@@ -74,6 +74,9 @@ public:
     std::vector<int> getBottomRoadIndices() const;
     Plot* getPlotAt(int i, int j);
     RoadPlot* getRoadPlotAt(int i, int j);  // casts to a RoadPlot*
+    // Tries 30 random plots within the chunk. Returns a pointer to a roadplot
+    // if it finds one
+    std::experimental::optional<RoadPlot*> getRandomRoadPlot();
 
     // Set the road pointers for the given roadplot
     void setBottomRoad(int i, int j, RoadPlot *road);
