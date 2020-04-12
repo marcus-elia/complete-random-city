@@ -7,7 +7,7 @@ Vehicle::Vehicle() : Movable()
 Vehicle::Vehicle(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity) :
 Movable(inputLocation, inputLookingAt, inputSpeed, inputVelocity)
 {
-    initializeSolids();
+    
 }
 
 
