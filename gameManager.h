@@ -8,6 +8,7 @@
 //#include "recPrism.h"
 #include "player.h"
 #include "perlinNoiseGenerator.h"
+#include "car.h"
 
 class GameManager
 {
@@ -24,6 +25,9 @@ private:
     std::vector<std::shared_ptr<Chunk>> currentChunks;
     int perlinSize;  // how many chunks before perlin repeats
     PerlinNoiseGenerator png;
+
+    // Vehicles
+    std::vector<std::shared_ptr<Vehicle>> vehicles;
 public:
     GameManager();
     GameManager(int inputChunkSize, int inputRenderRadius, int inputPerlinSize);
@@ -50,6 +54,11 @@ public:
     void updateCurrentChunks();
     // Returns a pointer to the chunk that p is in
     std::shared_ptr<Chunk> pointToChunk(Point p);
+
+    // Vehicles
+    // Randomly spawns a car in the chunk the player is currently in
+    // Returns true if successful
+    bool createCar();
 
     // Camera
     Point getCameraLocation() const;

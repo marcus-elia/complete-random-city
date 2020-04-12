@@ -24,6 +24,7 @@ void GameManager::reactToMouseMovement(double theta)
 }
 void GameManager::reactToMouseClick()
 {
+    createCar();
 }
 
 
@@ -35,28 +36,10 @@ void GameManager::draw() const
     }
 
 
-    // Draw a red square under the player for debug
-    /*glDisable(GL_CULL_FACE);
-    Vector3 v = player.getLocation();
-    glBegin(GL_QUADS);
-    glColor4f(1,0,0,1);
-    glVertex3f(v.x + 20,3, v.z + 20);
-    glVertex3f(v.x - 20,3, v.z + 20);
-    glVertex3f(v.x - 20,3, v.z - 20);
-    glVertex3f(v.x + 20,3, v.z - 20);
-
-    glEnd();
-    glEnable(GL_CULL_FACE);*/
-    // Make current chunk red for debug
-    /*Point2D p = player.getCurrentChunkCoords();
-    glBegin(GL_QUADS);
-    glColor4f(1,0,0,1);
-    glVertex3f(chunkSize*p.x,1, chunkSize*p.z);
-    glVertex3f(chunkSize*p.x,1, chunkSize*p.z + chunkSize);
-    glVertex3f(chunkSize*p.x + chunkSize,1, chunkSize*p.z + chunkSize);
-    glVertex3f(chunkSize*p.x + chunkSize,1, chunkSize*p.z);
-
-    glEnd();*/
+    for(std::shared_ptr<Vehicle> v : vehicles)
+    {
+        v->draw();
+    }
 }
 
 void GameManager::tick()
@@ -75,6 +58,12 @@ void GameManager::tick()
         //std::cout << pointToInt({player.whatChunk().x, player.whatChunk().z}) << std::endl;
         //std::cout << player.getLocation().x << ", " << player.getLocation().z << std::endl;
         updateCurrentChunks();
+    }
+
+    // Vehicles move
+    for(std::shared_ptr<Vehicle> v : vehicles)
+    {
+        v->tick();
     }
 }
 
@@ -226,6 +215,26 @@ std::shared_ptr<Chunk> GameManager::pointToChunk(Point p)
     }
     return allSeenChunks[chunkIndex];
 }
+
+
+// Vehicles
+bool GameManager::createCar()
+{
+    // Pointer to the player's current chunk
+    Chunk* c = allSeenChunks[pointToInt(player.whatChunk())].get();
+    std::experimental::optional<RoadPlot*> roadPlot = c->getRandomRoadPlot();
+    if(!roadPlot)
+    {
+        return false;
+    }
+    RoadPlot* rp = roadPlot.value();
+    Point location = {(double)rp->getCenter().x, 10, (double)rp->getCenter().z};
+    Point lookingAt = {location.x, location.y, location.z - 10};
+    vehicles.push_back(std::make_shared<Car>(Car(location, lookingAt, 5, {0,0,-1},
+            30, 20, 20, {1, 1, 0, 1}, rp)));
+    return true;
+}
+
 
 
 
