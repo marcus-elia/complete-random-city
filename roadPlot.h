@@ -16,7 +16,7 @@ private:
     bool culDeSac; // If the road dead ends, make a circle
 
     // The actual road in each direction, or nullopt
-    RoadPlot *leftRoad, *rightRoad, *upRoad, *downRoad;
+    std::experimental::optional<RoadPlot*> leftRoad, rightRoad, upRoad, downRoad;
 
     // For drawing
     std::vector<Point> roadCorners;
@@ -35,20 +35,20 @@ public:
     bool getRight() const;
     bool getUp() const;
     bool getDown() const;
-    RoadPlot* getLeftRoad() const;
-    RoadPlot* getRightRoad() const;
-    RoadPlot* getUpRoad() const;
-    RoadPlot* getDownRoad() const;
+    std::experimental::optional<RoadPlot*> getLeftRoad() const;
+    std::experimental::optional<RoadPlot*> getRightRoad() const;
+    std::experimental::optional<RoadPlot*> getUpRoad() const;
+    std::experimental::optional<RoadPlot*> getDownRoad() const;
 
     // Setters
     void setLeft(bool inputLeft);
     void setRight(bool inputRight);
     void setUp(bool inputUp);
     void setDown(bool inputDown);
-    void setLeftRoad(RoadPlot* inputLeftRoad);
-    void setRightRoad(RoadPlot* inputRightRoad);
-    void setUpRoad(RoadPlot* inputUpRoad);
-    void setDownRoad(RoadPlot* inputDownRoad);
+    void setLeftRoad(std::experimental::optional<RoadPlot*> inputLeftRoad);
+    void setRightRoad(std::experimental::optional<RoadPlot*> inputRightRoad);
+    void setUpRoad(std::experimental::optional<RoadPlot*> inputUpRoad);
+    void setDownRoad(std::experimental::optional<RoadPlot*> inputDownRoad);
 
     // For cars
     // Returns a valid direction to exit this intersection from

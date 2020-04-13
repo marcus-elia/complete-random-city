@@ -200,22 +200,22 @@ void Car::tick()
         bool enteredNewRoad = false;
         if(exitDirection == North && location.z < currentRoad->getNorthEdge())
         {
-            currentRoad = currentRoad->getUpRoad();
+            currentRoad = currentRoad->getUpRoad().value();
             enteredNewRoad = true;
         }
         else if(exitDirection == East && location.x > currentRoad->getEastEdge())
         {
-            currentRoad = currentRoad->getRightRoad();
+            currentRoad = currentRoad->getRightRoad().value();
             enteredNewRoad = true;
         }
         else if(exitDirection == South && location.y > currentRoad->getSouthEdge())
         {
-            currentRoad = currentRoad->getDownRoad();
+            currentRoad = currentRoad->getDownRoad().value();
             enteredNewRoad = true;
         }
         else if(exitDirection == West && location.x < currentRoad->getWestEdge())
         {
-            currentRoad = currentRoad->getRightRoad();
+            currentRoad = currentRoad->getRightRoad().value();
             enteredNewRoad = true;
         }
 

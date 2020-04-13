@@ -15,6 +15,10 @@ RoadPlot::RoadPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inp
     down = inputDown;
     initializeRoadCorners();
     initializeYellowLines();
+    leftRoad = std::experimental::nullopt;
+    rightRoad = std::experimental::nullopt;
+    upRoad = std::experimental::nullopt;
+    downRoad = std::experimental::nullopt;
 }
 
 void RoadPlot::initializeRoadCorners()
@@ -127,19 +131,19 @@ bool RoadPlot::getDown() const
 {
     return down;
 }
-RoadPlot* RoadPlot::getLeftRoad() const
+std::experimental::optional<RoadPlot*> RoadPlot::getLeftRoad() const
 {
     return leftRoad;
 }
-RoadPlot* RoadPlot::getRightRoad() const
+std::experimental::optional<RoadPlot*> RoadPlot::getRightRoad() const
 {
     return rightRoad;
 }
-RoadPlot* RoadPlot::getUpRoad() const
+std::experimental::optional<RoadPlot*> RoadPlot::getUpRoad() const
 {
     return upRoad;
 }
-RoadPlot* RoadPlot::getDownRoad() const
+std::experimental::optional<RoadPlot*> RoadPlot::getDownRoad() const
 {
     return downRoad;
 }
@@ -161,19 +165,19 @@ void RoadPlot::setDown(bool inputDown)
 {
     down = inputDown;
 }
-void RoadPlot::setLeftRoad(RoadPlot* inputLeftRoad)
+void RoadPlot::setLeftRoad(std::experimental::optional<RoadPlot*> inputLeftRoad)
 {
     leftRoad = inputLeftRoad;
 }
-void RoadPlot::setRightRoad(RoadPlot* inputRightRoad)
+void RoadPlot::setRightRoad(std::experimental::optional<RoadPlot*> inputRightRoad)
 {
     rightRoad = inputRightRoad;
 }
-void RoadPlot::setUpRoad(RoadPlot* inputUpRoad)
+void RoadPlot::setUpRoad(std::experimental::optional<RoadPlot*> inputUpRoad)
 {
     upRoad = inputUpRoad;
 }
-void RoadPlot::setDownRoad(RoadPlot* inputDownRoad)
+void RoadPlot::setDownRoad(std::experimental::optional<RoadPlot*> inputDownRoad)
 {
     downRoad = inputDownRoad;
 }
@@ -313,6 +317,48 @@ void RoadPlot::draw()
         drawPoint(sgmt.p2);
     }
     glEnd();
+
+    // Debug
+    /*if(getLeftRoad())
+    {
+        glColor4f(1,0,0,1);
+        glBegin(GL_QUADS);
+        drawPoint({center.x - sideLength/3.0 + 8, 5, center.z + 8.0});
+        drawPoint({center.x - sideLength/3.0 - 8, 5, center.z + 8.0});
+        drawPoint({center.x - sideLength/3.0 - 8, 5, center.z - 8.0});
+        drawPoint({center.x - sideLength/3.0 + 8, 5, center.z - 8.0});
+        glEnd();
+    }
+    if(getRightRoad())
+    {
+        glColor4f(1,0,0,1);
+        glBegin(GL_QUADS);
+        drawPoint({center.x + sideLength/3.0 + 8, 5, center.z + 8.0});
+        drawPoint({center.x + sideLength/3.0 - 8, 5, center.z + 8.0});
+        drawPoint({center.x + sideLength/3.0 - 8, 5, center.z - 8.0});
+        drawPoint({center.x + sideLength/3.0 + 8, 5, center.z - 8.0});
+        glEnd();
+    }
+    if(getUpRoad())
+    {
+        glColor4f(1,0,0,1);
+        glBegin(GL_QUADS);
+        drawPoint({center.x + 8.0, 5, center.z - sideLength/3.0 + 8.0});
+        drawPoint({center.x - 8.0, 5, center.z - sideLength/3.0+ 8.0});
+        drawPoint({center.x  - 8.0, 5, center.z - sideLength/3.0- 8.0});
+        drawPoint({center.x + 8.0, 5, center.z - sideLength/3.0- 8.0});
+        glEnd();
+    }
+    if(getDownRoad())
+    {
+        glColor4f(1,0,0,1);
+        glBegin(GL_QUADS);
+        drawPoint({center.x + 8.0, 5, center.z + sideLength/3.0 + 8.0});
+        drawPoint({center.x - 8.0, 5, center.z + sideLength/3.0+ 8.0});
+        drawPoint({center.x  - 8.0, 5, center.z + sideLength/3.0- 8.0});
+        drawPoint({center.x + 8.0, 5, center.z + sideLength/3.0- 8.0});
+        glEnd();
+    }*/
 
     glEnable(GL_CULL_FACE);
 }
