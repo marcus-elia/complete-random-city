@@ -56,6 +56,16 @@ public:
     // other direction (and this is a cul de sac), then it does return input.
     DrivingDirection getRandomDirectionExcept(DrivingDirection input) const;
 
+    // Where certain edges are
+    double getWestEdge() const;
+    double getNorthEdge() const;
+    double getEastEdge() const;
+    double getSouthEdge() const;
+    double getWestIntersectionEdge() const;
+    double getNorthIntersectionEdge() const;
+    double getEastIntersectionEdge() const;
+    double getSouthIntersectionEdge() const;
+
     void draw();
 };
 

@@ -208,6 +208,41 @@ DrivingDirection RoadPlot::getRandomDirectionExcept(DrivingDirection input) cons
     return choices[r];
 }
 
+double RoadPlot::getWestEdge() const
+{
+    return center.x - sideLength/2.0;
+}
+double RoadPlot::getNorthEdge() const
+{
+    return center.z - sideLength/2.0;
+}
+double RoadPlot::getEastEdge() const
+{
+    return center.x + sideLength/2.0;
+}
+double RoadPlot::getSouthEdge() const
+{
+    return center.z + sideLength/2.0;
+}
+double RoadPlot::getWestIntersectionEdge() const
+{
+    return center.x - sideLength/4.0;
+}
+double RoadPlot::getNorthIntersectionEdge() const
+{
+    return center.z - sideLength/4.0;
+}
+double RoadPlot::getEastIntersectionEdge() const
+{
+    return center.x + sideLength/4.0;
+}
+double RoadPlot::getSouthIntersectionEdge() const
+{
+    return center.z + sideLength/4.0;
+}
+
+
+
 
 
 void RoadPlot::draw()
