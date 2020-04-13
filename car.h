@@ -54,6 +54,8 @@ public:
 
     // Helper functions for driving
     IntersectionDirection determineIntersectionDirection(DrivingDirection approach, DrivingDirection exit) const;
+    // Make the car turn to be facing the given cardinal direction
+    void alignWithDirection(DrivingDirection input);
 
     void draw() const;
 

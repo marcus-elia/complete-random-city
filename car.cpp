@@ -25,8 +25,9 @@ void Car::initializeSolids()
 }
 void Car::initializeDirections()
 {
-    approachDirection = currentRoad->getRandomDirectionExcept(North); // North is arbitrary
-    exitDirection = currentRoad->getRandomDirectionExcept(approachDirection);
+    exitDirection = currentRoad->getRandomDirectionExcept(North); // North is arbitrary
+    alignWithDirection(exitDirection);
+    currentStatus = Exiting;
 }
 
 
@@ -158,6 +159,25 @@ IntersectionDirection Car::determineIntersectionDirection(DrivingDirection appro
     }
 }
 
+void Car::alignWithDirection(DrivingDirection input)
+{
+    if(input == North)
+    {
+        setXZAngle(3*PI/2);
+    }
+    else if(input == East)
+    {
+        setXZAngle(0);
+    }
+    else if(input == South)
+    {
+        setXZAngle(PI/2);
+    }
+    else
+    {
+        setXZAngle(PI);
+    }
+}
 
 
 
@@ -172,4 +192,50 @@ void Car::draw() const
 void Car::tick()
 {
     move(velocity.x, velocity.y, velocity.z);
+
+    // If we are leaving the RoadPlot, check if we've reached the border
+    if(currentStatus == Exiting)
+    {
+        bool enteredNewRoad = false;
+        if(exitDirection == North && location.z < currentRoad->getNorthEdge())
+        {
+            currentRoad = currentRoad->getUpRoad();
+            enteredNewRoad = true;
+        }
+        else if(exitDirection == East && location.x > currentRoad->getEastEdge())
+        {
+            currentRoad = currentRoad->getRightRoad();
+            enteredNewRoad = true;
+        }
+        else if(exitDirection == South && location.y > currentRoad->getSouthEdge())
+        {
+            currentRoad = currentRoad->getDownRoad();
+            enteredNewRoad = true;
+        }
+        else if(exitDirection == West && location.x < currentRoad->getWestEdge())
+        {
+            currentRoad = currentRoad->getRightRoad();
+            enteredNewRoad = true;
+        }
+
+        if(enteredNewRoad)
+        {
+            currentStatus = Approaching;
+            approachDirection = exitDirection;
+            exitDirection = currentRoad->getRandomDirectionExcept(approachDirection);
+            intersectionDirection = determineIntersectionDirection(approachDirection, exitDirection);
+        }
+    }
+    else if(currentStatus == Approaching)
+    {
+        bool reachedCenter = false;
+        if((approachDirection == North && location.z <= currentRoad->getCenter().z) ||
+                (approachDirection == West && location.x >= currentRoad->getCenter().x) ||
+                (approachDirection == South && location.z >= currentRoad->getCenter().z) ||
+                (approachDirection == East && location.x <= currentRoad->getCenter().x))
+        {
+            currentStatus = Exiting;
+            alignWithDirection(exitDirection);
+        }
+    }
 }
