@@ -23,6 +23,12 @@ void Car::initializeSolids()
     solids.push_back(std::make_shared<RecPrism>(RecPrism(location, bodyColor, width, height, length,
             {1,1,1,1})));
 }
+void Car::initializeDirections()
+{
+    approachDirection = currentRoad->getRandomDirectionExcept(North); // North is arbitrary
+    exitDirection = currentRoad->getRandomDirectionExcept(approachDirection);
+}
+
 
 // Getters
 double Car::getLength() const
@@ -41,6 +47,26 @@ RoadPlot* Car::getCurrentRoad() const
 {
     return currentRoad;
 }
+IntersectionDirection Car::getIntersectionDirection() const
+{
+    return intersectionDirection;
+}
+DrivingDirection Car::getApproachDirection() const
+{
+    return approachDirection;
+}
+DrivingDirection Car::getExitDirection() const
+{
+    return exitDirection;
+}
+RoadStatus Car::getCurrentStatus() const
+{
+    return currentStatus;
+}
+
+
+
+
 
 // Setters
 void Car::setLength(double inputLength)
@@ -59,6 +85,81 @@ void Car::setCurrentRoad(RoadPlot* inputCurrentRoad)
 {
     currentRoad = inputCurrentRoad;
 }
+void Car::setIntersectionDirection(IntersectionDirection input)
+{
+    intersectionDirection = input;
+}
+void Car::setApproachDirection(DrivingDirection input)
+{
+    approachDirection = input;
+}
+void Car::setExitDirection(DrivingDirection input)
+{
+    exitDirection = input;
+}
+void Car::setCurrentStatus(RoadStatus input)
+{
+    currentStatus = input;
+}
+
+
+IntersectionDirection Car::determineIntersectionDirection(DrivingDirection approach, DrivingDirection exit) const
+{
+    switch(approach)
+    {
+        case North:
+            switch(exit)
+            {
+                case North:
+                    return Straight;
+                case East:
+                    return RightTurn;
+                case South:
+                    return Circle;
+                default:
+                    return LeftTurn;
+            }
+        case East:
+            switch(exit)
+            {
+                case North:
+                    return LeftTurn;
+                case East:
+                    return Straight;
+                case South:
+                    return RightTurn;
+                default:
+                    return Circle;
+            }
+        case South:
+            switch(exit)
+            {
+                case North:
+                    return Circle;
+                case East:
+                    return LeftTurn;
+                case South:
+                    return Straight;
+                default:
+                    return RightTurn;
+            }
+        default:
+            switch(exit)
+            {
+                case North:
+                    return RightTurn;
+                case East:
+                    return Circle;
+                case South:
+                    return LeftTurn;
+                default:
+                    return Straight;
+            }
+    }
+}
+
+
+
 
 void Car::draw() const
 {
