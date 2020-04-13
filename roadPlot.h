@@ -50,6 +50,12 @@ public:
     void setUpRoad(RoadPlot* inputUpRoad);
     void setDownRoad(RoadPlot* inputDownRoad);
 
+    // For cars
+    // Returns a direction which connects to another roadplot from this one, other
+    // than the input direction (which a car presumably came from). If there is no
+    // other direction (and this is a cul de sac), then it does return input.
+    DrivingDirection getRandomDirectionExcept(DrivingDirection input) const;
+
     void draw();
 };
 

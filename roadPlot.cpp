@@ -178,6 +178,38 @@ void RoadPlot::setDownRoad(RoadPlot* inputDownRoad)
     downRoad = inputDownRoad;
 }
 
+DrivingDirection RoadPlot::getRandomDirectionExcept(DrivingDirection input) const
+{
+    bool satisfied = false;
+    std::vector<DrivingDirection> choices;
+    if(getLeftRoad() && input != West)
+    {
+        choices.push_back(West);
+    }
+    if(getRightRoad() && input != East)
+    {
+        choices.push_back(East);
+    }
+    if(getUpRoad() && input != North)
+    {
+        choices.push_back(North);
+    }
+    if(getDownRoad() && input != South)
+    {
+        choices.push_back(South);
+    }
+    // If we can only go back the way we came, return input
+    if(choices.empty())
+    {
+        return input;
+    }
+    // Otherwise, randomly pick a direction
+    int r = rand() % choices.size();
+    return choices[r];
+}
+
+
+
 void RoadPlot::draw()
 {
     // Draw the rectangles that form the road
