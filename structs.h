@@ -1,6 +1,9 @@
 #ifndef COMPLETE_RANDOM_CITY_STRUCTS_H
 #define COMPLETE_RANDOM_CITY_STRUCTS_H
 
+// This file contains some structs and enums to make
+// including simpler
+
 
 // int points used for the chunks
 // in the xz plane
@@ -41,6 +44,9 @@ struct RGBAcolor
     double a;
 };
 
+
+enum IntersectionDirection {LeftTurn, Straight, RightTurn, Circle};
+enum DrivingDirection {North, South, East, West};
 
 
 #endif //COMPLETE_RANDOM_CITY_STRUCTS_H
