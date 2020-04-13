@@ -20,6 +20,11 @@ public:
 
     std::vector<std::shared_ptr<Solid>> getSolids() const;
 
+    // Rotating needs to be overridden because the Solids also need to turn when
+    // the vehicle does
+    void setLookingAt(Point inputLookingAt);
+    void setXZAngle(double inputAngle);
+
     void move(double deltaX, double deltaY, double deltaZ);
     void rotate(double thetaX, double thetaY, double thetaZ);
 };

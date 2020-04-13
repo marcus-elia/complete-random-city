@@ -30,10 +30,10 @@ public:
 
     // Setters
     void setLocation(Point inputLocation);
-    void setLookingAt(Point inputLookingAt);
+    virtual void setLookingAt(Point inputLookingAt);
     void setSpeed(double inputSpeed);
     void setVelocity(Point inputVelocity);
-    void setXZAngle(double inputAngle);
+    virtual void setXZAngle(double inputAngle);
 
     virtual void move(double deltaX, double deltaY, double deltaZ);
     virtual void rotate(double thetaX, double thetaY, double thetaZ);
