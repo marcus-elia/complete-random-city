@@ -56,6 +56,7 @@ void Vehicle::move(double deltaX, double deltaY, double deltaZ)
     for(std::shared_ptr<Solid> s : solids)
     {
         s->move(deltaX, deltaY, deltaZ);
+        s->moveOwnerCenter(deltaX, deltaY, deltaZ);
     }
 }
 void Vehicle::rotate(double thetaX, double thetaY, double thetaZ)
