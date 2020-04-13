@@ -17,6 +17,7 @@ public:
     Point getOwnerCenter() const;
 
     void setOwnerCenter(Point inputOwnerCenter);
+    void moveOwnerCenter(double deltaX, double deltaY, double deltaZ);
 
     virtual void rotateAroundOwner(double thetaX, double thetaY, double thetaZ) = 0;
 };

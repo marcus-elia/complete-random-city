@@ -25,3 +25,7 @@ void MovableComponent::setOwnerCenter(Point inputOwnerCenter)
 {
     ownerCenter = inputOwnerCenter;
 }
+void MovableComponent::moveOwnerCenter(double deltaX, double deltaY, double deltaZ)
+{
+    movePoint(ownerCenter, deltaX, deltaY, deltaZ);
+}
