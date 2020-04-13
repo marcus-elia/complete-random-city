@@ -13,7 +13,7 @@ TriPrism::TriPrism(Point inputCenter, RGBAcolor inputColor,
 TriPrism::TriPrism(Point inputCenter, RGBAcolor inputColor,
 double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
 Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-Point* inputOwnerCenter) : Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor,
+Point inputOwnerCenter) : Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor,
         inputLocation, inputLookingAt, inputSpeed, inputVelocity, inputOwnerCenter)
 {
     initializeCorners();

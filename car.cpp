@@ -22,7 +22,8 @@ RoadPlot* inputCurrentRoad) : Vehicle(inputLocation, inputLookingAt, inputSpeed,
 void Car::initializeSolids()
 {
     solids.push_back(std::make_shared<RecPrism>(RecPrism(location, bodyColor, width, height, length,
-            {1,1,1,1})));
+            {1,1,1,1}, location, lookingAt,  0,
+            {0,0,0},  location)));
 }
 void Car::initializeDirections()
 {

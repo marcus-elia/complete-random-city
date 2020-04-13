@@ -18,7 +18,7 @@ public:
             double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
             double inputUpperXWidth, double inputUpperZWidth,
             Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-            Point* inputOwnerCenter);
+            Point inputOwnerCenter);
 
     void initializeCorners();
 

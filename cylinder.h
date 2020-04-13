@@ -23,12 +23,12 @@ public:
     Cylinder(Point inputCenter, RGBAcolor inputColor,
             double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
             Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-            Point* inputOwnerCenter);
+            Point inputOwnerCenter);
     Cylinder(Point inputCenter, RGBAcolor inputColor,
              double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
              double inputTopXWidth, double inputTopZWidth,
              Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-             Point* inputOwnerCenter);
+             Point inputOwnerCenter);
 
     void initializeCorners();
 

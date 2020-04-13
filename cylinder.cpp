@@ -29,7 +29,7 @@ Cylinder::Cylinder(Point inputCenter, RGBAcolor inputColor,
 Cylinder::Cylinder(Point inputCenter, RGBAcolor inputColor,
         double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
         Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-        Point* inputOwnerCenter) : Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor,
+        Point inputOwnerCenter) : Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor,
                                          inputLocation, inputLookingAt, inputSpeed, inputVelocity, inputOwnerCenter)
 {
     topXWidth = xWidth;
@@ -41,7 +41,7 @@ Cylinder::Cylinder(Point inputCenter, RGBAcolor inputColor,
         double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
         double inputTopXWidth, double inputTopZWidth,
         Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-        Point* inputOwnerCenter) :
+        Point inputOwnerCenter) :
         Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor,
               inputLocation, inputLookingAt, inputSpeed, inputVelocity, inputOwnerCenter)
 {

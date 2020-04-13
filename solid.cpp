@@ -23,13 +23,13 @@ Solid::Solid(Point inputCenter, RGBAcolor inputColor,
     lookingAt = {0,0,0};
     speed = 0;
     velocity = {0,0,0};
-    ownerCenter = &center;
+    ownerCenter = center;
 }
 
 Solid::Solid(Point inputCenter, RGBAcolor inputColor,
              double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
              Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-             Point* inputOwnerCenter) : MovableComponent(inputLocation, inputLookingAt, inputSpeed,
+             Point inputOwnerCenter) : MovableComponent(inputLocation, inputLookingAt, inputSpeed,
                      inputVelocity, inputOwnerCenter)
 {
     center = inputCenter;
@@ -129,12 +129,12 @@ void Solid::rotate(double thetaX, double thetaY, double thetaZ)
 
 void Solid::rotateAroundOwner(double thetaX, double thetaY, double thetaZ)
 {
-    rotatePointAroundPoint(center, *ownerCenter, thetaX, thetaY, thetaZ);
-    rotatePointAroundPoint(location, *ownerCenter, thetaX, thetaY, thetaZ);
-    rotatePointAroundPoint(lookingAt, *ownerCenter, thetaX, thetaY, thetaZ);
+    rotatePointAroundPoint(center, ownerCenter, thetaX, thetaY, thetaZ);
+    rotatePointAroundPoint(location, ownerCenter, thetaX, thetaY, thetaZ);
+    rotatePointAroundPoint(lookingAt, ownerCenter, thetaX, thetaY, thetaZ);
     for(Point &p : corners)
     {
-        rotatePointAroundPoint(p, *ownerCenter, thetaX, thetaY, thetaZ);
+        rotatePointAroundPoint(p, ownerCenter, thetaX, thetaY, thetaZ);
     }
     rotate(thetaX, thetaY, thetaZ);
 }

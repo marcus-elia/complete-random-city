@@ -14,7 +14,7 @@ RecPrism::RecPrism(Point inputCenter, RGBAcolor inputColor,
 RecPrism::RecPrism(Point inputCenter, RGBAcolor inputColor,
 double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
 Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-Point* inputOwnerCenter) : Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor,
+Point inputOwnerCenter) : Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor,
         inputLocation, inputLookingAt, inputSpeed, inputVelocity, inputOwnerCenter)
 {
     initializeCorners();
@@ -41,8 +41,10 @@ void RecPrism::lookAt(Point &p)
 
 void RecPrism::draw() const
 {
+    glDisable(GL_CULL_FACE);
     drawLines();
     drawFaces();
+    glEnable(GL_CULL_FACE);
 
     // Debugging: print a ring around the middle of each rectangle to
     // prove that it knows where it is.

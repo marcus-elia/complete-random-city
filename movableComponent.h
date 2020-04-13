@@ -7,16 +7,16 @@ class MovableComponent : public Movable
 {
 protected:
     // The center point that this will rotate around
-    Point* ownerCenter;
+    Point ownerCenter;
 public:
     MovableComponent();
     MovableComponent(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity);
     MovableComponent(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-            Point* inputOwnerCenter);
+            Point inputOwnerCenter);
 
-    Point* getOwnerCenter() const;
+    Point getOwnerCenter() const;
 
-    void setOwnerCenter(Point* inputOwnerCenter);
+    void setOwnerCenter(Point inputOwnerCenter);
 
     virtual void rotateAroundOwner(double thetaX, double thetaY, double thetaZ) = 0;
 };
