@@ -16,6 +16,7 @@ RoadPlot* inputCurrentRoad) : Vehicle(inputLocation, inputLookingAt, inputSpeed,
     bodyColor = inputBodyColor;
     currentRoad = inputCurrentRoad;
     initializeSolids();
+    initializeDirections();
 }
 
 void Car::initializeSolids()
@@ -25,7 +26,7 @@ void Car::initializeSolids()
 }
 void Car::initializeDirections()
 {
-    exitDirection = currentRoad->getRandomDirectionExcept(North); // North is arbitrary
+    exitDirection = currentRoad->getRandomDirection();
     alignWithDirection(exitDirection);
     currentStatus = Exiting;
 }
