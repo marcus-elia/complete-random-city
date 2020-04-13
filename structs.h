@@ -47,6 +47,7 @@ struct RGBAcolor
 
 enum IntersectionDirection {LeftTurn, Straight, RightTurn, Circle};
 enum DrivingDirection {North, South, East, West};
+enum RoadStatus {Approaching, Intersection, Exiting};
 
 
 #endif //COMPLETE_RANDOM_CITY_STRUCTS_H
