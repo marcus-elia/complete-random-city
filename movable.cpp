@@ -3,14 +3,14 @@
 Movable::Movable()
 {
     location = {0,0,0};
-    lookingAt = {0,0,0};
+    setLookingAt({0,0,0});
     speed = 0;
     velocity = {0,0,0};
 }
 Movable::Movable(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity)
 {
     location = inputLocation;
-    lookingAt = inputLookingAt;
+    setLookingAt(inputLookingAt);
     speed = inputSpeed;
     velocity = inputVelocity;
     updateVelocity();
@@ -43,6 +43,10 @@ Point Movable::getVelocity() const
 {
     return velocity;
 }
+double Movable::getXZAngle() const
+{
+    return xzAngle;
+}
 
 // Setters
 void Movable::setLocation(Point inputLocation)
@@ -52,6 +56,7 @@ void Movable::setLocation(Point inputLocation)
 void Movable::setLookingAt(Point inputLookingAt)
 {
     lookingAt = inputLookingAt;
+    xzAngle = atan2(lookingAt.z - location.z, lookingAt.x - location.x);
 }
 void Movable::setSpeed(double inputSpeed)
 {
@@ -61,6 +66,14 @@ void Movable::setSpeed(double inputSpeed)
 void Movable::setVelocity(Point inputVelocity)
 {
     velocity = inputVelocity;
+}
+void Movable::setXZAngle(double inputAngle)
+{
+    // Rotate the object to match the angle
+    double thetaY = inputAngle - xzAngle;
+    rotate(0, thetaY, 0);
+    // Set the new angle
+    xzAngle = inputAngle;
 }
 
 void Movable::move(double deltaX, double deltaY, double deltaZ)

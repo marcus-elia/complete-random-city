@@ -13,6 +13,7 @@ protected:
     Point lookingAt;
     double speed;
     Point velocity;
+    double xzAngle; // angle in the xz-plane
 public:
     Movable();
     Movable(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity);
@@ -25,12 +26,14 @@ public:
     Point getLookingAt() const;
     double getSpeed() const;
     Point getVelocity() const;
+    double getXZAngle() const;
 
     // Setters
     void setLocation(Point inputLocation);
     void setLookingAt(Point inputLookingAt);
     void setSpeed(double inputSpeed);
     void setVelocity(Point inputVelocity);
+    void setXZAngle(double inputAngle);
 
     virtual void move(double deltaX, double deltaY, double deltaZ);
     virtual void rotate(double thetaX, double thetaY, double thetaZ);
