@@ -62,4 +62,6 @@ public:
     void tick();
 };
 
+DrivingDirection oppositeDirection(DrivingDirection input);
+
 #endif //COMPLETE_RANDOM_CITY_CAR_H

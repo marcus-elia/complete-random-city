@@ -188,6 +188,23 @@ void Car::draw() const
     {
         s->draw();
     }
+    // Debug
+    glDisable(GL_CULL_FACE);
+    if(currentStatus == Approaching)
+    {
+        glColor4f(1,0,0,1);
+    }
+    else
+    {
+        glColor4f(0,0,1,1);
+    }
+    glBegin(GL_QUADS);
+    drawPoint({location.x + 8, 30, location.z + 8});
+    drawPoint({location.x - 8, 30, location.z + 8});
+    drawPoint({location.x - 8, 30, location.z - 8});
+    drawPoint({location.x + 8, 30, location.z - 8});
+    glEnd();
+    glEnable(GL_CULL_FACE);
 }
 
 void Car::tick()
@@ -223,7 +240,7 @@ void Car::tick()
         {
             currentStatus = Approaching;
             approachDirection = exitDirection;
-            exitDirection = currentRoad->getRandomDirectionExcept(approachDirection);
+            exitDirection = currentRoad->getRandomDirectionExcept(oppositeDirection(approachDirection));
             intersectionDirection = determineIntersectionDirection(approachDirection, exitDirection);
         }
     }
@@ -231,12 +248,32 @@ void Car::tick()
     {
         bool reachedCenter = false;
         if((approachDirection == North && location.z <= currentRoad->getCenter().z) ||
-                (approachDirection == West && location.x >= currentRoad->getCenter().x) ||
+                (approachDirection == West && location.x <= currentRoad->getCenter().x) ||
                 (approachDirection == South && location.z >= currentRoad->getCenter().z) ||
-                (approachDirection == East && location.x <= currentRoad->getCenter().x))
+                (approachDirection == East && location.x >= currentRoad->getCenter().x))
         {
             currentStatus = Exiting;
             alignWithDirection(exitDirection);
         }
+    }
+}
+
+DrivingDirection oppositeDirection(DrivingDirection input)
+{
+    if(input == North)
+    {
+        return South;
+    }
+    else if(input == West)
+    {
+        return East;
+    }
+    else if(input == South)
+    {
+        return North;
+    }
+    else
+    {
+        return West;
     }
 }
