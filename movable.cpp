@@ -57,6 +57,8 @@ void Movable::setLookingAt(Point inputLookingAt)
 {
     lookingAt = inputLookingAt;
     xzAngle = atan2(lookingAt.z - location.z, lookingAt.x - location.x);
+    double prevAngle = atan2(velocity.z, velocity.x);
+    rotatePointAroundPoint(velocity, {0,0,0}, 0, xzAngle - prevAngle, 0);
 }
 void Movable::setSpeed(double inputSpeed)
 {
@@ -74,6 +76,9 @@ void Movable::setXZAngle(double inputAngle)
     rotate(0, thetaY, 0);
     // Set the new angle
     xzAngle = inputAngle;
+
+    double prevAngle = atan2(velocity.z, velocity.x);
+    rotatePointAroundPoint(velocity, {0,0,0}, 0, xzAngle - prevAngle, 0);
 }
 
 void Movable::move(double deltaX, double deltaY, double deltaZ)
