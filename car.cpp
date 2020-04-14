@@ -205,6 +205,15 @@ void Car::draw() const
     drawPoint({location.x - 8, 30, location.z - 8});
     drawPoint({location.x + 8, 30, location.z - 8});
     glEnd();
+
+    glBegin(GL_QUADS);
+    glColor4f(0,1,1,1);
+    Point2D loc = currentRoad->getCenter();
+    drawPoint({loc.x + 8.0, 10, loc.z + 8.0});
+    drawPoint({loc.x - 8.0, 10, loc.z + 8.0});
+    drawPoint({loc.x - 8.0, 10, loc.z - 8.0});
+    drawPoint({loc.x + 8.0, 10, loc.z - 8.0});
+    glEnd();
     glEnable(GL_CULL_FACE);
 }
 
@@ -233,7 +242,7 @@ void Car::tick()
         }
         else if(exitDirection == West && location.x < currentRoad->getWestEdge())
         {
-            currentRoad = currentRoad->getRightRoad().value();
+            currentRoad = currentRoad->getLeftRoad().value();
             enteredNewRoad = true;
         }
 
