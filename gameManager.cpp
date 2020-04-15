@@ -230,8 +230,8 @@ bool GameManager::createCar()
     RoadPlot* rp = roadPlot.value();
     Point location = {(double)rp->getCenter().x, 10, (double)rp->getCenter().z};
     Point lookingAt = {location.x, location.y, location.z - 10};
-    vehicles.push_back(std::make_shared<Car>(Car(location, lookingAt, 5, {0,0,-1},
-            30, 20, 20, {1, 1, 0, 1}, rp)));
+    vehicles.push_back(std::make_shared<Car>(Car(location, lookingAt, 1, {0,0,-1},
+            20, 10, rp->getLaneWidth() - 4, {1, 1, 0, 1}, rp)));
     return true;
 }
 
