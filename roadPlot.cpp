@@ -243,6 +243,11 @@ DrivingDirection RoadPlot::getRandomDirectionExcept(DrivingDirection input) cons
     return choices[r];
 }
 
+
+double RoadPlot::getLaneWidth() const
+{
+    return sideLength/4.0;
+}
 double RoadPlot::getWestEdge() const
 {
     return center.x - sideLength/2.0;
@@ -274,6 +279,38 @@ double RoadPlot::getEastIntersectionEdge() const
 double RoadPlot::getSouthIntersectionEdge() const
 {
     return center.z + sideLength/4.0;
+}
+Point2D RoadPlot::getUpExitPoint() const
+{
+    return {center.x + sideLength/8, center.z - sideLength/4};
+}
+Point2D RoadPlot::getUpEntrancePoint() const
+{
+    return {center.x - sideLength/8, center.z - sideLength/4};
+}
+Point2D RoadPlot::getRightExitPoint() const
+{
+    return {center.x + sideLength/4, center.z + sideLength/8};
+}
+Point2D RoadPlot::getRightEntrancePoint() const
+{
+    return {center.x + sideLength/4, center.z - sideLength/8};
+}
+Point2D RoadPlot::getDownExitPoint() const
+{
+    return {center.x - sideLength/8, center.z + sideLength/4};
+}
+Point2D RoadPlot::getDownEntrancePoint() const
+{
+    return {center.x + sideLength/8, center.z + sideLength/4};
+}
+Point2D RoadPlot::getLeftExitPoint() const
+{
+    return {center.x - sideLength/4, center.z - sideLength/8};
+}
+Point2D RoadPlot::getLeftEntrancePoint() const
+{
+    return {center.x - sideLength/4, center.z + sideLength/8};
 }
 
 
@@ -317,48 +354,5 @@ void RoadPlot::draw()
         drawPoint(sgmt.p2);
     }
     glEnd();
-
-    // Debug
-    /*if(getLeftRoad())
-    {
-        glColor4f(1,0,0,1);
-        glBegin(GL_QUADS);
-        drawPoint({center.x - sideLength/3.0 + 8, 5, center.z + 8.0});
-        drawPoint({center.x - sideLength/3.0 - 8, 5, center.z + 8.0});
-        drawPoint({center.x - sideLength/3.0 - 8, 5, center.z - 8.0});
-        drawPoint({center.x - sideLength/3.0 + 8, 5, center.z - 8.0});
-        glEnd();
-    }
-    if(getRightRoad())
-    {
-        glColor4f(1,0,0,1);
-        glBegin(GL_QUADS);
-        drawPoint({center.x + sideLength/3.0 + 8, 5, center.z + 8.0});
-        drawPoint({center.x + sideLength/3.0 - 8, 5, center.z + 8.0});
-        drawPoint({center.x + sideLength/3.0 - 8, 5, center.z - 8.0});
-        drawPoint({center.x + sideLength/3.0 + 8, 5, center.z - 8.0});
-        glEnd();
-    }
-    if(getUpRoad())
-    {
-        glColor4f(1,0,0,1);
-        glBegin(GL_QUADS);
-        drawPoint({center.x + 8.0, 5, center.z - sideLength/3.0 + 8.0});
-        drawPoint({center.x - 8.0, 5, center.z - sideLength/3.0+ 8.0});
-        drawPoint({center.x  - 8.0, 5, center.z - sideLength/3.0- 8.0});
-        drawPoint({center.x + 8.0, 5, center.z - sideLength/3.0- 8.0});
-        glEnd();
-    }
-    if(getDownRoad())
-    {
-        glColor4f(1,0,0,1);
-        glBegin(GL_QUADS);
-        drawPoint({center.x + 8.0, 5, center.z + sideLength/3.0 + 8.0});
-        drawPoint({center.x - 8.0, 5, center.z + sideLength/3.0+ 8.0});
-        drawPoint({center.x  - 8.0, 5, center.z + sideLength/3.0- 8.0});
-        drawPoint({center.x + 8.0, 5, center.z + sideLength/3.0- 8.0});
-        glEnd();
-    }*/
-
     glEnable(GL_CULL_FACE);
 }

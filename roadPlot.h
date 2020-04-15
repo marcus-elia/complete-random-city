@@ -58,7 +58,8 @@ public:
     // other direction (and this is a cul de sac), then it does return input.
     DrivingDirection getRandomDirectionExcept(DrivingDirection input) const;
 
-    // Where certain edges are
+    // Where certain things are
+    double getLaneWidth() const;
     double getWestEdge() const;
     double getNorthEdge() const;
     double getEastEdge() const;
@@ -67,6 +68,16 @@ public:
     double getNorthIntersectionEdge() const;
     double getEastIntersectionEdge() const;
     double getSouthIntersectionEdge() const;
+
+    // Get the physical points cars will go through on the perimeter of the intersection
+    Point2D getUpExitPoint() const;
+    Point2D getUpEntrancePoint() const;
+    Point2D getRightExitPoint() const;
+    Point2D getRightEntrancePoint() const;
+    Point2D getDownExitPoint() const;
+    Point2D getDownEntrancePoint() const;
+    Point2D getLeftExitPoint() const;
+    Point2D getLeftEntrancePoint() const;
 
     void draw();
 };
