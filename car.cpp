@@ -30,6 +30,26 @@ void Car::initializeDirections()
     exitDirection = currentRoad->getRandomDirection();
     alignWithDirection(exitDirection);
     currentStatus = Exiting;
+
+    // Put it in the right place
+    Point2D start;
+    if(exitDirection == North)
+    {
+        start = currentRoad->getUpExitPoint();
+    }
+    else if(exitDirection == East)
+    {
+        start = currentRoad->getRightExitPoint();
+    }
+    else if(exitDirection == South)
+    {
+        start = currentRoad->getDownExitPoint();
+    }
+    else if(exitDirection == West)
+    {
+        start = currentRoad->getLeftExitPoint();
+    }
+    move(start.x - location.x, 0, start.z - location.z);
 }
 
 
@@ -325,7 +345,7 @@ void Car::checkStatusIntersection()
         turnPoints.pop_back();
         double theta = atan2(nextLocation.z - location.z, nextLocation.x - location.x);
         velocity = {nextLocation.x - location.x, 0, nextLocation.z - location.z};
-        //rotate(0, theta, 0);
+        rotate(0, theta, 0);
     }
 }
 void Car::checkStatusApproaching()
