@@ -23,6 +23,9 @@ private:
     DrivingDirection exitDirection;     // example: North means car is facing north as it leaves
     // What phase of the RoadPlot is the car in
     RoadStatus currentStatus;
+
+    // If the car is turning, we need points on the curve to guide it
+    std::vector<Point2D> turnPoints;
 public:
     Car();
     Car(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
@@ -56,6 +59,13 @@ public:
     IntersectionDirection determineIntersectionDirection(DrivingDirection approach, DrivingDirection exit) const;
     // Make the car turn to be facing the given cardinal direction
     void alignWithDirection(DrivingDirection input);
+    // Gets a vector of turn points from the RoadPlot
+    void updateTurnPoints();
+
+    // Check for when the Car needs to change status, and update things accordingly
+    void checkStatusExiting();
+    void checkStatusIntersection();
+    void checkStatusApproaching();
 
     void draw() const;
 

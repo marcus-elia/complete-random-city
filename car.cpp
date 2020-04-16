@@ -181,6 +181,67 @@ void Car::alignWithDirection(DrivingDirection input)
     }
 }
 
+void Car::updateTurnPoints()
+{
+    if(intersectionDirection == LeftTurn)
+    {
+        if(approachDirection == North)
+        {
+            turnPoints = currentRoad->getTurnPointsLeftNorth(speed);
+        }
+        else if(approachDirection == East)
+        {
+            turnPoints = currentRoad->getTurnPointsLeftEast(speed);
+        }
+        else if(approachDirection == South)
+        {
+            turnPoints = currentRoad->getTurnPointsLeftSouth(speed);
+        }
+        else if(approachDirection == West)
+        {
+            turnPoints = currentRoad->getTurnPointsLeftWest(speed);
+        }
+    }
+    else if(intersectionDirection == RightTurn)
+    {
+        if(approachDirection == North)
+        {
+            turnPoints = currentRoad->getTurnPointsRightNorth(speed);
+        }
+        else if(approachDirection == East)
+        {
+            turnPoints = currentRoad->getTurnPointsRightEast(speed);
+        }
+        else if(approachDirection == South)
+        {
+            turnPoints = currentRoad->getTurnPointsRightSouth(speed);
+        }
+        else if(approachDirection == West)
+        {
+            turnPoints = currentRoad->getTurnPointsRightWest(speed);
+        }
+    }
+    else if(intersectionDirection == Circle)
+    {
+        if(approachDirection == North)
+        {
+            turnPoints = currentRoad->getTurnPointsCircleNorth(speed);
+        }
+        else if(approachDirection == East)
+        {
+            turnPoints = currentRoad->getTurnPointsCircleEast(speed);
+        }
+        else if(approachDirection == South)
+        {
+            turnPoints = currentRoad->getTurnPointsCircleSouth(speed);
+        }
+        else if(approachDirection == West)
+        {
+            turnPoints = currentRoad->getTurnPointsCircleWest(speed);
+        }
+    }
+}
+
 
 
 void Car::draw() const
@@ -217,6 +278,71 @@ void Car::draw() const
     glEnable(GL_CULL_FACE);
 }
 
+
+void Car::checkStatusExiting()
+{
+    bool enteredNewRoad = false;
+    if(exitDirection == North && location.z < currentRoad->getNorthEdge())
+    {
+        currentRoad = currentRoad->getUpRoad().value();
+        enteredNewRoad = true;
+    }
+    else if(exitDirection == East && location.x > currentRoad->getEastEdge())
+    {
+        currentRoad = currentRoad->getRightRoad().value();
+        enteredNewRoad = true;
+    }
+    else if(exitDirection == South && location.y > currentRoad->getSouthEdge())
+    {
+        currentRoad = currentRoad->getDownRoad().value();
+        enteredNewRoad = true;
+    }
+    else if(exitDirection == West && location.x < currentRoad->getWestEdge())
+    {
+        currentRoad = currentRoad->getLeftRoad().value();
+        enteredNewRoad = true;
+    }
+
+    if(enteredNewRoad)
+    {
+        currentStatus = Approaching;
+        approachDirection = exitDirection;
+        exitDirection = currentRoad->getRandomDirectionExcept(oppositeDirection(approachDirection));
+        intersectionDirection = determineIntersectionDirection(approachDirection, exitDirection);
+    }
+}
+void Car::checkStatusIntersection()
+{
+    if(turnPoints.empty())
+    {
+        currentStatus = Exiting;
+        alignWithDirection(exitDirection);
+        updateVelocity();
+    }
+    else
+    {
+        Point2D nextLocation = turnPoints.back();
+        turnPoints.pop_back();
+        double theta = atan2(nextLocation.z - location.z, nextLocation.x - location.x);
+        velocity = {nextLocation.x - location.x, 0, nextLocation.z - location.z};
+        rotate(0, theta, 0);
+    }
+}
+void Car::checkStatusApproaching()
+{
+    if((approachDirection == North && location.z <= currentRoad->getCenter().z) ||
+       (approachDirection == West && location.x <= currentRoad->getCenter().x) ||
+       (approachDirection == South && location.z >= currentRoad->getCenter().z) ||
+       (approachDirection == East && location.x >= currentRoad->getCenter().x))
+    {
+        currentStatus = Intersection;
+        updateTurnPoints();
+    }
+}
+
+
+
+
 void Car::tick()
 {
     move(velocity.x, velocity.y, velocity.z);
@@ -224,47 +350,15 @@ void Car::tick()
     // If we are leaving the RoadPlot, check if we've reached the border
     if(currentStatus == Exiting)
     {
-        bool enteredNewRoad = false;
-        if(exitDirection == North && location.z < currentRoad->getNorthEdge())
-        {
-            currentRoad = currentRoad->getUpRoad().value();
-            enteredNewRoad = true;
-        }
-        else if(exitDirection == East && location.x > currentRoad->getEastEdge())
-        {
-            currentRoad = currentRoad->getRightRoad().value();
-            enteredNewRoad = true;
-        }
-        else if(exitDirection == South && location.y > currentRoad->getSouthEdge())
-        {
-            currentRoad = currentRoad->getDownRoad().value();
-            enteredNewRoad = true;
-        }
-        else if(exitDirection == West && location.x < currentRoad->getWestEdge())
-        {
-            currentRoad = currentRoad->getLeftRoad().value();
-            enteredNewRoad = true;
-        }
-
-        if(enteredNewRoad)
-        {
-            currentStatus = Approaching;
-            approachDirection = exitDirection;
-            exitDirection = currentRoad->getRandomDirectionExcept(oppositeDirection(approachDirection));
-            intersectionDirection = determineIntersectionDirection(approachDirection, exitDirection);
-        }
+        checkStatusExiting();
     }
     else if(currentStatus == Approaching)
     {
-        bool reachedCenter = false;
-        if((approachDirection == North && location.z <= currentRoad->getCenter().z) ||
-                (approachDirection == West && location.x <= currentRoad->getCenter().x) ||
-                (approachDirection == South && location.z >= currentRoad->getCenter().z) ||
-                (approachDirection == East && location.x >= currentRoad->getCenter().x))
-        {
-            currentStatus = Exiting;
-            alignWithDirection(exitDirection);
-        }
+        checkStatusApproaching();
+    }
+    else if(currentStatus == Intersection)
+    {
+        checkStatusIntersection();
     }
 }
 
