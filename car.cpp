@@ -295,6 +295,22 @@ void Car::draw() const
     drawPoint({loc.x - 8.0, 10, loc.z - 8.0});
     drawPoint({loc.x + 8.0, 10, loc.z - 8.0});
     glEnd();
+
+    if(!turnPoints.empty())
+    {
+        for(Point2D p : turnPoints)
+        {
+            glBegin(GL_QUADS);
+            glColor4f(0,1,1,1);
+            Point2D loc = currentRoad->getCenter();
+            drawPoint({p.x + 1.0, 5, p.z + 1.0});
+            drawPoint({p.x - 1.0, 5, p.z + 1.0});
+            drawPoint({p.x - 1.0, 5, p.z - 1.0});
+            drawPoint({p.x + 1.0, 5, p.z - 1.0});
+            glEnd();
+        }
+    }
+
     glEnable(GL_CULL_FACE);
 }
 
@@ -312,7 +328,7 @@ void Car::checkStatusExiting()
         currentRoad = currentRoad->getRightRoad().value();
         enteredNewRoad = true;
     }
-    else if(exitDirection == South && location.y > currentRoad->getSouthEdge())
+    else if(exitDirection == South && location.z > currentRoad->getSouthEdge())
     {
         currentRoad = currentRoad->getDownRoad().value();
         enteredNewRoad = true;
