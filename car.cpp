@@ -325,15 +325,15 @@ void Car::checkStatusIntersection()
         turnPoints.pop_back();
         double theta = atan2(nextLocation.z - location.z, nextLocation.x - location.x);
         velocity = {nextLocation.x - location.x, 0, nextLocation.z - location.z};
-        rotate(0, theta, 0);
+        //rotate(0, theta, 0);
     }
 }
 void Car::checkStatusApproaching()
 {
-    if((approachDirection == North && location.z <= currentRoad->getCenter().z) ||
-       (approachDirection == West && location.x <= currentRoad->getCenter().x) ||
-       (approachDirection == South && location.z >= currentRoad->getCenter().z) ||
-       (approachDirection == East && location.x >= currentRoad->getCenter().x))
+    if((approachDirection == North && location.z <= currentRoad->getSouthIntersectionEdge()) ||
+       (approachDirection == West && location.x <= currentRoad->getEastIntersectionEdge()) ||
+       (approachDirection == South && location.z >= currentRoad->getNorthIntersectionEdge()) ||
+       (approachDirection == East && location.x >= currentRoad->getWestIntersectionEdge()))
     {
         currentStatus = Intersection;
         updateTurnPoints();
