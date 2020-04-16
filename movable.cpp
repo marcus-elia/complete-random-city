@@ -19,10 +19,13 @@ Movable::Movable(Point inputLocation, Point inputLookingAt, double inputSpeed, P
 void Movable::updateVelocity()
 {
     double magnitude = sqrt(velocity.x*velocity.x + velocity.y*velocity.y + velocity.z*velocity.z);
-    if(magnitude > 0)
+    if(magnitude == 0)
     {
-        velocity = {velocity.x/magnitude*speed, velocity.y/magnitude*speed, velocity.z/magnitude*speed};
+        velocity = {lookingAt.x - location.x, lookingAt.y - location.y, lookingAt.z - location.z};
+        magnitude = sqrt(velocity.x*velocity.x + velocity.y*velocity.y + velocity.z*velocity.z);
     }
+    velocity = {velocity.x/magnitude*speed, velocity.y/magnitude*speed, velocity.z/magnitude*speed};
+
 }
 
 
