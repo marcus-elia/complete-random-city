@@ -312,6 +312,240 @@ Point2D RoadPlot::getLeftEntrancePoint() const
 {
     return {center.x - sideLength/4, center.z + sideLength/8};
 }
+// Points for cars turning
+std::vector<Point2D> RoadPlot::getTurnPointsLeftNorth(double carSpeed) const
+{
+    Point2D turnCenter = {static_cast<int>(getWestIntersectionEdge()), static_cast<int>(getSouthIntersectionEdge())};
+    // r = the radius of the curve
+    double r = 3.0*sideLength/8;
+
+    // If car is too fast, pretend it is going slower so we can calculate points
+    // d = Euclidean distance between the points on the curve
+    double d = carSpeed < 2*r ? carSpeed : 2*r;
+
+    // n = number of points inside the curve (not counting endpoints) to make the car move at the
+    // correct speed. (this formula came from law of cosines)
+    int n = ceil(PI / (2*acos(1 - (d*d)/(r*r))) - 1);
+
+    double deltaTheta = (PI/2) / (n+1);  // the angle swept out between each two points
+
+    std::vector<Point2D> turnPoints;
+    double theta = 3*PI/2; // Start at the end of the intersection and go clockwise
+    double deltaX, deltaZ;
+    for(int i = 1; i < n+1; i++)
+    {
+        theta += deltaTheta;
+        deltaX = r*cos(theta);
+        deltaZ = r*sin(theta);
+        turnPoints.push_back({static_cast<int>(turnCenter.x + deltaX), static_cast<int>(turnCenter.z + deltaZ)});
+    }
+    return turnPoints;
+}
+std::vector<Point2D> RoadPlot::getTurnPointsRightNorth(double carSpeed) const
+{
+    Point2D turnCenter = {static_cast<int>(getEastIntersectionEdge()), static_cast<int>(getSouthIntersectionEdge())};
+    double r = sideLength/8.0;
+    double d = carSpeed < 2*r ? carSpeed : 2*r;
+    int n = ceil(PI / (2*acos(1 - (d*d)/(r*r))) - 1);
+    double deltaTheta = (PI/2) / (n+1);
+    std::vector<Point2D> turnPoints;
+    double theta = 3*PI/2; // Start at the end of the intersection and go counterclockwise
+    double deltaX, deltaZ;
+    for(int i = 1; i < n+1; i++)
+    {
+        theta -= deltaTheta;
+        deltaX = r*cos(theta);
+        deltaZ = r*sin(theta);
+        turnPoints.push_back({static_cast<int>(turnCenter.x + deltaX), static_cast<int>(turnCenter.z + deltaZ)});
+    }
+    return turnPoints;
+}
+std::vector<Point2D> RoadPlot::getTurnPointsCircleNorth(double carSpeed) const
+{
+    double r = sideLength*0.2795;
+    double d = carSpeed < 2*r ? carSpeed : 2*r;
+    int n = ceil(5.3556 / (acos(1 - (d*d)/(r*r))) - 1);
+    double deltaTheta = (5.3556) / (n+1);
+    std::vector<Point2D> turnPoints;
+    double theta = PI/2 + 0.46365; // Start at the end of the intersection and go clockwise
+    double deltaX, deltaZ;
+    for(int i = 1; i < n+1; i++)
+    {
+        theta += deltaTheta;
+        deltaX = r*cos(theta);
+        deltaZ = r*sin(theta);
+        turnPoints.push_back({static_cast<int>(center.x + deltaX), static_cast<int>(center.z + deltaZ)});
+    }
+    return turnPoints;
+}
+std::vector<Point2D> RoadPlot::getTurnPointsLeftEast(double carSpeed) const
+{
+    Point2D turnCenter = {static_cast<int>(getWestIntersectionEdge()), static_cast<int>(getNorthIntersectionEdge())};
+    double r = sideLength/8.0;
+    double d = carSpeed < 2*r ? carSpeed : 2*r;
+    int n = ceil(PI / (2*acos(1 - (d*d)/(r*r))) - 1);
+    double deltaTheta = (PI/2) / (n+1);
+    std::vector<Point2D> turnPoints;
+    double theta = 0; // Start at the end of the intersection and go counterclockwise
+    double deltaX, deltaZ;
+    for(int i = 1; i < n+1; i++)
+    {
+        theta += deltaTheta;
+        deltaX = r*cos(theta);
+        deltaZ = r*sin(theta);
+        turnPoints.push_back({static_cast<int>(turnCenter.x + deltaX), static_cast<int>(turnCenter.z + deltaZ)});
+    }
+    return turnPoints;
+}
+std::vector<Point2D> RoadPlot::getTurnPointsRightEast(double carSpeed) const
+{
+    Point2D turnCenter = {static_cast<int>(getWestIntersectionEdge()), static_cast<int>(getSouthIntersectionEdge())};
+    double r = sideLength/8.0;
+    double d = carSpeed < 2*r ? carSpeed : 2*r;
+    int n = ceil(PI / (2*acos(1 - (d*d)/(r*r))) - 1);
+    double deltaTheta = (PI/2) / (n+1);
+    std::vector<Point2D> turnPoints;
+    double theta = 0; // Start at the end of the intersection and go counterclockwise
+    double deltaX, deltaZ;
+    for(int i = 1; i < n+1; i++)
+    {
+        theta -= deltaTheta;
+        deltaX = r*cos(theta);
+        deltaZ = r*sin(theta);
+        turnPoints.push_back({static_cast<int>(turnCenter.x + deltaX), static_cast<int>(turnCenter.z + deltaZ)});
+    }
+    return turnPoints;
+}
+std::vector<Point2D> RoadPlot::getTurnPointsCircleEast(double carSpeed) const
+{
+    double r = sideLength*0.2795;
+    double d = carSpeed < 2*r ? carSpeed : 2*r;
+    int n = ceil(5.3556 / (acos(1 - (d*d)/(r*r))) - 1);
+    double deltaTheta = (5.3556) / (n+1);
+    std::vector<Point2D> turnPoints;
+    double theta = PI + 0.46365; // Start at the end of the intersection and go clockwise
+    double deltaX, deltaZ;
+    for(int i = 1; i < n+1; i++)
+    {
+        theta += deltaTheta;
+        deltaX = r*cos(theta);
+        deltaZ = r*sin(theta);
+        turnPoints.push_back({static_cast<int>(center.x + deltaX), static_cast<int>(center.z + deltaZ)});
+    }
+    return turnPoints;
+}
+std::vector<Point2D> RoadPlot::getTurnPointsLeftSouth(double carSpeed) const
+{
+    Point2D turnCenter = {static_cast<int>(getEastIntersectionEdge()), static_cast<int>(getNorthIntersectionEdge())};
+    double r = 3*sideLength/8.0;
+    double d = carSpeed < 2*r ? carSpeed : 2*r;
+    int n = ceil(PI / (2*acos(1 - (d*d)/(r*r))) - 1);
+    double deltaTheta = (PI/2) / (n+1);
+    std::vector<Point2D> turnPoints;
+    double theta = PI/2; // Start at the end of the intersection and go counterclockwise
+    double deltaX, deltaZ;
+    for(int i = 1; i < n+1; i++)
+    {
+        theta += deltaTheta;
+        deltaX = r*cos(theta);
+        deltaZ = r*sin(theta);
+        turnPoints.push_back({static_cast<int>(turnCenter.x + deltaX), static_cast<int>(turnCenter.z + deltaZ)});
+    }
+    return turnPoints;
+}
+std::vector<Point2D> RoadPlot::getTurnPointsRightSouth(double carSpeed) const
+{
+    Point2D turnCenter = {static_cast<int>(getWestIntersectionEdge()), static_cast<int>(getNorthIntersectionEdge())};
+    double r = sideLength/8.0;
+    double d = carSpeed < 2*r ? carSpeed : 2*r;
+    int n = ceil(PI / (2*acos(1 - (d*d)/(r*r))) - 1);
+    double deltaTheta = (PI/2) / (n+1);
+    std::vector<Point2D> turnPoints;
+    double theta = PI/2; // Start at the end of the intersection and go counterclockwise
+    double deltaX, deltaZ;
+    for(int i = 1; i < n+1; i++)
+    {
+        theta -= deltaTheta;
+        deltaX = r*cos(theta);
+        deltaZ = r*sin(theta);
+        turnPoints.push_back({static_cast<int>(turnCenter.x + deltaX), static_cast<int>(turnCenter.z + deltaZ)});
+    }
+    return turnPoints;
+}
+std::vector<Point2D> RoadPlot::getTurnPointsCircleSouth(double carSpeed) const
+{
+    double r = sideLength*0.2795;
+    double d = carSpeed < 2*r ? carSpeed : 2*r;
+    int n = ceil(5.3556 / (acos(1 - (d*d)/(r*r))) - 1);
+    double deltaTheta = (5.3556) / (n+1);
+    std::vector<Point2D> turnPoints;
+    double theta = 3*PI/2 + 0.46365; // Start at the end of the intersection and go clockwise
+    double deltaX, deltaZ;
+    for(int i = 1; i < n+1; i++)
+    {
+        theta += deltaTheta;
+        deltaX = r*cos(theta);
+        deltaZ = r*sin(theta);
+        turnPoints.push_back({static_cast<int>(center.x + deltaX), static_cast<int>(center.z + deltaZ)});
+    }
+    return turnPoints;
+}
+std::vector<Point2D> RoadPlot::getTurnPointsLeftWest(double carSpeed) const
+{
+    Point2D turnCenter = {static_cast<int>(getEastIntersectionEdge()), static_cast<int>(getSouthIntersectionEdge())};
+    double r = 3*sideLength/8.0;
+    double d = carSpeed < 2*r ? carSpeed : 2*r;
+    int n = ceil(PI / (2*acos(1 - (d*d)/(r*r))) - 1);
+    double deltaTheta = (PI/2) / (n+1);
+    std::vector<Point2D> turnPoints;
+    double theta = PI; // Start at the end of the intersection and go counterclockwise
+    double deltaX, deltaZ;
+    for(int i = 1; i < n+1; i++)
+    {
+        theta += deltaTheta;
+        deltaX = r*cos(theta);
+        deltaZ = r*sin(theta);
+        turnPoints.push_back({static_cast<int>(turnCenter.x + deltaX), static_cast<int>(turnCenter.z + deltaZ)});
+    }
+    return turnPoints;
+}
+std::vector<Point2D> RoadPlot::getTurnPointsRightWest(double carSpeed) const
+{
+    Point2D turnCenter = {static_cast<int>(getEastIntersectionEdge()), static_cast<int>(getNorthIntersectionEdge())};
+    double r = sideLength/8.0;
+    double d = carSpeed < 2*r ? carSpeed : 2*r;
+    int n = ceil(PI / (2*acos(1 - (d*d)/(r*r))) - 1);
+    double deltaTheta = (PI/2) / (n+1);
+    std::vector<Point2D> turnPoints;
+    double theta = PI; // Start at the end of the intersection and go counterclockwise
+    double deltaX, deltaZ;
+    for(int i = 1; i < n+1; i++)
+    {
+        theta -= deltaTheta;
+        deltaX = r*cos(theta);
+        deltaZ = r*sin(theta);
+        turnPoints.push_back({static_cast<int>(turnCenter.x + deltaX), static_cast<int>(turnCenter.z + deltaZ)});
+    }
+    return turnPoints;
+}
+std::vector<Point2D> RoadPlot::getTurnPointsCircleWest(double carSpeed) const
+{
+    double r = sideLength*0.2795;
+    double d = carSpeed < 2*r ? carSpeed : 2*r;
+    int n = ceil(5.3556 / (acos(1 - (d*d)/(r*r))) - 1);
+    double deltaTheta = (5.3556) / (n+1);
+    std::vector<Point2D> turnPoints;
+    double theta = 0.46365; // Start at the end of the intersection and go clockwise
+    double deltaX, deltaZ;
+    for(int i = 1; i < n+1; i++)
+    {
+        theta += deltaTheta;
+        deltaX = r*cos(theta);
+        deltaZ = r*sin(theta);
+        turnPoints.push_back({static_cast<int>(center.x + deltaX), static_cast<int>(center.z + deltaZ)});
+    }
+    return turnPoints;
+}
 
 
 

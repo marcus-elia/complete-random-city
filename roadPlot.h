@@ -79,6 +79,25 @@ public:
     Point2D getLeftExitPoint() const;
     Point2D getLeftEntrancePoint() const;
 
+    // Return a vector points for the car to drive on while turning through the intersection
+    // For a car driving north (approaching from the south) and turning left
+    std::vector<Point2D> getTurnPointsLeftNorth(double carSpeed) const;
+    // Same, but turning right
+    std::vector<Point2D> getTurnPointsRightNorth(double carSpeed) const;
+    // Same but cul-de-sac
+    std::vector<Point2D> getTurnPointsCircleNorth(double carSpeed) const;
+
+    // Now the other directions
+    std::vector<Point2D> getTurnPointsLeftEast(double carSpeed) const;
+    std::vector<Point2D> getTurnPointsRightEast(double carSpeed) const;
+    std::vector<Point2D> getTurnPointsCircleEast(double carSpeed) const;
+    std::vector<Point2D> getTurnPointsLeftSouth(double carSpeed) const;
+    std::vector<Point2D> getTurnPointsRightSouth(double carSpeed) const;
+    std::vector<Point2D> getTurnPointsCircleSouth(double carSpeed) const;
+    std::vector<Point2D> getTurnPointsLeftWest(double carSpeed) const;
+    std::vector<Point2D> getTurnPointsRightWest(double carSpeed) const;
+    std::vector<Point2D> getTurnPointsCircleWest(double carSpeed) const;
+
     void draw();
 };
 
