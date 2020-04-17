@@ -381,7 +381,7 @@ std::vector<Point2D> RoadPlot::getTurnPointsCircleNorth(double carSpeed) const
 std::vector<Point2D> RoadPlot::getTurnPointsLeftEast(double carSpeed) const
 {
     Point2D turnCenter = {static_cast<int>(getWestIntersectionEdge()), static_cast<int>(getNorthIntersectionEdge())};
-    double r = sideLength/8.0;
+    double r = 3*sideLength/8.0;
     double d = carSpeed < 2*r ? carSpeed : 2*r;
     int n = ceil(PI / (2*acos(1 - (d*d)/(r*r))) - 1);
     double deltaTheta = (PI/2) / (n+1);
@@ -588,5 +588,25 @@ void RoadPlot::draw()
         drawPoint(sgmt.p2);
     }
     glEnd();
+
+    // Debug
+    /*glColor4f(1.0, 0.0, 1.0, 1.0);
+    glBegin(GL_LINES);
+    std::vector<Point2D> points = getTurnPointsLeftWest(1);
+    for(Point2D p : points)
+    {
+        drawPoint({static_cast<double>(p.x), 2, static_cast<double>(p.z)});
+    }
+    glEnd();
+    glColor4f(0.6, 0.2, 0.8, 1.0);
+    glBegin(GL_LINES);
+    points = getTurnPointsRightWest(1);
+    for(Point2D p : points)
+    {
+        drawPoint({static_cast<double>(p.x), 2, static_cast<double>(p.z)});
+    }
+    glEnd();*/
+
+
     glEnable(GL_CULL_FACE);
 }
