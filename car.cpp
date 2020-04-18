@@ -470,6 +470,10 @@ void Car::checkStatusApproaching()
         currentStatus = Intersection;
         updateTurnPoints();
         updateDeltaTheta();
+        if(intersectionDirection == Circle)
+        {
+            setXZAngle(xzAngle + PI/2  - atan(PI/4*0.23));
+        }
     }
 }
 
