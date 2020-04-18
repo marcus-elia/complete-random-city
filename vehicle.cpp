@@ -32,7 +32,8 @@ void Vehicle::setXZAngle(double inputAngle)
 {
     // Rotate the object to match the angle
     double thetaY = inputAngle - xzAngle;
-    rotate(0, thetaY, 0);
+    //rotate(0, thetaY, 0);
+    rotatePointAroundPoint(lookingAt, location, 0, thetaY, 0);
     // Set the new angle
     xzAngle = inputAngle;
 
