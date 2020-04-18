@@ -590,20 +590,20 @@ void RoadPlot::draw()
     glEnd();
 
     // Debug
-    /*glColor4f(1.0, 0.0, 1.0, 1.0);
-    glBegin(GL_LINES);
-    std::vector<Point2D> points = getTurnPointsLeftWest(1);
+    /*double red = 0;
+    double blue = 0;
+    glBegin(GL_QUADS);
+    std::vector<Point2D> points = getTurnPointsRightSouth(1);
+    double delta = 1.0 / points.size();
     for(Point2D p : points)
     {
-        drawPoint({static_cast<double>(p.x), 2, static_cast<double>(p.z)});
-    }
-    glEnd();
-    glColor4f(0.6, 0.2, 0.8, 1.0);
-    glBegin(GL_LINES);
-    points = getTurnPointsRightWest(1);
-    for(Point2D p : points)
-    {
-        drawPoint({static_cast<double>(p.x), 2, static_cast<double>(p.z)});
+        glColor4f(red, 0.0, blue, 1.0);
+        drawPoint({p.x + 1.0, 2, p.z + 1.0});
+        drawPoint({p.x - 1.0, 2, p.z + 1.0});
+        drawPoint({p.x - 1.0, 2, p.z - 1.0});
+        drawPoint({p.x + 1.0, 2, p.z - 1.0});
+        red += delta;
+        blue += delta;
     }
     glEnd();*/
 

@@ -4,7 +4,9 @@
 #include "vehicle.h"
 #include "roadPlot.h"
 #include "structs.h"
+#include "cylinder.h"
 
+enum typeOfCar {Sedan, SUV, PickupTruck};
 
 class Car : public Vehicle
 {
@@ -13,6 +15,7 @@ private:
     double length;
     double height;
     double width;
+    typeOfCar carType;
 
     // Driving things
     RoadPlot* currentRoad;
@@ -32,7 +35,7 @@ public:
     Car();
     Car(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
             double inputLength, double inputHeight, double inputWidth, RGBAcolor inputBodyColor,
-            RoadPlot* inputCurrentRoad);
+            typeOfCar inputCarType, RoadPlot* inputCurrentRoad);
 
     void initializeSolids();
     void initializeDirections();

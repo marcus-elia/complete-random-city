@@ -7,13 +7,14 @@ Car::Car() : Vehicle()
     width = 10;
 }
 Car::Car(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-double inputLength, double inputHeight, double inputWidth, RGBAcolor inputBodyColor,
+double inputLength, double inputHeight, double inputWidth, RGBAcolor inputBodyColor, typeOfCar inputCarType,
 RoadPlot* inputCurrentRoad) : Vehicle(inputLocation, inputLookingAt, inputSpeed, inputVelocity)
 {
     length = inputLength;
     height = inputHeight;
     width = inputWidth;
     bodyColor = inputBodyColor;
+    carType = inputCarType;
     currentRoad = inputCurrentRoad;
     initializeSolids();
     initializeDirections();
@@ -21,9 +22,28 @@ RoadPlot* inputCurrentRoad) : Vehicle(inputLocation, inputLookingAt, inputSpeed,
 
 void Car::initializeSolids()
 {
-    solids.push_back(std::make_shared<RecPrism>(RecPrism(location, bodyColor, width, height, length,
-            {1,1,1,1}, location, lookingAt,  0,
-            {0,0,0},  location)));
+    if(carType == Sedan)
+    {
+        // Body
+        Point solidCenter;
+        Point solidLookingAt;
+        solidCenter = {location.x, height/2 + 5, location.z};
+        solidLookingAt = lookingAt;
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(solidCenter,
+                bodyColor, width, height, length,{1,1,1,1},
+                 solidCenter, solidLookingAt,  0,
+                {0,0,0},  location)));
+        // Front Left Wheel
+        solidCenter = {location.x - width/2 - 1, 5, location.z - length/2 + 8};
+        solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 5, lookingAt.z + solidCenter.z - location.z};
+        std::shared_ptr<Cylinder> frontLeftWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
+                10, 2, 10, {1,1,1,1},
+                solidCenter, solidLookingAt, 0, {0,0,0},
+               location));
+        frontLeftWheel->rotate(0, 0, PI/2);
+        solids.push_back(frontLeftWheel);
+    }
+
 }
 void Car::initializeDirections()
 {
@@ -203,61 +223,62 @@ void Car::alignWithDirection(DrivingDirection input)
 
 void Car::updateTurnPoints()
 {
+    double turnSpeed = speed/2;
     if(intersectionDirection == LeftTurn)
     {
         if(approachDirection == North)
         {
-            turnPoints = currentRoad->getTurnPointsLeftNorth(speed);
+            turnPoints = currentRoad->getTurnPointsLeftNorth(turnSpeed);
         }
         else if(approachDirection == East)
         {
-            turnPoints = currentRoad->getTurnPointsLeftEast(speed);
+            turnPoints = currentRoad->getTurnPointsLeftEast(turnSpeed);
         }
         else if(approachDirection == South)
         {
-            turnPoints = currentRoad->getTurnPointsLeftSouth(speed);
+            turnPoints = currentRoad->getTurnPointsLeftSouth(turnSpeed);
         }
         else if(approachDirection == West)
         {
-            turnPoints = currentRoad->getTurnPointsLeftWest(speed);
+            turnPoints = currentRoad->getTurnPointsLeftWest(turnSpeed);
         }
     }
     else if(intersectionDirection == RightTurn)
     {
         if(approachDirection == North)
         {
-            turnPoints = currentRoad->getTurnPointsRightNorth(speed);
+            turnPoints = currentRoad->getTurnPointsRightNorth(turnSpeed);
         }
         else if(approachDirection == East)
         {
-            turnPoints = currentRoad->getTurnPointsRightEast(speed);
+            turnPoints = currentRoad->getTurnPointsRightEast(turnSpeed);
         }
         else if(approachDirection == South)
         {
-            turnPoints = currentRoad->getTurnPointsRightSouth(speed);
+            turnPoints = currentRoad->getTurnPointsRightSouth(turnSpeed);
         }
         else if(approachDirection == West)
         {
-            turnPoints = currentRoad->getTurnPointsRightWest(speed);
+            turnPoints = currentRoad->getTurnPointsRightWest(turnSpeed);
         }
     }
     else if(intersectionDirection == Circle)
     {
         if(approachDirection == North)
         {
-            turnPoints = currentRoad->getTurnPointsCircleNorth(speed);
+            turnPoints = currentRoad->getTurnPointsCircleNorth(turnSpeed);
         }
         else if(approachDirection == East)
         {
-            turnPoints = currentRoad->getTurnPointsCircleEast(speed);
+            turnPoints = currentRoad->getTurnPointsCircleEast(turnSpeed);
         }
         else if(approachDirection == South)
         {
-            turnPoints = currentRoad->getTurnPointsCircleSouth(speed);
+            turnPoints = currentRoad->getTurnPointsCircleSouth(turnSpeed);
         }
         else if(approachDirection == West)
         {
-            turnPoints = currentRoad->getTurnPointsCircleWest(speed);
+            turnPoints = currentRoad->getTurnPointsCircleWest(turnSpeed);
         }
     }
 }
@@ -341,7 +362,7 @@ void Car::draw() const
         s->draw();
     }
     // Debug
-    glDisable(GL_CULL_FACE);
+    /*glDisable(GL_CULL_FACE);
     if(currentStatus == Approaching)
     {
         glColor4f(1,.4,.4,1);
@@ -402,7 +423,7 @@ void Car::draw() const
     glBegin(GL_LINES);
     drawPoint(location);
     drawPoint({location.x + 40*cos(xzAngle), location.y, location.z + 40*sin(xzAngle)});
-    glEnd();
+    glEnd();*/
 
 
 
