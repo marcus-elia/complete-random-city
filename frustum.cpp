@@ -40,16 +40,6 @@ void Frustum::initializeCorners()
 }
 
 
-void Frustum::move(double deltaX, double deltaY, double deltaZ)
-{
-
-}
-
-void Frustum::rotate(double thetaX, double thetaY, double thetaZ)
-{
-
-}
-
 void Frustum::lookAt(Point &p)
 {
 

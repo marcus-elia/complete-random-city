@@ -30,17 +30,6 @@ void TriPrism::initializeCorners()
     corners.push_back({center.x, center.y + yWidth/2, center.z - zWidth/2});
 }
 
-
-void TriPrism::move(double deltaX, double deltaY, double deltaZ)
-{
-
-}
-
-void TriPrism::rotate(double thetaX, double thetaY, double thetaZ)
-{
-
-}
-
 void TriPrism::lookAt(Point &p)
 {
 
