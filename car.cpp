@@ -27,21 +27,56 @@ void Car::initializeSolids()
         // Body
         Point solidCenter;
         Point solidLookingAt;
-        solidCenter = {location.x, height/2 + 5, location.z};
+        solidCenter = {location.x, height/4 + 2, location.z};
         solidLookingAt = lookingAt;
         solids.push_back(std::make_shared<RecPrism>(RecPrism(solidCenter,
-                bodyColor, width, height, length,{1,1,1,1},
+                bodyColor, width, height/2, length,{1,1,1,1},
                  solidCenter, solidLookingAt,  0,
                 {0,0,0},  location)));
+        // Cabin
+        solidCenter = {location.x, height/2 + 2 + height/4, location.z};
+        solidLookingAt = lookingAt;
+        solids.push_back(std::make_shared<Frustum>(Frustum(solidCenter,
+                                                             bodyColor, width, height/2, width,{1,1,1,1},
+                                                             width-1, width-3,
+                                                             solidCenter, solidLookingAt,  0,
+                                                             {0,0,0},  location)));
         // Front Left Wheel
-        solidCenter = {location.x - width/2 - 1, 5, location.z - length/2 + 8};
-        solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 5, lookingAt.z + solidCenter.z - location.z};
+        solidCenter = {location.x - width/2 - 1, 3, location.z - length/2 + 4};
+        solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 3, lookingAt.z + solidCenter.z - location.z};
         std::shared_ptr<Cylinder> frontLeftWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
-                10, 2, 10, {1,1,1,1},
+                6, 2, 6, {1,1,1,1},
                 solidCenter, solidLookingAt, 0, {0,0,0},
                location));
         frontLeftWheel->rotate(0, 0, PI/2);
         solids.push_back(frontLeftWheel);
+        // Front Right Wheel
+        solidCenter = {location.x + width/2 + 1, 3, location.z - length/2 + 4};
+        solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 3, lookingAt.z + solidCenter.z - location.z};
+        std::shared_ptr<Cylinder> frontRightWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
+                                                                                       6, 2, 6, {1,1,1,1},
+                                                                                       solidCenter, solidLookingAt, 0, {0,0,0},
+                                                                                       location));
+        frontRightWheel->rotate(0, 0, PI/2);
+        solids.push_back(frontRightWheel);
+        // Back Left Wheel
+        solidCenter = {location.x - width/2 - 1, 3, location.z + length/2 - 4};
+        solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 3, lookingAt.z + solidCenter.z - location.z};
+        std::shared_ptr<Cylinder> backLeftWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
+                                                                                       6, 2, 6, {1,1,1,1},
+                                                                                       solidCenter, solidLookingAt, 0, {0,0,0},
+                                                                                       location));
+        backLeftWheel->rotate(0, 0, PI/2);
+        solids.push_back(backLeftWheel);
+        // Back Right Wheel
+        solidCenter = {location.x + width/2 + 1, 3, location.z + length/2 - 4};
+        solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 3, lookingAt.z + solidCenter.z - location.z};
+        std::shared_ptr<Cylinder> backRightWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
+                                                                                      6, 2, 6, {1,1,1,1},
+                                                                                      solidCenter, solidLookingAt, 0, {0,0,0},
+                                                                                      location));
+        backRightWheel->rotate(0, 0, PI/2);
+        solids.push_back(backRightWheel);
     }
 
 }

@@ -5,6 +5,7 @@
 #include "roadPlot.h"
 #include "structs.h"
 #include "cylinder.h"
+#include "frustum.h"
 
 enum typeOfCar {Sedan, SUV, PickupTruck};
 
