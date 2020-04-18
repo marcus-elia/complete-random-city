@@ -136,7 +136,7 @@ void Solid::rotateAroundOwner(double thetaX, double thetaY, double thetaZ)
     {
         rotatePointAroundPoint(p, ownerCenter, thetaX, thetaY, thetaZ);
     }
-    rotate(thetaX, thetaY, thetaZ);
+    //rotate(thetaX, thetaY, thetaZ);
 }
 
 
