@@ -67,15 +67,6 @@ void Cylinder::initializeCorners()
 }
 
 
-void Cylinder::move(double deltaX, double deltaY, double deltaZ)
-{
-
-}
-
-void Cylinder::rotate(double thetaX, double thetaY, double thetaZ)
-{
-
-}
 
 void Cylinder::lookAt(Point &p)
 {
