@@ -262,7 +262,77 @@ void Car::updateTurnPoints()
     }
 }
 
-
+void Car::updateDeltaTheta()
+{
+    if(turnPoints.empty())
+    {
+        deltaTheta = 0;
+        return;
+    }
+    int n = turnPoints.size();
+    double angleAmount; // how much the car turns in total through the intersection
+    if(approachDirection == North)
+    {
+        if(exitDirection == East)
+        {
+            angleAmount = PI/2;
+        }
+        else if(exitDirection == South)
+        {
+            angleAmount = -5.3556;
+        }
+        else if(exitDirection == West)
+        {
+            angleAmount = - PI/2;
+        }
+    }
+    else if(approachDirection == East)
+    {
+        if(exitDirection == North)
+        {
+            angleAmount = -PI/2;
+        }
+        else if(exitDirection == South)
+        {
+            angleAmount = PI/2;
+        }
+        else if(exitDirection == West)
+        {
+            angleAmount = -5.3556;
+        }
+    }
+    else if(approachDirection == South)
+    {
+        if(exitDirection == North)
+        {
+            angleAmount = -5.3556;
+        }
+        else if(exitDirection == East)
+        {
+            angleAmount = -PI/2;
+        }
+        else if(exitDirection == West)
+        {
+            angleAmount = PI/2;
+        }
+    }
+    else if(approachDirection == West)
+    {
+        if(exitDirection == North)
+        {
+            angleAmount = PI/2;
+        }
+        else if(exitDirection == East)
+        {
+            angleAmount = -5.3556;
+        }
+        else if(exitDirection == South)
+        {
+            angleAmount = -PI/2;
+        }
+    }
+    deltaTheta = angleAmount / n;
+}
 
 void Car::draw() const
 {
@@ -317,8 +387,9 @@ void Car::draw() const
         glColor4f(1,0,1,1);
         for(Point2D p : turnPoints)
         {
-            glBegin(GL_QUADS);
+
             glColor4f(0,1,1,1);
+            glBegin(GL_QUADS);
             Point2D loc = currentRoad->getCenter();
             drawPoint({p.x + 1.0, 5, p.z + 1.0});
             drawPoint({p.x - 1.0, 5, p.z + 1.0});
@@ -327,6 +398,13 @@ void Car::draw() const
             glEnd();
         }
     }
+    glColor4f(0,.6,.6,1);
+    glBegin(GL_LINES);
+    drawPoint(location);
+    drawPoint({location.x + 40*cos(xzAngle), location.y, location.z + 40*sin(xzAngle)});
+    glEnd();
+
+
 
     glEnable(GL_CULL_FACE);
 }
@@ -376,10 +454,10 @@ void Car::checkStatusIntersection()
     {
         Point2D nextLocation = turnPoints.back();
         turnPoints.pop_back();
-        double theta = atan2(nextLocation.z - location.z, nextLocation.x - location.x);
-        velocity = {nextLocation.x - location.x, 0, nextLocation.z - location.z};
+        //double theta = atan2(nextLocation.z - location.z, nextLocation.x - location.x);
         //rotate(0, theta, 0);
-        setXZAngle(theta);
+        setXZAngle(xzAngle + deltaTheta);
+        velocity = {nextLocation.x - location.x, 0, nextLocation.z - location.z};
     }
 }
 void Car::checkStatusApproaching()
@@ -391,6 +469,7 @@ void Car::checkStatusApproaching()
     {
         currentStatus = Intersection;
         updateTurnPoints();
+        updateDeltaTheta();
     }
 }
 

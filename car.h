@@ -26,6 +26,8 @@ private:
 
     // If the car is turning, we need points on the curve to guide it
     std::vector<Point2D> turnPoints;
+    // How much to rotate by each frame when turning
+    double deltaTheta;
 public:
     Car();
     Car(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
@@ -61,6 +63,8 @@ public:
     void alignWithDirection(DrivingDirection input);
     // Gets a vector of turn points from the RoadPlot
     void updateTurnPoints();
+    // Sets how much we turn per tick depending on what kind of turn it is
+    void updateDeltaTheta();
 
     // Check for when the Car needs to change status, and update things accordingly
     void checkStatusExiting();
