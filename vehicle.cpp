@@ -42,7 +42,8 @@ void Vehicle::setXZAngle(double inputAngle)
 
     for(std::shared_ptr<Solid> s : solids)
     {
-        s->setXZAngle(inputAngle);
+        //s->setXZAngle(inputAngle);
+        s->rotateAroundOwner(0, thetaY, 0);
     }
 }
 
