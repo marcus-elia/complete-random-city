@@ -27,7 +27,7 @@ Point inputOwnerCenter) : Solid(inputCenter, inputColor, inputXWidth, inputYWidt
 void RightTrapezoid::initializeCorners()
 {
     corners.push_back({center.x + xWidth/2, center.y + yWidth/2, center.z + zWidth/2});
-    corners.push_back({center.x - xWidth/2, center.y + yWidth/2, center.z + xWidth/2});
+    corners.push_back({center.x - xWidth/2, center.y + yWidth/2, center.z + zWidth/2});
     corners.push_back({center.x + xWidth/2, center.y - yWidth/2, center.z + zWidth/2});
     corners.push_back({center.x - xWidth/2, center.y - yWidth/2, center.z + zWidth/2});
     corners.push_back({center.x + xWidth/2, center.y + yWidth/2, center.z + zWidth/2 - upperZWidth});
@@ -135,5 +135,5 @@ std::experimental::optional<Point> RightTrapezoid::correctCollision(Point p, int
 
 void RightTrapezoid::printDebugStats()
 {
-    
+
 }
