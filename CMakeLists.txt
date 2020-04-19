@@ -29,7 +29,7 @@ file(GLOB SOURCE_FILES
 add_executable(graphics graphics.h graphics.cpp gameManager.h gameManager.cpp player.h player.cpp
         chunk.h chunk.cpp perlinNoiseGenerator.h perlinNoiseGenerator.cpp plot.cpp plot.h roadPlot.cpp
         roadPlot.h structs.h emptyPlot.cpp emptyPlot.h solid.cpp solid.h recPrism.cpp recPrism.h
-        triPrism.h triPrism.cpp frustum.h frustum.cpp cylinder.h cylinder.cpp building.cpp building.h buildingPlot.cpp buildingPlot.h fourPlot.cpp fourPlot.h movable.cpp movable.h movableComponent.cpp movableComponent.h vehicle.cpp vehicle.h car.cpp car.h rightTrapezoid.cpp rightTrapezoid.h)
+        triPrism.h triPrism.cpp frustum.h frustum.cpp cylinder.h cylinder.cpp building.cpp building.h buildingPlot.cpp buildingPlot.h fourPlot.cpp fourPlot.h movable.cpp movable.h movableComponent.cpp movableComponent.h vehicle.cpp vehicle.h car.cpp car.h rightTrapezoid.cpp rightTrapezoid.h ellipsoid.cpp ellipsoid.h)
 
 if (WIN32)
     target_link_libraries (graphics ${OPENGL_LIBRARIES} freeglut)
