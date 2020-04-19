@@ -28,6 +28,8 @@ private:
 
     // Vehicles
     std::vector<std::shared_ptr<Vehicle>> vehicles;
+    int maxNumVehicles;
+    int tickNumberMod100;
 public:
     GameManager();
     GameManager(int inputChunkSize, int inputRenderRadius, int inputPerlinSize);
@@ -56,6 +58,7 @@ public:
     std::shared_ptr<Chunk> pointToChunk(Point p);
 
     // Vehicles
+    void manageCars();
     // Randomly spawns a car in the chunk the player is currently in
     // Returns true if successful
     bool createCar();

@@ -2,18 +2,22 @@
 
 GameManager::GameManager()
 {
+    tickNumberMod100 = 0;
     perlinSize = 10;
     png = PerlinNoiseGenerator(10, 10, 1);
     chunkSize = 512;
     renderRadius = 3;
+    maxNumVehicles = 20;
     updateCurrentChunks();
 }
 GameManager::GameManager(int inputChunkSize, int inputRenderRadius, int inputPerlinSize)
 {
+    tickNumberMod100 = 0;
     chunkSize = inputChunkSize;
     renderRadius = inputRenderRadius;
     perlinSize = inputPerlinSize;
     png = PerlinNoiseGenerator(perlinSize, perlinSize, 1);
+    maxNumVehicles = 20;
     updateCurrentChunks();
 }
 
@@ -24,7 +28,7 @@ void GameManager::reactToMouseMovement(double theta)
 }
 void GameManager::reactToMouseClick()
 {
-    createCar();
+    
 }
 
 
@@ -64,6 +68,13 @@ void GameManager::tick()
     for(std::shared_ptr<Vehicle> v : vehicles)
     {
         v->tick();
+    }
+
+    tickNumberMod100++;
+    if(tickNumberMod100 == 100)
+    {
+        tickNumberMod100 = 0;
+        manageCars();
     }
 }
 
@@ -218,6 +229,24 @@ std::shared_ptr<Chunk> GameManager::pointToChunk(Point p)
 
 
 // Vehicles
+void GameManager::manageCars()
+{
+    // Remove any cars too far away
+    for(int i = 0; i < vehicles.size(); i++)
+    {
+        if(distance2d(vehicles[i]->getLocation(), player.getLocation()) > 2*chunkSize)
+        {
+            vehicles[i] = vehicles.back();
+            vehicles.pop_back();
+        }
+    }
+    // Add a new car if needed
+    while(vehicles.size() < maxNumVehicles)
+    {
+        createCar();
+    }
+}
+
 bool GameManager::createCar()
 {
     // Pointer to the player's current chunk
@@ -227,11 +256,63 @@ bool GameManager::createCar()
     {
         return false;
     }
+    // Determine where to put the new car
     RoadPlot* rp = roadPlot.value();
     Point location = {(double)rp->getCenter().x, 10, (double)rp->getCenter().z};
     Point lookingAt = {location.x, location.y, location.z - 10};
+
+    // Determine what kind of car it will be
+    int r1 = rand();
+    int r2 = rand();
+    typeOfCar inputCarType;
+    RGBAcolor inputColor;
+    double carLength;
+    if(r1 % 100 < 40)
+    {
+        inputCarType = Sedan;
+        carLength = 22;
+    }
+    else if(r1 % 100 < 70)
+    {
+        inputCarType = SUV;
+        carLength = 26;
+    }
+    else
+    {
+        inputCarType = PickupTruck;
+        carLength = 26;
+    }
+    if(r2 % 100 < 15)
+    {
+        inputColor = {0.8, 0, 0.1, 1}; // Red
+    }
+    else if(r2 % 100 < 30)
+    {
+        inputColor = {0, 0.4, 0.4, 1};  // Dark Cyan
+    }
+    else if(r2 % 100 < 45)
+    {
+        inputColor = {.9,.9,0,1}; // Yellow
+    }
+    else if(r2 % 100 < 60)
+    {
+        inputColor = {0.15, 0.15, 0.15, 1}; // Dark Gray
+    }
+    else if(r2 % 100 < 70)
+    {
+        inputColor = {0, 0.7, 0, 1}; // Green
+    }
+    else if(r2 % 100 < 85)
+    {
+        inputColor = {.9, .9, 0.7, 1}; // Off-white
+    }
+    else
+    {
+        inputColor = {0,0,1,1}; // Blue
+    }
     vehicles.push_back(std::make_shared<Car>(Car(location, lookingAt, 2, {0,0,-1},
-            20, 10, rp->getLaneWidth() - 4, {1, 1, 0, 1}, Sedan, rp)));
+            25, 10, rp->getLaneWidth() - 4, inputColor,
+            inputCarType, rp)));
     return true;
 }
 
