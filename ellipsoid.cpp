@@ -112,7 +112,7 @@ std::experimental::optional<Point> Ellipsoid::correctCollision(Point p, int buff
     return std::experimental::nullopt;
 }
 
-void printDebugStats()
+void Ellipsoid::printDebugStats()
 {
 
 }
