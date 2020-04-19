@@ -27,5 +27,7 @@ public:
     void drawFaces() const;
 
     std::experimental::optional<Point> correctCollision(Point p, int buffer);
+
+    void printDebugStats();
 };
 #endif //COMPLETE_RANDOM_CITY_RIGHTTRAPEZOID_H

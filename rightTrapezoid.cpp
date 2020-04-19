@@ -132,3 +132,8 @@ std::experimental::optional<Point> RightTrapezoid::correctCollision(Point p, int
 {
     return std::experimental::nullopt;
 }
+
+void RightTrapezoid::printDebugStats()
+{
+    
+}
