@@ -78,6 +78,18 @@ void Car::initializeSolids()
         backRightWheel->rotate(0, 0, PI/2);
         solids.push_back(backRightWheel);
     }
+    else if(carType == SUV)
+    {
+        // Body
+        Point solidCenter;
+        Point solidLookingAt;
+        solidCenter = {location.x, height/4 + 3, location.z};
+        solidLookingAt = lookingAt;
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(solidCenter,
+                                                             bodyColor, width, height/2, length,{1,1,1,1},
+                                                             solidCenter, solidLookingAt,  0,
+                                                             {0,0,0},  location)));
+    }
 
 }
 void Car::initializeDirections()
