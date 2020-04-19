@@ -6,6 +6,7 @@
 #include "structs.h"
 #include "cylinder.h"
 #include "frustum.h"
+#include "rightTrapezoid.h"
 
 enum typeOfCar {Sedan, SUV, PickupTruck};
 

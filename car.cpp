@@ -22,11 +22,11 @@ RoadPlot* inputCurrentRoad) : Vehicle(inputLocation, inputLookingAt, inputSpeed,
 
 void Car::initializeSolids()
 {
+    Point solidCenter;
+    Point solidLookingAt;
     if(carType == Sedan)
     {
         // Body
-        Point solidCenter;
-        Point solidLookingAt;
         solidCenter = {location.x, height/4 + 2, location.z};
         solidLookingAt = lookingAt;
         solids.push_back(std::make_shared<RecPrism>(RecPrism(solidCenter,
@@ -41,42 +41,6 @@ void Car::initializeSolids()
                                                              width-1, width-3,
                                                              solidCenter, solidLookingAt,  0,
                                                              {0,0,0},  location)));
-        // Front Left Wheel
-        solidCenter = {location.x - width/2 - 1, 3, location.z - length/2 + 4};
-        solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 3, lookingAt.z + solidCenter.z - location.z};
-        std::shared_ptr<Cylinder> frontLeftWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
-                6, 2, 6, {1,1,1,1},
-                solidCenter, solidLookingAt, 0, {0,0,0},
-               location));
-        frontLeftWheel->rotate(0, 0, PI/2);
-        solids.push_back(frontLeftWheel);
-        // Front Right Wheel
-        solidCenter = {location.x + width/2 + 1, 3, location.z - length/2 + 4};
-        solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 3, lookingAt.z + solidCenter.z - location.z};
-        std::shared_ptr<Cylinder> frontRightWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
-                                                                                       6, 2, 6, {1,1,1,1},
-                                                                                       solidCenter, solidLookingAt, 0, {0,0,0},
-                                                                                       location));
-        frontRightWheel->rotate(0, 0, PI/2);
-        solids.push_back(frontRightWheel);
-        // Back Left Wheel
-        solidCenter = {location.x - width/2 - 1, 3, location.z + length/2 - 4};
-        solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 3, lookingAt.z + solidCenter.z - location.z};
-        std::shared_ptr<Cylinder> backLeftWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
-                                                                                       6, 2, 6, {1,1,1,1},
-                                                                                       solidCenter, solidLookingAt, 0, {0,0,0},
-                                                                                       location));
-        backLeftWheel->rotate(0, 0, PI/2);
-        solids.push_back(backLeftWheel);
-        // Back Right Wheel
-        solidCenter = {location.x + width/2 + 1, 3, location.z + length/2 - 4};
-        solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 3, lookingAt.z + solidCenter.z - location.z};
-        std::shared_ptr<Cylinder> backRightWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
-                                                                                      6, 2, 6, {1,1,1,1},
-                                                                                      solidCenter, solidLookingAt, 0, {0,0,0},
-                                                                                      location));
-        backRightWheel->rotate(0, 0, PI/2);
-        solids.push_back(backRightWheel);
     }
     else if(carType == SUV)
     {
@@ -89,7 +53,54 @@ void Car::initializeSolids()
                                                              bodyColor, width, height/2, length,{1,1,1,1},
                                                              solidCenter, solidLookingAt,  0,
                                                              {0,0,0},  location)));
+        // Cabin
+        solidCenter = {location.x, 3 + height/2 + height/4, location.z + length/8};
+        solidLookingAt = {lookingAt.x, lookingAt.y + height/2 + height/4, lookingAt.z};
+        solids.push_back(std::make_shared<RightTrapezoid>(RightTrapezoid(solidCenter,
+                bodyColor, width, height/2, 3*length/4, {1,1,1,1}, 5*length/8,
+                solidCenter, solidLookingAt, 0, {0,0,0}, location)));
+
     }
+
+
+
+    // Add in the wheels
+    // Front Left Wheel
+    solidCenter = {location.x - width/2 - 1, 3, location.z - length/2 + 4};
+    solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 3, lookingAt.z + solidCenter.z - location.z};
+    std::shared_ptr<Cylinder> frontLeftWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
+                                                                                   6, 2, 6, {1,1,1,1},
+                                                                                   solidCenter, solidLookingAt, 0, {0,0,0},
+                                                                                   location));
+    frontLeftWheel->rotate(0, 0, PI/2);
+    solids.push_back(frontLeftWheel);
+    // Front Right Wheel
+    solidCenter = {location.x + width/2 + 1, 3, location.z - length/2 + 4};
+    solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 3, lookingAt.z + solidCenter.z - location.z};
+    std::shared_ptr<Cylinder> frontRightWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
+                                                                                    6, 2, 6, {1,1,1,1},
+                                                                                    solidCenter, solidLookingAt, 0, {0,0,0},
+                                                                                    location));
+    frontRightWheel->rotate(0, 0, PI/2);
+    solids.push_back(frontRightWheel);
+    // Back Left Wheel
+    solidCenter = {location.x - width/2 - 1, 3, location.z + length/2 - 4};
+    solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 3, lookingAt.z + solidCenter.z - location.z};
+    std::shared_ptr<Cylinder> backLeftWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
+                                                                                  6, 2, 6, {1,1,1,1},
+                                                                                  solidCenter, solidLookingAt, 0, {0,0,0},
+                                                                                  location));
+    backLeftWheel->rotate(0, 0, PI/2);
+    solids.push_back(backLeftWheel);
+    // Back Right Wheel
+    solidCenter = {location.x + width/2 + 1, 3, location.z + length/2 - 4};
+    solidLookingAt = {lookingAt.x + solidCenter.x - location.x, 3, lookingAt.z + solidCenter.z - location.z};
+    std::shared_ptr<Cylinder> backRightWheel = std::make_shared<Cylinder>(Cylinder(solidCenter, {0,0,0,1},
+                                                                                   6, 2, 6, {1,1,1,1},
+                                                                                   solidCenter, solidLookingAt, 0, {0,0,0},
+                                                                                   location));
+    backRightWheel->rotate(0, 0, PI/2);
+    solids.push_back(backRightWheel);
 
 }
 void Car::initializeDirections()
