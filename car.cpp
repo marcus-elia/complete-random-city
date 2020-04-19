@@ -45,8 +45,6 @@ void Car::initializeSolids()
     else if(carType == SUV)
     {
         // Body
-        Point solidCenter;
-        Point solidLookingAt;
         solidCenter = {location.x, height/4 + 3, location.z};
         solidLookingAt = lookingAt;
         solids.push_back(std::make_shared<RecPrism>(RecPrism(solidCenter,
@@ -60,6 +58,22 @@ void Car::initializeSolids()
                 bodyColor, width, height/2, 3*length/4, {1,1,1,1}, 5*length/8,
                 solidCenter, solidLookingAt, 0, {0,0,0}, location)));
 
+    }
+    else if(carType == PickupTruck)
+    {
+        // Body
+        solidCenter = {location.x, height/4 + 3, location.z};
+        solidLookingAt = lookingAt;
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(solidCenter,
+                                                             bodyColor, width, height/2, length,{1,1,1,1},
+                                                             solidCenter, solidLookingAt,  0,
+                                                             {0,0,0},  location)));
+        // Cabin
+        solidCenter = {location.x, 3 + height/2 + height/4, location.z - length/6};
+        solidLookingAt = {lookingAt.x, lookingAt.y + height/2 + height/4, lookingAt.z};
+        solids.push_back(std::make_shared<RightTrapezoid>(RightTrapezoid(solidCenter,
+                                                                         bodyColor, width, height/2, length/3, {1,1,1,1}, length/6,
+                                                                         solidCenter, solidLookingAt, 0, {0,0,0}, location)));
     }
 
 
