@@ -8,6 +8,7 @@ GameManager::GameManager()
     chunkSize = 512;
     renderRadius = 3;
     maxNumVehicles = 20;
+    maxNumDirigibles = 5;
     updateCurrentChunks();
 }
 GameManager::GameManager(int inputChunkSize, int inputRenderRadius, int inputPerlinSize)
@@ -18,6 +19,7 @@ GameManager::GameManager(int inputChunkSize, int inputRenderRadius, int inputPer
     perlinSize = inputPerlinSize;
     png = PerlinNoiseGenerator(perlinSize, perlinSize, 1);
     maxNumVehicles = 20;
+    maxNumDirigibles = 5;
     updateCurrentChunks();
 }
 
@@ -28,7 +30,7 @@ void GameManager::reactToMouseMovement(double theta)
 }
 void GameManager::reactToMouseClick()
 {
-    
+
 }
 
 
@@ -43,6 +45,10 @@ void GameManager::draw() const
     for(std::shared_ptr<Vehicle> v : vehicles)
     {
         v->draw();
+    }
+    for(std::shared_ptr<Dirigible> d : dirigibles)
+    {
+        d->draw();
     }
 }
 
@@ -69,12 +75,20 @@ void GameManager::tick()
     {
         v->tick();
     }
+    for(std::shared_ptr<Dirigible> d : dirigibles)
+    {
+        d->tick();
+    }
 
     tickNumberMod100++;
     if(tickNumberMod100 == 100)
     {
         tickNumberMod100 = 0;
         manageCars();
+    }
+    else if(tickNumberMod100 == 50)
+    {
+        manageDirigibles();
     }
 }
 
@@ -234,7 +248,7 @@ void GameManager::manageCars()
     // Remove any cars too far away
     for(int i = 0; i < vehicles.size(); i++)
     {
-        if(distance2d(vehicles[i]->getLocation(), player.getLocation()) > 2*chunkSize)
+        if(distance2d(vehicles[i]->getLocation(), player.getLocation()) > 2*chunkSize && vehicles.size() > 1)
         {
             vehicles[i] = vehicles.back();
             vehicles.pop_back();
@@ -315,6 +329,69 @@ bool GameManager::createCar()
             inputCarType, rp)));
     return true;
 }
+
+
+void GameManager::manageDirigibles()
+{
+    // Remove any airships too far away
+    for(int i = 0; i < dirigibles.size(); i++)
+    {
+        if(distance2d(dirigibles[i]->getLocation(), player.getLocation()) > 2.25*chunkSize && dirigibles.size() > 1)
+        {
+            dirigibles[i] = dirigibles.back();
+            dirigibles.pop_back();
+        }
+    }
+    // Add a new car if needed
+    if(dirigibles.size() < maxNumDirigibles)
+    {
+        createDirigible();
+    }
+}
+bool GameManager::createDirigible()
+{
+    int r1 = rand() % 100;
+    int r2 = rand() % 100;
+    double randAngle = (rand() % 100) * (2*PI/100);
+    Point location = {player.getLocation().x + 200*cos(randAngle), 220.0 + r1 + r2, player.getLocation().z + 200*sin(randAngle)};
+    Point lookingAt = {location.x, location.y, location.z - 10};
+    RGBAcolor inputColor;
+    if(r1 < 20)
+    {
+        inputColor = {0.8, 0.5, 0.5, 1};
+    }
+    else if(r1 < 40)
+    {
+        inputColor = {0.4, 0.8, 0.4, 1};
+    }
+    else if(r1 < 60)
+    {
+        inputColor = {1, 0.5, 0, 1}; // orange
+    }
+    else if(r1 < 80)
+    {
+        inputColor = {0.5, 0.2, 0.5, 1};
+    }
+    else
+    {
+        inputColor = {0.4, 0.8, 0.8, 1};
+    }
+    if(r2 > 50)
+    {
+        dirigibles.push_back(std::make_shared<Dirigible>(Dirigible(location, lookingAt, 0.3, {0,0,-1},
+                                                                   90, 40, 40, inputColor,
+                                                                   Blimp)));
+    }
+    else
+    {
+        dirigibles.push_back(std::make_shared<Dirigible>(Dirigible(location, lookingAt, 0.1, {0,0,-1},
+                                                                   40, 40, 40, inputColor,
+                                                                   Balloon)));
+    }
+
+    return true;
+}
+
 
 
 

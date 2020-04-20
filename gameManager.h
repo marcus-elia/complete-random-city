@@ -9,6 +9,7 @@
 #include "player.h"
 #include "perlinNoiseGenerator.h"
 #include "car.h"
+#include "dirigible.h"
 
 class GameManager
 {
@@ -30,6 +31,8 @@ private:
     std::vector<std::shared_ptr<Vehicle>> vehicles;
     int maxNumVehicles;
     int tickNumberMod100;
+    std::vector<std::shared_ptr<Dirigible>> dirigibles;
+    int maxNumDirigibles;
 public:
     GameManager();
     GameManager(int inputChunkSize, int inputRenderRadius, int inputPerlinSize);
@@ -62,6 +65,9 @@ public:
     // Randomly spawns a car in the chunk the player is currently in
     // Returns true if successful
     bool createCar();
+
+    void manageDirigibles();
+    bool createDirigible();
 
     // Camera
     Point getCameraLocation() const;
