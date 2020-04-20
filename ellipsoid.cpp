@@ -40,12 +40,12 @@ void Ellipsoid::initializeCorners()
     for(int ring = 0; ring < numRings; ring++)
     {
         curY -= deltaY;
-        rx = (abs(curY - center.y) / yWidth) * xWidth;
-        rz = (abs(curY - center.y) / yWidth) * zWidth;
+        rx = xWidth/2 * sqrt(1 - 4*(curY-center.y)*(curY-center.y)/yWidth/yWidth);
+        rz = zWidth/2 * sqrt(1 - 4*(curY-center.y)*(curY-center.y)/yWidth/yWidth);
         double theta;
         for(int i = 0; i < pointsPerRing; i++)
         {
-            theta = i / pointsPerRing * 2 * PI;
+            theta = (double)i / pointsPerRing * 2 * PI;
             corners.push_back({center.x + rx*cos(theta), curY, center.z + rz*sin(theta)});
         }
     }
