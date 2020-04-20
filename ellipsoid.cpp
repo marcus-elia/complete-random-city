@@ -63,9 +63,51 @@ void Ellipsoid::draw() const
     drawFaces();
     glEnable(GL_CULL_FACE);
 }
+
 void Ellipsoid::drawLines() const
 {
+    glColor4f(lineColor.r, lineColor.g, lineColor.b, lineColor.a);
+    glBegin(GL_LINES);
 
+    // The top
+    for(int i = 0; i < pointsPerRing; i++)
+    {
+        drawPoint(corners[0]);
+        drawPoint(corners[i+2]);
+    }
+    // The Bottom
+    for(int i = 0; i < pointsPerRing; i++)
+    {
+        drawPoint(corners[1]);
+        drawPoint(corners[(numRings - 1)*pointsPerRing + 2 + i]);
+    }
+    // First ring, horiztonal lines
+    for(int i = 0; i < pointsPerRing; i++)
+    {
+        drawPoint(corners[i + 2]);
+        drawPoint(corners[2 + (i + 1) % pointsPerRing]);
+    }
+    //drawPoint(corners[pointsPerRing + 3]);
+    //drawPoint(corners[2]);
+
+    // Iterate through the other rings
+    for(int ring = 1; ring < numRings; ring++)
+    {
+        for(int i = 0; i < pointsPerRing; i++)
+        {
+            // Vertical segment
+            drawPoint(corners[(ring-1)*pointsPerRing + 2 + i]); // the higher (previous) ring
+            drawPoint(corners[ring*pointsPerRing + 2 + i]);     // the lower (current) ring
+
+            // Horizontal segment
+            drawPoint(corners[ring*pointsPerRing + 2 + i]);
+            drawPoint(corners[ring*pointsPerRing + 2 + (i + 1) % pointsPerRing]);
+        }
+        // Connect to the start points
+        //drawPoint(corners[ring*pointsPerRing + 2]);
+        //drawPoint(corners[(ring + 1)*pointsPerRing + 1]);
+    }
+    glEnd();
 }
 void Ellipsoid::drawFaces() const
 {
