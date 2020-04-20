@@ -6,7 +6,7 @@ Dirigible::Dirigible() : Vehicle()
     height = 10;
     width = 10;
     target = location;
-    turnSpeed = 0.1;
+    turnSpeed = 0.01;
 }
 Dirigible::Dirigible(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
 double inputLength, double inputHeight, double inputWidth, RGBAcolor inputBodyColor,
@@ -19,7 +19,7 @@ typeOfAirship inputAirshipType) : Vehicle(inputLocation, inputLookingAt, inputSp
     airshipType = inputAirshipType;
     initializeSolids();
     target = location;
-    turnSpeed = 0.1;
+    turnSpeed = 0.01;
 }
 
 void Dirigible::initializeSolids()
@@ -76,18 +76,34 @@ void Dirigible::tick()
         setRandomTarget();
     }
     double angleToTurn = atan2(target.z - location.z, target.x - location.x) - xzAngle;
-    if(angleToTurn < 0)
+    while(angleToTurn < -PI)
     {
-        rotate(0, turnSpeed, 0);
+        angleToTurn += 2*PI;
+    }
+    while(angleToTurn > 2*PI)
+    {
+        angleToTurn -= 2*PI;
+    }
+    if(abs(angleToTurn) < turnSpeed)
+    {
+        setXZAngle(atan2(target.z - location.z, target.x - location.x));
+        updateVelocity();
+    }
+    else if(angleToTurn < 0)
+    {
+        setXZAngle(xzAngle + turnSpeed);
+        updateVelocity();
     }
     else if(angleToTurn > 0)
     {
-        rotate(0, -turnSpeed, 0);
+        setXZAngle(xzAngle - turnSpeed);
+        updateVelocity();
     }
 }
 
 void Dirigible::setRandomTarget()
 {
     double randAngle = (rand() % 100) * (2*PI / 100);
-    target = {location.x + cos(randAngle)*100, location.y, location.z + sin(randAngle)*100};
+    double randDistance = (rand() % 50) + 100;
+    target = {location.x + cos(randAngle)*randDistance, location.y, location.z + sin(randAngle)*randDistance};
 }
