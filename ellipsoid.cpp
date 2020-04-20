@@ -3,7 +3,7 @@
 Ellipsoid::Ellipsoid() : Solid()
 {
     pointsPerRing = 16;
-    numRings = 8;
+    numRings = 9;
     initializeCorners();
 }
 Ellipsoid::Ellipsoid(Point inputCenter, RGBAcolor inputColor,
@@ -11,7 +11,7 @@ double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineC
         Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor)
 {
     pointsPerRing = 16;
-    numRings = 8;
+    numRings = 9;
     initializeCorners();
 }
 Ellipsoid::Ellipsoid(Point inputCenter, RGBAcolor inputColor,
@@ -21,7 +21,7 @@ Point inputOwnerCenter) : Solid(inputCenter, inputColor, inputXWidth, inputYWidt
                                 inputLocation, inputLookingAt, inputSpeed, inputVelocity, inputOwnerCenter)
 {
     pointsPerRing = 16;
-    numRings = 8;
+    numRings = 9;
     initializeCorners();
 }
 
@@ -36,10 +36,25 @@ void Ellipsoid::initializeCorners()
 
     double curY = center.y + yWidth/2;
     double deltaY = yWidth / (numRings + 1);
+    double phi = -PI/2;
+    double deltaPhi = (PI) / (numRings + 1);
     double rx, rz;  // the x and z radii at the given height
     for(int ring = 0; ring < numRings; ring++)
     {
-        curY -= deltaY;
+        //curY -= deltaY;
+        phi += deltaPhi;
+        if(phi < 0)
+        {
+            curY = center.y + 1 / sqrt(4 / (tan(phi)*tan(phi)*xWidth*xWidth) + 4 / (yWidth*yWidth));
+        }
+        else if(phi > 0)
+        {
+            curY = center.y - 1 / sqrt(4 / (tan(phi)*tan(phi)*xWidth*xWidth) + 4 / (yWidth*yWidth));
+        }
+        else
+        {
+            curY = center.y;
+        }
         rx = xWidth/2 * sqrt(1 - 4*(curY-center.y)*(curY-center.y)/yWidth/yWidth);
         rz = zWidth/2 * sqrt(1 - 4*(curY-center.y)*(curY-center.y)/yWidth/yWidth);
         double theta;
