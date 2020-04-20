@@ -63,6 +63,25 @@ void Dirigible::initializeSolids()
                                                     solidCenter, solidLookingAt, 0, {0,0,-1}, location));
         rightFin->rotate(0, 0, 4*PI/3);
         solids.push_back(rightFin);
+    }
+    else if(airshipType == Balloon)
+    {
+        Point solidCenter;
+        Point solidLookingAt;
+        solidCenter = location;
+        solidLookingAt = lookingAt;
+        solids.push_back(std::make_shared<Ellipsoid>(Ellipsoid(location, bodyColor, width, height, length,
+                                                     {1,1,1,1},
+                                                     solidCenter, solidLookingAt, 0, {0,0,0}, location)));
+        solidCenter = {location.x, location.y - 1.3*height, location.z};
+        solidLookingAt = {lookingAt.x, lookingAt.y - 1.3*height, lookingAt.z};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(solidCenter, {.3, .1, .1,1},
+                width/3, height/3, length/3,
+                            {1,1,1,1}, solidCenter, solidLookingAt, 0,
+                            {0,0,-1}, location)));
+    }
+    if(false)
+    {
 
     }
 }

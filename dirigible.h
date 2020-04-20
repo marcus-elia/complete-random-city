@@ -5,6 +5,7 @@
 #include "ellipsoid.h"
 #include "cylinder.h"
 #include "rightTrapezoid.h"
+#include "recPrism.h"
 
 enum typeOfAirship {Blimp, Balloon};
 
