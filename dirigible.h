@@ -20,6 +20,7 @@ private:
     // For movement
     Point target;
     double turnSpeed;
+    bool needsToTurn;
 public:
     Dirigible();
     Dirigible(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
