@@ -37,6 +37,10 @@ public:
     GameManager();
     GameManager(int inputChunkSize, int inputRenderRadius, int inputPerlinSize);
 
+
+    // All keys should initially be false.
+    void initializeKeys();
+
     // Getters
     Player getPlayer() const;
     bool getWKey();

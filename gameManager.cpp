@@ -10,6 +10,7 @@ GameManager::GameManager()
     maxNumVehicles = 20;
     maxNumDirigibles = 5;
     updateCurrentChunks();
+    initializeKeys();
 }
 GameManager::GameManager(int inputChunkSize, int inputRenderRadius, int inputPerlinSize)
 {
@@ -21,7 +22,15 @@ GameManager::GameManager(int inputChunkSize, int inputRenderRadius, int inputPer
     maxNumVehicles = 20;
     maxNumDirigibles = 5;
     updateCurrentChunks();
+    initializeKeys();
 }
+
+
+void GameManager::initializeKeys()
+{
+    aKey = false, sKey = false, wKey = false, dKey = false, rKey = false, cKey = false;
+}
+
 
 void GameManager::reactToMouseMovement(double theta)
 {
