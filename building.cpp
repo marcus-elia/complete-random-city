@@ -247,6 +247,36 @@ void Building::initializeSolids()
         solids.push_back(std::make_shared<Cylinder>(Cylinder(center, {0.4,0.5,1,1},
                                                              3*sideLength/4.0-2, 1, sideLength-2, edgeColor)));
     }
+    else if(buildingType == WaterTower)
+    {
+        RGBAcolor lightBlue = {0.5, 0.5, 1,1};
+        Point center = {(double)topLeft.x + sideLength/2.0, 3*height/4.0, (double)topLeft.z + sideLength/2.0};
+        // Main tank
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, lightBlue,
+                                                            sideLength, height/2, sideLength, edgeColor)));
+        // Roof
+        center = {center.x, center.y + height/4.0 + 10, center.z};
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, lightBlue,
+                                                             sideLength, 20, sideLength, edgeColor,
+                                                             0,0)));
+        // Pipe
+        center = {center.x, height/4.0, center.z};
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, lightBlue,
+                                                             sideLength/8, height/2, sideLength/8, edgeColor)));
+        // Supports
+        center = {center.x + sideLength/3.0 - 1, height/4.0, center.z + sideLength/3.0 - 1};
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, lightBlue,
+                                                             2, height/2, 2, edgeColor)));
+        center = {center.x - 2*sideLength/3.0  + 2, height/4.0, center.z};
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, lightBlue,
+                                                             2, height/2, 2, edgeColor)));
+        center = {center.x, height/4.0, center.z  - 2*sideLength/3.0  + 2};
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, lightBlue,
+                                                             2, height/2, 2, edgeColor)));
+        center = {center.x + 2*sideLength/3.0 - 2, height/4.0, center.z};
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, lightBlue,
+                                                             2, height/2, 2, edgeColor)));
+    }
 }
 
 std::vector<std::shared_ptr<Solid>> Building::getSolids() const

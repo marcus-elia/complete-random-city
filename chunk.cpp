@@ -341,8 +341,16 @@ void Chunk::initializePlots()
                     int height;
                     if(perlinSeed < 0.25 || (perlinSeed < 0.5 && r1 < 0.6))
                     {
-                        buildingType = House;
-                        height = propertySize/2;
+                        if(r2 > 0.98)
+                        {
+                            buildingType = WaterTower;
+                            height = 150;
+                        }
+                        else
+                        {
+                            buildingType = House;
+                            height = propertySize/2;
+                        }
                     }
                     else if(r1 > 0.85 && perlinSeed > 0.75)
                     {

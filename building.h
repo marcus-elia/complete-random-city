@@ -6,10 +6,11 @@
 #include "triPrism.h"
 #include "frustum.h"
 #include "cylinder.h"
+#include "ellipsoid.h"
 #include <vector>
 #include <memory>
 
-enum typeOfBuilding {Plain, House, Skyscraper, Empire, UFO, CN, Hourglass, Pyramid, Church, Mansion};
+enum typeOfBuilding {Plain, House, Skyscraper, Empire, UFO, CN, Hourglass, Pyramid, Church, Mansion, WaterTower, CellTower};
 
 class Building
 {
