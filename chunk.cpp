@@ -7,6 +7,7 @@ Chunk::Chunk()
     perlinSeed = 0.5;
     initializeCenter();
     propertySize = sideLength / 8;
+    airport = std::experimental::nullopt;
 }
 Chunk::Chunk(Point2D inputBottomLeft, int inputSideLength, double inputPerlinSeed,
              std::experimental::optional<std::vector<int>> inputLeftRoadIndices,
@@ -19,6 +20,7 @@ Chunk::Chunk(Point2D inputBottomLeft, int inputSideLength, double inputPerlinSee
     perlinSeed = inputPerlinSeed;
     initializeCenter();
     propertySize = sideLength / 8;
+    airport = std::experimental::nullopt;
 
     // If the roads entering a side are specified, use them. If not, make them randomly
     srand(time(NULL));
@@ -120,6 +122,53 @@ void Chunk::initializeRoadLocations()
         {
             roadLocations[i][j] = true;
             i++;
+        }
+    }
+}
+
+void Chunk::tryToMakeAirport()
+{
+    bool airportMade = false;
+    int a, b;
+    for(int i = 0; i < 3; i++)
+    {
+        for(int j = 0; j < 3; j++)
+        {
+            // The plots that this airport would cover
+            int coords[20][2] = {{i+0,j+0},{i+1,j+0},
+                                 {i+0,j+1},{i+1,j+1},{i+2,j+1},{i+3,j+1},
+                                 {i+0,j+2},{i+1,j+2},{i+2,j+2},{i+3,j+2},
+                                           {i+1,j+3},{i+2,j+3},{i+3,j+3},{i+4,j+3},
+                                                     {i+2,j+4},{i+3,j+4},{i+4,j+4},{i+5,j+4},
+                                                               {i+3,j+5},{i+4,j+5}};
+            bool couldWork = true;
+            for(auto coord : coords)
+            {
+                a = coord[0];
+                b = coord[1];
+                if(plots[a][b]->getPlotType() != Empty)
+                {
+                    couldWork = false;
+                    break;
+                }
+            }
+            if(!airportMade && couldWork)
+            {
+                Point airportTopLeft = {plots[i][j]->getCenter().x - propertySize/2.0, 0,
+                                        plots[i][j]->getCenter().z - propertySize/2.0};
+                airport = Airport(airportTopLeft, sideLength/8);
+                airportMade = true;
+
+                // Now turn all plots covered by the airport into MultiPlots
+                for(auto coord : coords)
+                {
+                    a = coord[0];
+                    b = coord[1];
+                    plots[a][b] = std::make_shared<MultiPlot>(MultiPlot({a, b},
+                                                                        chunkCoordinatesToCenter(a, b, sideLength, bottomLeft, propertySize), propertySize));
+                }
+
+            }
         }
     }
 }
@@ -271,7 +320,15 @@ void Chunk::initializePlots()
         }
     }
 
-    // Now every plot is either a Road or an EmptyPlot
+    if(rand() % 100 < 25)
+    {
+        tryToMakeAirport();
+    }
+    if(hasAirport())
+    {
+        return;
+    }
+
     // Look for spots to put a MultiPlot
     bool churchMade = false;
     bool mansionMade = false;
@@ -583,6 +640,14 @@ std::vector<int> Chunk::getBottomRoadIndices() const
 {
     return bottomRoadIndices;
 }
+bool Chunk::hasAirport() const
+{
+    if(airport)
+    {
+        return true;
+    }
+    return false;
+}
 Plot* Chunk::getPlotAt(int i, int j)
 {
     return plots[i][j].get();
@@ -665,6 +730,11 @@ void Chunk::draw() const
         {
             plots[i][j]->draw();
         }
+    }
+
+    if(airport)
+    {
+        airport.value().draw();
     }
 }
 

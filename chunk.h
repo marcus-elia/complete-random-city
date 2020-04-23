@@ -11,6 +11,7 @@
 #include "multiPlot.h"
 #include "buildingPlot.h"
 #include "building.h"
+#include "airport.h"
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
@@ -45,6 +46,8 @@ private:
 
     // Where there are roads leaving/entering this chunk
     std::vector<int> leftRoadIndices, rightRoadIndices, topRoadIndices, bottomRoadIndices;
+
+    std::experimental::optional<Airport> airport;
 public:
     Chunk();
     Chunk(Point2D inputBottomLeft, int inputSideLength, double inputPerlinSeed,
@@ -58,6 +61,7 @@ public:
     std::vector<int> makeRandomRoadIndices(double seed, int size);
     void initializeRoadLocations();
     void initializePlots();
+    void tryToMakeAirport();
     // Have roads point to each other
     void setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chunk>> leftChunk,
                              std::experimental::optional<std::shared_ptr<Chunk>> rightChunk,
@@ -72,6 +76,7 @@ public:
     std::vector<int> getRightRoadIndices() const;
     std::vector<int> getTopRoadIndices() const;
     std::vector<int> getBottomRoadIndices() const;
+    bool hasAirport() const;
     Plot* getPlotAt(int i, int j);
     RoadPlot* getRoadPlotAt(int i, int j);  // casts to a RoadPlot*
     // Tries 30 random plots within the chunk. Returns a pointer to a roadplot

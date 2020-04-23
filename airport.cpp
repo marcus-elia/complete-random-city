@@ -45,8 +45,8 @@ void Airport::draw() const
     // Main runway from northwest to southeast
     glVertex3f(topLeft.x + plotSize, 1, topLeft.z);
     glVertex3f(topLeft.x, 1, topLeft.z + plotSize);
-    glVertex3f(topLeft.x + 4*plotSize, 1, topLeft.z + 5*plotSize);
-    glVertex3f(topLeft.x + 5*plotSize, 1, topLeft.z + 4*plotSize);
+    glVertex3f(topLeft.x + 5*plotSize, 1, topLeft.z + 6*plotSize);
+    glVertex3f(topLeft.x + 6*plotSize, 1, topLeft.z + 5*plotSize);
     // Small vertical runway
     glVertex3f(topLeft.x + 4*plotSize - 5, 1, topLeft.z + plotSize + 5);
     glVertex3f(topLeft.x + 3*plotSize + 5, 1, topLeft.z + plotSize + 5);
@@ -56,5 +56,5 @@ void Airport::draw() const
 }
 void Airport::tick()
 {
-    
+
 }
