@@ -277,6 +277,17 @@ void Building::initializeSolids()
         solids.push_back(std::make_shared<Cylinder>(Cylinder(center, lightBlue,
                                                              2, height/2, 2, edgeColor)));
     }
+    else if(buildingType == ControlTower)
+    {
+        Point center = {(double)topLeft.x + sideLength/2.0, height/2.0, (double)topLeft.z + sideLength/2.0};
+        // Control tower
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, {1,1,1,1},
+                                                   2*sideLength/3.0, height, 2*sideLength/3.0, edgeColor)));
+        center = {center.x, height + height/4.0, center.z};
+        solids.push_back(std::make_shared<Cylinder>(Cylinder(center, {0,0.2,1,1},
+                                                             2*sideLength/3.0, height/2, 2*sideLength/3.0, edgeColor,
+                                                             sideLength, sideLength)));
+    }
 }
 
 std::vector<std::shared_ptr<Solid>> Building::getSolids() const
