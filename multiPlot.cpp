@@ -1,17 +1,16 @@
-#include "fourPlot.h"
+#include "multiPlot.h"
 
-FourPlot::FourPlot()
+MultiPlot::MultiPlot()
 {
     plotType = Four;
 }
-FourPlot::FourPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength,
-        FourPlotLocation inputFourPlotLocation) : Plot(inputTopLeftChunkCoords, inputCenter, inputSideLength)
+MultiPlot::MultiPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength)
+: Plot(inputTopLeftChunkCoords, inputCenter, inputSideLength)
 {
-    fourPlotLocation = inputFourPlotLocation;
     plotType = Four;
 }
 
-void FourPlot::draw()
+void MultiPlot::draw()
 {
     glColor4f(0, 0.7, 0.1, 1);
     glBegin(GL_QUADS);

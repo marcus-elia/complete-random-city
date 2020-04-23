@@ -272,7 +272,7 @@ void Chunk::initializePlots()
     }
 
     // Now every plot is either a Road or an EmptyPlot
-    // Look for spots to put a FourPlot
+    // Look for spots to put a MultiPlot
     bool churchMade = false;
     bool mansionMade = false;
     for(int i = 0; i < 7; i++)
@@ -292,15 +292,12 @@ void Chunk::initializePlots()
                                  {1, 1, 1, 1},
                                  {1,1,1,1}, Church)));
                     churchMade = true;
-                    plots[i+1][j] = std::make_shared<FourPlot>(FourPlot({i+1,j},
-                            chunkCoordinatesToCenter(i+1, j, sideLength, bottomLeft, propertySize), propertySize,
-                            UpRight));
-                    plots[i+1][j+1] = std::make_shared<FourPlot>(FourPlot({i+1,j+1},
-                                           chunkCoordinatesToCenter(i+1, j+1, sideLength, bottomLeft, propertySize), propertySize,
-                                           DownRight));
-                    plots[i][j+1] = std::make_shared<FourPlot>(FourPlot({i,j+1},
-                                                                        chunkCoordinatesToCenter(i, j+1, sideLength, bottomLeft, propertySize), propertySize,
-                                                                        DownLeft));
+                    plots[i+1][j] = std::make_shared<MultiPlot>(MultiPlot({i + 1, j},
+                                                                          chunkCoordinatesToCenter(i+1, j, sideLength, bottomLeft, propertySize), propertySize));
+                    plots[i+1][j+1] = std::make_shared<MultiPlot>(MultiPlot({i + 1, j + 1},
+                                                                            chunkCoordinatesToCenter(i+1, j+1, sideLength, bottomLeft, propertySize), propertySize));
+                    plots[i][j+1] = std::make_shared<MultiPlot>(MultiPlot({i, j + 1},
+                                                                          chunkCoordinatesToCenter(i, j+1, sideLength, bottomLeft, propertySize), propertySize));
                 }
                 if(perlinSeed < 0.25 && !mansionMade && rand() % 100 > 50)
                 {
@@ -311,15 +308,12 @@ void Chunk::initializePlots()
                                                 Building(topLeftOfBuilding, propertySize, 60,
                                                  {1, 1, 1, 1}, {1,1,1,1}, Mansion)));
                     mansionMade = true;
-                    plots[i+1][j] = std::make_shared<FourPlot>(FourPlot({i+1,j},
-                                                                        chunkCoordinatesToCenter(i+1, j, sideLength, bottomLeft, propertySize), propertySize,
-                                                                        UpRight));
-                    plots[i+1][j+1] = std::make_shared<FourPlot>(FourPlot({i+1,j+1},
-                                                                          chunkCoordinatesToCenter(i+1, j+1, sideLength, bottomLeft, propertySize), propertySize,
-                                                                          DownRight));
-                    plots[i][j+1] = std::make_shared<FourPlot>(FourPlot({i,j+1},
-                                                                        chunkCoordinatesToCenter(i, j+1, sideLength, bottomLeft, propertySize), propertySize,
-                                                                        DownLeft));
+                    plots[i+1][j] = std::make_shared<MultiPlot>(MultiPlot({i + 1, j},
+                                                                          chunkCoordinatesToCenter(i+1, j, sideLength, bottomLeft, propertySize), propertySize));
+                    plots[i+1][j+1] = std::make_shared<MultiPlot>(MultiPlot({i + 1, j + 1},
+                                                                            chunkCoordinatesToCenter(i+1, j+1, sideLength, bottomLeft, propertySize), propertySize));
+                    plots[i][j+1] = std::make_shared<MultiPlot>(MultiPlot({i, j + 1},
+                                                                          chunkCoordinatesToCenter(i, j+1, sideLength, bottomLeft, propertySize), propertySize));
                 }
             }
         }

@@ -30,7 +30,7 @@ add_executable(graphics graphics.h graphics.cpp gameManager.h gameManager.cpp pl
         chunk.h chunk.cpp perlinNoiseGenerator.h perlinNoiseGenerator.cpp plot.cpp plot.h roadPlot.cpp
         roadPlot.h structs.h emptyPlot.cpp emptyPlot.h solid.cpp solid.h recPrism.cpp recPrism.h
         triPrism.h triPrism.cpp frustum.h frustum.cpp cylinder.h cylinder.cpp building.cpp building.h
-        buildingPlot.cpp buildingPlot.h fourPlot.cpp fourPlot.h movable.cpp movable.h movableComponent.cpp
+        buildingPlot.cpp buildingPlot.h multiPlot.cpp multiPlot.h movable.cpp movable.h movableComponent.cpp
         movableComponent.h vehicle.cpp vehicle.h car.cpp car.h rightTrapezoid.cpp rightTrapezoid.h
         ellipsoid.cpp ellipsoid.h dirigible.cpp dirigible.h)
 
