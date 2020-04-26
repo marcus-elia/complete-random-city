@@ -226,7 +226,7 @@ int main(int argc, char** argv)
     glutInitWindowSize((int)width, (int)height);
     glutInitWindowPosition(100, 100); // Position the window's initial top-left corner
     /* create the window and store the handle to it */
-    wd = glutCreateWindow("Use w,a,s,d to move horizontally, and r and c to move vertically. Click to shoot missiles and color buildings. Esc to quit." /* title */ );
+    wd = glutCreateWindow("Use w,a,s,d to move horizontally, and r and c to move vertically. Esc to quit." /* title */ );
 
     // Register callback handler for window re-paint event
     glutDisplayFunc(display);
