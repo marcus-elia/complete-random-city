@@ -5,6 +5,8 @@
 #include "recPrism.h"
 #include "rightTrapezoid.h"
 #include "ellipsoid.h"
+#include "cylinder.h"
+#include "frustum.h"
 
 class Airplane : public Vehicle
 {
