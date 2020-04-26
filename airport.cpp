@@ -47,6 +47,11 @@ void Airport::draw() const
 {
     controlTower->draw();
 
+    for(auto a : airplanes)
+    {
+        a->draw();
+    }
+
     // Draw the runways
     glColor4f(0.3, 0.3, 0.3, 1);
     glBegin(GL_QUADS);
@@ -64,5 +69,8 @@ void Airport::draw() const
 }
 void Airport::tick()
 {
-
+    for(auto a : airplanes)
+    {
+        a->tick();
+    }
 }

@@ -89,7 +89,11 @@ public:
     void setRightRoad(int i, int j, RoadPlot *road);
     void setLeftRoad(int i, int j, RoadPlot *road);
 
+    void makeAirportCreatePlane();
+
     void draw() const;
+
+    void tick();
 
     // Wrapper function, returns chunks around this
     std::vector<Point2D> getChunksAround(int radius);

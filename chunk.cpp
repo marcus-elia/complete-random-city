@@ -697,6 +697,27 @@ void Chunk::setLeftRoad(int i, int j, RoadPlot *road)
     dynamic_cast<RoadPlot*>(pl)->setLeftRoad(road);
 }
 
+
+void Chunk::makeAirportCreatePlane()
+{
+    if(hasAirport())
+    {
+        airport.value().createAirplane();
+    }
+}
+
+
+void Chunk::tick()
+{
+    if(airport)
+    {
+        airport.value().tick();
+    }
+}
+
+
+
+
 void Chunk::draw() const
 {
     glBegin(GL_QUADS);

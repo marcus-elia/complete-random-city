@@ -11,6 +11,7 @@ GameManager::GameManager()
     maxNumDirigibles = 5;
     updateCurrentChunks();
     initializeKeys();
+    vehicles = std::vector<std::shared_ptr<Vehicle>>();
 }
 GameManager::GameManager(int inputChunkSize, int inputRenderRadius, int inputPerlinSize)
 {
@@ -39,7 +40,11 @@ void GameManager::reactToMouseMovement(double theta)
 }
 void GameManager::reactToMouseClick()
 {
-
+    std::shared_ptr<Chunk> playerChunk = allSeenChunks[player.getCurrentChunkInt()];
+    if(playerChunk->hasAirport())
+    {
+        playerChunk->makeAirportCreatePlane();
+    }
 }
 
 
@@ -63,6 +68,11 @@ void GameManager::draw() const
 
 void GameManager::tick()
 {
+    for(auto &c : currentChunks)
+    {
+        c->tick();
+    }
+
     // The player moves
     player.tick();
 
