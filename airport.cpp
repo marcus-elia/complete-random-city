@@ -25,6 +25,14 @@ void Airport::initializeControlTower()
     controlTower = std::make_shared<Building>(Building(towerTopLeft, plotSize, 170, {1,1,1,1}, {1,1,1,1}, ControlTower));
 }
 
+
+void Airport::createAirplane()
+{
+    airplanes.push_back(std::make_shared<Airplane>(Airplane(runwayStart, runwayEnd, 1, {0,0,0}, 300, runwayStart, runwayEnd, 30, 15, 20)));
+}
+
+
+
 // Getters
 Point Airport::getRunwayStart() const
 {

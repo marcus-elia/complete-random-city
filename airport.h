@@ -3,7 +3,9 @@
 
 #include "structs.h"
 #include "building.h"
+#include "airplane.h"
 #include <memory>
+#include <vector>
 
 class Airport
 {
@@ -15,12 +17,16 @@ private:
     double plotSize;
     Point topLeft;
     std::shared_ptr<Building> controlTower;
+    std::vector<std::shared_ptr<Airplane>> airplanes;
 public:
     Airport();
     Airport(Point inputTopLeft, double inputPlotSize);
 
     void initializeRunwayPoints();
     void initializeControlTower();
+
+    // Planes
+    void createAirplane();
 
     // Getters
     Point getRunwayStart() const;
