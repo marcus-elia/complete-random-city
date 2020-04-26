@@ -91,6 +91,8 @@ public:
     void setLeftRoad(int i, int j, RoadPlot *road);
 
     void makeAirportCreatePlane();
+    // Returns true if the plot at i,j is adjacent to a road
+    bool touchesRoad(int i, int j) const;
 
     void draw() const;
 

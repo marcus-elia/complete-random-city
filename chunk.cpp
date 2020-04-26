@@ -202,7 +202,7 @@ void Chunk::tryToMakeMultiplotBuildings()
                     plots[i][j+1] = std::make_shared<MultiPlot>(MultiPlot({i, j + 1},
                                                                           chunkCoordinatesToCenter(i, j+1, sideLength, bottomLeft, propertySize), propertySize));
                 }
-                if(perlinSeed < 0.25 && !mansionMade && rand() % 100 > 50)
+                if(perlinSeed < 0.25 && !mansionMade && rand() % 100 > 50 && touchesRoad(i, j))
                 {
                     Point2D topLeftOfBuilding = {bottomLeft.x*sideLength + i*propertySize,
                                                  bottomLeft.z*sideLength + j*propertySize};
@@ -405,7 +405,7 @@ void Chunk::initializePlots()
                     // What type of building is it? How high is it?
                     typeOfBuilding buildingType;
                     int height;
-                    if(perlinSeed < 0.25 || (perlinSeed < 0.5 && r1 < 0.6))
+                    if((perlinSeed < 0.25 || (perlinSeed < 0.5 && r1 < 0.6)) && touchesRoad(i, j))
                     {
                         if(r2 > 0.98)
                         {
@@ -840,6 +840,42 @@ std::vector<Point2D> getChunksAroundPointByPoint(Point2D p, int radius)
     return result;
 }
 
+
+bool Chunk::touchesRoad(int i, int j) const
+{
+    // Look up
+    if(j > 0)
+    {
+        if(roadLocations[i][j-1])
+        {
+            return true;
+        }
+    }
+    // Left
+    if(i > 0)
+    {
+        if(roadLocations[i-1][j])
+        {
+            return true;
+        }
+    }
+    // Down
+    if(j < 7)
+    {
+        if(roadLocations[i][j+1])
+        {
+            return true;
+        }
+    }
+    if(i < 7)
+    {
+        if(roadLocations[i+1][j])
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 
 bool makesSquareUpLeft(int i, int j, bool roadLocs[8][8])
