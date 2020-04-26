@@ -8,10 +8,10 @@ GameManager::GameManager()
     chunkSize = 512;
     renderRadius = 3;
     maxNumVehicles = 20;
-    maxNumDirigibles = 5;
+    maxNumDirigibles = 8;
     updateCurrentChunks();
     initializeKeys();
-    vehicles = std::vector<std::shared_ptr<Vehicle>>();
+    //vehicles = std::vector<std::shared_ptr<Vehicle>>();
 }
 GameManager::GameManager(int inputChunkSize, int inputRenderRadius, int inputPerlinSize)
 {
@@ -21,7 +21,7 @@ GameManager::GameManager(int inputChunkSize, int inputRenderRadius, int inputPer
     perlinSize = inputPerlinSize;
     png = PerlinNoiseGenerator(perlinSize, perlinSize, 1);
     maxNumVehicles = 20;
-    maxNumDirigibles = 5;
+    maxNumDirigibles = 8;
     updateCurrentChunks();
     initializeKeys();
 }
@@ -372,7 +372,7 @@ bool GameManager::createDirigible()
     int r1 = rand() % 100;
     int r2 = rand() % 100;
     double randAngle = (rand() % 100) * (2*PI/100);
-    Point location = {player.getLocation().x + 200*cos(randAngle), 220.0 + r1 + r2, player.getLocation().z + 200*sin(randAngle)};
+    Point location = {player.getLocation().x + 400*cos(randAngle), 280.0 + r1 + r2, player.getLocation().z + 400*sin(randAngle)};
     Point lookingAt = {location.x, location.y, location.z - 10};
     RGBAcolor inputColor;
     if(r1 < 20)
