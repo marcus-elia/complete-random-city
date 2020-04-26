@@ -62,6 +62,7 @@ public:
     void initializeRoadLocations();
     void initializePlots();
     void tryToMakeAirport();
+    void tryToMakeMultiplotBuildings();
     // Have roads point to each other
     void setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chunk>> leftChunk,
                              std::experimental::optional<std::shared_ptr<Chunk>> rightChunk,
