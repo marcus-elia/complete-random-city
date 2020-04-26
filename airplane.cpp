@@ -67,3 +67,11 @@ void Airplane::tick()
         }
     }
 }
+
+void Airplane::draw() const
+{
+    for(auto s : solids)
+    {
+        s->draw();
+    }
+}

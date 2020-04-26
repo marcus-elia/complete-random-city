@@ -26,6 +26,8 @@ public:
     void initializeSolids();
 
     void tick();
+
+    void draw() const;
 };
 
 #endif //COMPLETE_RANDOM_CITY_AIRPLANE_H
