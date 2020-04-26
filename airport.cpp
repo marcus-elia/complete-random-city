@@ -11,6 +11,7 @@ Airport::Airport(Point inputTopLeft, double inputPlotSize)
     plotSize = inputPlotSize;
     initializeRunwayPoints();
     initializeControlTower();
+    createAirplane();
 }
 
 
@@ -29,7 +30,7 @@ void Airport::initializeControlTower()
 void Airport::createAirplane()
 {
     airplanes.push_back(std::make_shared<Airplane>(Airplane(runwayStart, {runwayStart.x, runwayStart.y, runwayStart.z - 10},
-            1, {0,0,0}, 300, runwayStart, runwayEnd, 30, 15, 20)));
+            1, {0,0,0}, 300, runwayStart, runwayEnd, 80, 25, 40)));
 }
 
 
