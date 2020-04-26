@@ -405,8 +405,16 @@ void Chunk::initializePlots()
                         }
                         else
                         {
-                            buildingType = House;
-                            height = propertySize/2;
+                            if(rand() % 100 < 67)
+                            {
+                                buildingType = House;
+                                height = propertySize/2;
+                            }
+                            else
+                            {
+                                buildingType = House2;
+                                height = 2*propertySize/3;
+                            }
                         }
                     }
                     else if(r1 > 0.85 && perlinSeed > 0.75)

@@ -10,7 +10,8 @@
 #include <vector>
 #include <memory>
 
-enum typeOfBuilding {Plain, House, Skyscraper, Empire, UFO, CN, Hourglass, Pyramid, Church, Mansion, WaterTower, ControlTower};
+enum typeOfBuilding {Plain, House, Skyscraper, Empire, UFO, CN, Hourglass, Pyramid,
+        Church, Mansion, WaterTower, ControlTower, House2};
 
 class Building
 {

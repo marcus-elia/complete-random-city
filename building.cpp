@@ -46,6 +46,17 @@ void Building::initializeSolids()
         solids.push_back(std::make_shared<TriPrism>(TriPrism(roofCenter, {.3, .1, .1,1},
                                                              sideLength, height/2, sideLength, edgeColor)));
     }
+    else if(buildingType == House2)
+    {
+        Point center = {(double)topLeft.x + sideLength/2, (double)height/2, (double)topLeft.z + sideLength/2};
+        solids.push_back(std::make_shared<RecPrism>(RecPrism(center, {.87, .82, .28, 1},
+                                                             sideLength - 5, height, sideLength - 5,
+                                                             edgeColor)));
+        Point roofCenter = {center.x, center.y + 3*height/4, center.z};
+        solids.push_back(std::make_shared<Frustum>(Frustum(roofCenter, {.2, .05, .05,1},
+                                                             sideLength, height/2, sideLength, edgeColor,
+                                                             2*sideLength/3, 3)));
+    }
     else if(buildingType == Skyscraper)
     {
         Point center = {(double)topLeft.x + sideLength/2, (double)3*height/4, (double)topLeft.z + sideLength/2};
