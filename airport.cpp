@@ -28,7 +28,8 @@ void Airport::initializeControlTower()
 
 void Airport::createAirplane()
 {
-    airplanes.push_back(std::make_shared<Airplane>(Airplane(runwayStart, runwayEnd, 1, {0,0,0}, 300, runwayStart, runwayEnd, 30, 15, 20)));
+    airplanes.push_back(std::make_shared<Airplane>(Airplane(runwayStart, {runwayStart.x, runwayStart.y, runwayStart.z - 10},
+            1, {0,0,0}, 300, runwayStart, runwayEnd, 30, 15, 20)));
 }
 
 
