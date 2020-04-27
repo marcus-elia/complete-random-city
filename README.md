@@ -17,10 +17,10 @@ This project uses OpenGL/Glut. If you are on Windows, you will
  
  If you cannot run it and you are curious to see what it looks
  like, I have put some screenshots in the repository.
-(/screenshots/city.png)
-(/screenshots/suburbs.png)
-(/screenshots/forest.png)
-(/screenshots/airport.png)
-(/screenshots/house.png)
-(/screenshots/cars.png)
-(/screenshots/airships.png)
+![](/screenshots/city.png)
+![](/screenshots/suburbs.png)
+![](/screenshots/forest.png)
+![](/screenshots/airport.png)
+![](/screenshots/house.png)
+![](/screenshots/cars.png)
+![](/screenshots/airships.png)
