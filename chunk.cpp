@@ -221,9 +221,109 @@ void Chunk::tryToMakeMultiplotBuildings()
             }
         }
     }
-
 }
 
+void Chunk::makeBuildings()
+{
+    for(int i = 0; i < 8; i++)
+    {
+        for(int j = 0; j < 8; j++)
+        {
+            if(plots[i][j]->getPlotType() == Empty)
+            {
+                double r1 = (double)(rand() % 100) / 100;
+                double r2 = (double)(rand() % 100) / 100;
+
+                // Make a building if r says yes, more likely when perlin noise is high
+                if(r1 < perlinSeed && r2 > 0.2)
+                {
+                    Point2D topLeftOfBuilding = {bottomLeft.x*sideLength + i*propertySize,
+                                                 bottomLeft.z*sideLength + j*propertySize};
+                    // What type of building is it? How high is it?
+                    typeOfBuilding buildingType;
+                    int height;
+                    if((perlinSeed < 0.25 || (perlinSeed < 0.5 && r1 < 0.6)) && touchesRoad(i, j))
+                    {
+                        if(r2 > 0.98)
+                        {
+                            buildingType = WaterTower;
+                            height = 150;
+                        }
+                        else
+                        {
+                            if(rand() % 100 < 67)
+                            {
+                                buildingType = House;
+                                height = propertySize/2;
+                            }
+                            else
+                            {
+                                buildingType = House2;
+                                height = 2*propertySize/3;
+                            }
+                        }
+                    }
+                    else if(r1 > 0.85 && perlinSeed > 0.75)
+                    {
+                        buildingType = Skyscraper;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    else if(0.55 < r1 && r1 < 0.6 && perlinSeed > 0.4)
+                    {
+                        buildingType = Pyramid;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    else if(0.7 < r1 && r1 < 0.75 && perlinSeed > 0.65)
+                    {
+                        buildingType = Hourglass;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    else if(0.1 < r1  && r1 < 0.15 && perlinSeed > 0.65)
+                    {
+                        buildingType = Empire;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    else if(0.45 < r1 && r1 < 0.5 && perlinSeed > 0.65)
+                    {
+                        buildingType = UFO;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    else if(perlinSeed > 0.95 && r1 < 0.05 && r2 > 0.9)
+                    {
+                        buildingType = CN;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    else
+                    {
+                        buildingType = Plain;
+                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
+                    }
+                    plots[i][j] = std::make_shared<BuildingPlot>(BuildingPlot({i,j},
+                                                                              chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize,
+                                                                              Building(topLeftOfBuilding, propertySize, height,
+                                                                                       {r1, 0, perlinSeed, 1},
+                                                                                       {1,1,1,1}, buildingType)));
+                }
+            }
+        }
+    }
+}
+
+void Chunk::makeForests()
+{
+    for(int i = 0; i < 7; i++)
+    {
+        for(int j = 0; j < 7; j++)
+        {
+            if(plots[i][j]->getPlotType() == Empty)
+            {
+                Point2D plotCenter = chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize);
+                int forestLevel = countForestLevel(i, j);
+                plots[i][j] = std::make_shared<ForestPlot>(ForestPlot({i,j}, plotCenter, propertySize, forestLevel));
+            }
+        }
+    }
+}
 
 
 
@@ -375,6 +475,7 @@ void Chunk::initializePlots()
         }
     }
 
+    // Possibly make an airport
     if(rand() % 100 < 25)
     {
         tryToMakeAirport();
@@ -384,93 +485,16 @@ void Chunk::initializePlots()
         return;
     }
 
+    // Possibly make a church or a mansion
     tryToMakeMultiplotBuildings();
 
-
     // Now turn some empty plots into Buildings
-    for(int i = 0; i < 8; i++)
-    {
-        for(int j = 0; j < 8; j++)
-        {
-            if(plots[i][j]->getPlotType() == Empty)
-            {
-                double r1 = (double)(rand() % 100) / 100;
-                double r2 = (double)(rand() % 100) / 100;
+    makeBuildings();
 
-                // Make a building if r says yes, more likely when perlin noise is high
-                if(r1 < perlinSeed && r2 > 0.2)
-                {
-                    Point2D topLeftOfBuilding = {bottomLeft.x*sideLength + i*propertySize,
-                                                 bottomLeft.z*sideLength + j*propertySize};
-                    // What type of building is it? How high is it?
-                    typeOfBuilding buildingType;
-                    int height;
-                    if((perlinSeed < 0.25 || (perlinSeed < 0.5 && r1 < 0.6)) && touchesRoad(i, j))
-                    {
-                        if(r2 > 0.98)
-                        {
-                            buildingType = WaterTower;
-                            height = 150;
-                        }
-                        else
-                        {
-                            if(rand() % 100 < 67)
-                            {
-                                buildingType = House;
-                                height = propertySize/2;
-                            }
-                            else
-                            {
-                                buildingType = House2;
-                                height = 2*propertySize/3;
-                            }
-                        }
-                    }
-                    else if(r1 > 0.85 && perlinSeed > 0.75)
-                    {
-                        buildingType = Skyscraper;
-                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
-                    }
-                    else if(0.55 < r1 && r1 < 0.6 && perlinSeed > 0.4)
-                    {
-                        buildingType = Pyramid;
-                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
-                    }
-                    else if(0.7 < r1 && r1 < 0.75 && perlinSeed > 0.65)
-                    {
-                        buildingType = Hourglass;
-                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
-                    }
-                    else if(0.1 < r1  && r1 < 0.15 && perlinSeed > 0.65)
-                    {
-                        buildingType = Empire;
-                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
-                    }
-                    else if(0.45 < r1 && r1 < 0.5 && perlinSeed > 0.65)
-                    {
-                        buildingType = UFO;
-                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
-                    }
-                    else if(perlinSeed > 0.95 && r1 < 0.05 && r2 > 0.9)
-                    {
-                        buildingType = CN;
-                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
-                    }
-                    else
-                    {
-                        buildingType = Plain;
-                        height =  (int)(perlinSeed*180 + r1*80 + r2*80);
-                    }
-                    plots[i][j] = std::make_shared<BuildingPlot>(BuildingPlot({i,j},
-                            chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize,
-                            Building(topLeftOfBuilding, propertySize, height,
-                                                 {r1, 0, perlinSeed, 1},
-                                                 {1,1,1,1}, buildingType)));
-                    //plots[i][j] = std::make_shared<BuildingPlot>(BuildingPlot({i,j},
-                    //        chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize, perlinSeed));
-                }
-            }
-        }
+    // Fill in the remaining empty plots with forests
+    if(perlinSeed < 0.25)
+    {
+        makeForests();
     }
 }
 
@@ -875,6 +899,67 @@ bool Chunk::touchesRoad(int i, int j) const
         }
     }
     return false;
+}
+int Chunk::countForestLevel(int i, int j) const
+{
+    int count = 0;
+    if(i > 0) // Left
+    {
+        if(plots[i-1][j]->getPlotType() == Empty || plots[i-1][j]->getPlotType() == Forest)
+        {
+            count++;
+        }
+    }
+    if(i < 7) // Right
+    {
+        if(plots[i+1][j]->getPlotType() == Empty || plots[i+1][j]->getPlotType() == Forest)
+        {
+            count++;
+        }
+    }
+    if(j > 0) // Up
+    {
+        if(plots[i][j-1]->getPlotType() == Empty || plots[i][j-1]->getPlotType() == Forest)
+        {
+            count++;
+        }
+    }
+    if(j < 7) // Down
+    {
+        if(plots[i][j+1]->getPlotType() == Empty || plots[i][j+1]->getPlotType() == Forest)
+        {
+            count++;
+        }
+    }
+    if(i > 0 && j > 0) // Up left
+    {
+        if(plots[i-1][j-1]->getPlotType() == Empty || plots[i-1][j-1]->getPlotType() == Forest)
+        {
+            count++;
+        }
+    }
+    if(i < 7 && j > 0) // Up right
+    {
+        if(plots[i+1][j-1]->getPlotType() == Empty || plots[i+1][j-1]->getPlotType() == Forest)
+        {
+            count++;
+        }
+    }
+    if(i < 7 && j  < 7) // Down right
+    {
+        if(plots[i+1][j+1]->getPlotType() == Empty || plots[i+1][j+1]->getPlotType() == Forest)
+        {
+            count++;
+        }
+    }
+    if(i > 0 && j < 7) // Down left
+    {
+        if(plots[i-1][j+1]->getPlotType() == Empty || plots[i-1][j+1]->getPlotType() == Forest)
+        {
+            count++;
+        }
+    }
+    return count;
 }
 
 

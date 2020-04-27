@@ -10,6 +10,7 @@
 #include "emptyPlot.h"
 #include "multiPlot.h"
 #include "buildingPlot.h"
+#include "forestPlot.h"
 #include "building.h"
 #include "airport.h"
 #include <vector>
@@ -63,6 +64,8 @@ public:
     void initializePlots();
     void tryToMakeAirport();
     void tryToMakeMultiplotBuildings();
+    void makeBuildings();
+    void makeForests();
     // Have roads point to each other
     void setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chunk>> leftChunk,
                              std::experimental::optional<std::shared_ptr<Chunk>> rightChunk,
@@ -93,6 +96,10 @@ public:
     void makeAirportCreatePlane();
     // Returns true if the plot at i,j is adjacent to a road
     bool touchesRoad(int i, int j) const;
+
+    // Returns the number of empty or forest plots adjacent to the given plot
+    // Returns an int between 0 and 8
+    int countForestLevel(int i, int j) const;
 
     void draw() const;
 
