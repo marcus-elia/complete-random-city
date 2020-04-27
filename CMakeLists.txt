@@ -32,7 +32,7 @@ add_executable(graphics graphics.h graphics.cpp gameManager.h gameManager.cpp pl
         triPrism.h triPrism.cpp frustum.h frustum.cpp cylinder.h cylinder.cpp building.cpp building.h
         buildingPlot.cpp buildingPlot.h multiPlot.cpp multiPlot.h movable.cpp movable.h movableComponent.cpp
         movableComponent.h vehicle.cpp vehicle.h car.cpp car.h rightTrapezoid.cpp rightTrapezoid.h
-        ellipsoid.cpp ellipsoid.h dirigible.cpp dirigible.h airport.cpp airport.h airplane.cpp airplane.h)
+        ellipsoid.cpp ellipsoid.h dirigible.cpp dirigible.h airport.cpp airport.h airplane.cpp airplane.h forestPlot.cpp forestPlot.h tree.cpp tree.h)
 
 if (WIN32)
     target_link_libraries (graphics ${OPENGL_LIBRARIES} freeglut)
