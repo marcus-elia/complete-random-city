@@ -51,6 +51,8 @@ double Tree::getTrunkRadius() const
 
 void Tree::draw() const
 {
+    glLineWidth(1.0);
     trunk.draw();
     leaves.draw();
+    glLineWidth(2.0);
 }

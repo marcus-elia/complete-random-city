@@ -165,8 +165,10 @@ void Airplane::tick()
 
 void Airplane::draw() const
 {
+    glLineWidth(1.0);
     for(auto s : solids)
     {
         s->draw();
     }
+    glLineWidth(2.0);
 }

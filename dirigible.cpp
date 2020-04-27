@@ -116,10 +116,12 @@ void Dirigible::setWidth(double inputWidth)
 
 void Dirigible::draw() const
 {
+    glLineWidth(1.5);
     for(std::shared_ptr<Solid> s : solids)
     {
         s->draw();
     }
+    glLineWidth(2.0);
 }
 
 void Dirigible::tick()

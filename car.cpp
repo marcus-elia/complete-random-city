@@ -429,76 +429,12 @@ void Car::updateDeltaTheta()
 
 void Car::draw() const
 {
+    glLineWidth(1.0);
     for(std::shared_ptr<Solid> s : solids)
     {
         s->draw();
     }
-    // Debug
-    /*glDisable(GL_CULL_FACE);
-    if(currentStatus == Approaching)
-    {
-        glColor4f(1,.4,.4,1);
-    }
-    else if(currentStatus == Exiting)
-    {
-        glColor4f(.8,0,0,1);
-    }
-    else
-    {
-        if(intersectionDirection == LeftTurn)
-        {
-            glColor4f(0,1,0,1);
-        }
-        else if(intersectionDirection == RightTurn)
-        {
-            glColor4f(0,0,1,1);
-        }
-        else
-        {
-            glColor4f(.8,.8,1,1);
-        }
-    }
-    glBegin(GL_QUADS);
-    drawPoint({location.x + 8, 30, location.z + 8});
-    drawPoint({location.x - 8, 30, location.z + 8});
-    drawPoint({location.x - 8, 30, location.z - 8});
-    drawPoint({location.x + 8, 30, location.z - 8});
-    glEnd();
-
-    glBegin(GL_QUADS);
-    glColor4f(0,1,1,1);
-    Point2D loc = currentRoad->getCenter();
-    drawPoint({loc.x + 8.0, .5, loc.z + 8.0});
-    drawPoint({loc.x - 8.0, .5, loc.z + 8.0});
-    drawPoint({loc.x - 8.0, .5, loc.z - 8.0});
-    drawPoint({loc.x + 8.0, .5, loc.z - 8.0});
-    glEnd();
-
-
-    if(!turnPoints.empty())
-    {
-        glColor4f(1,0,1,1);
-        for(Point2D p : turnPoints)
-        {
-
-            glColor4f(0,1,1,1);
-            glBegin(GL_QUADS);
-            Point2D loc = currentRoad->getCenter();
-            drawPoint({p.x + 1.0, 5, p.z + 1.0});
-            drawPoint({p.x - 1.0, 5, p.z + 1.0});
-            drawPoint({p.x - 1.0, 5, p.z - 1.0});
-            drawPoint({p.x + 1.0, 5, p.z - 1.0});
-            glEnd();
-        }
-    }
-    glColor4f(0,.6,.6,1);
-    glBegin(GL_LINES);
-    drawPoint(location);
-    drawPoint({location.x + 40*cos(xzAngle), location.y, location.z + 40*sin(xzAngle)});
-    glEnd();*/
-
-
-
+    glLineWidth(2.0);
     glEnable(GL_CULL_FACE);
 }
 

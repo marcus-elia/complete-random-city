@@ -580,6 +580,7 @@ void RoadPlot::draw()
 
 
     // Draw the center lines
+    glLineWidth(3.0);
     glColor4f(1.0, 1.0, 0.0, 1.0);
     glBegin(GL_LINES);
     for(Segment sgmt : yellowLines)
@@ -588,24 +589,8 @@ void RoadPlot::draw()
         drawPoint(sgmt.p2);
     }
     glEnd();
+    glLineWidth(2.0);
 
-    // Debug
-    /*double red = 0;
-    double blue = 0;
-    glBegin(GL_QUADS);
-    std::vector<Point2D> points = getTurnPointsRightSouth(1);
-    double delta = 1.0 / points.size();
-    for(Point2D p : points)
-    {
-        glColor4f(red, 0.0, blue, 1.0);
-        drawPoint({p.x + 1.0, 2, p.z + 1.0});
-        drawPoint({p.x - 1.0, 2, p.z + 1.0});
-        drawPoint({p.x - 1.0, 2, p.z - 1.0});
-        drawPoint({p.x + 1.0, 2, p.z - 1.0});
-        red += delta;
-        blue += delta;
-    }
-    glEnd();*/
 
 
     glEnable(GL_CULL_FACE);

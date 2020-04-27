@@ -74,7 +74,7 @@ void display()
               camUp.x, camUp.y, camUp.z); // up vector
 
     // Draw in 3d
-    //draw_axes();
+    glLineWidth(2.0);
     manager.draw();
 
 
