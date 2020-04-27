@@ -74,7 +74,7 @@ void display()
               camUp.x, camUp.y, camUp.z); // up vector
 
     // Draw in 3d
-    draw_axes();
+    //draw_axes();
     manager.draw();
 
 
@@ -161,22 +161,6 @@ void kbu(unsigned char key, int x, int y)
 
 void kbdS(int key, int x, int y)
 {
-    /*switch(key)
-    {
-        case GLUT_KEY_DOWN:
-
-            break;
-        case GLUT_KEY_LEFT:
-            c.move(-5, 0, 0);
-            break;
-        case GLUT_KEY_RIGHT:
-            c.move(5, 0, 0);
-            break;
-        case GLUT_KEY_UP:
-
-            break;
-    }*/
-
     glutPostRedisplay();
 }
 
