@@ -5,6 +5,7 @@ Ellipsoid::Ellipsoid() : Solid()
     pointsPerRing = 16;
     numRings = 9;
     initializeCorners();
+    hideLines = false;
 }
 Ellipsoid::Ellipsoid(Point inputCenter, RGBAcolor inputColor,
 double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor) :
@@ -13,6 +14,17 @@ double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineC
     pointsPerRing = 16;
     numRings = 9;
     initializeCorners();
+    hideLines = false;
+}
+Ellipsoid::Ellipsoid(Point inputCenter, RGBAcolor inputColor,
+double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
+bool inputHideLines, int inputNumRings, int inputPointsPerRing) :
+        Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor)
+{
+    pointsPerRing = inputPointsPerRing;
+    numRings = inputNumRings;
+    initializeCorners();
+    hideLines = inputHideLines;
 }
 Ellipsoid::Ellipsoid(Point inputCenter, RGBAcolor inputColor,
 double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
@@ -23,6 +35,7 @@ Point inputOwnerCenter) : Solid(inputCenter, inputColor, inputXWidth, inputYWidt
     pointsPerRing = 16;
     numRings = 9;
     initializeCorners();
+    hideLines = false;
 }
 
 void Ellipsoid::initializeCorners()
@@ -74,7 +87,10 @@ void Ellipsoid::lookAt(Point &p)
 void Ellipsoid::draw() const
 {
     glDisable(GL_CULL_FACE);
-    drawLines();
+    if(!hideLines)
+    {
+        drawLines();
+    }
     drawFaces();
     glEnable(GL_CULL_FACE);
 }
