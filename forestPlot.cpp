@@ -17,17 +17,18 @@ Plot(inputTopLeftChunkCoords, inputCenter, inputSideLength)
 void ForestPlot::initializeTrees()
 {
     trees = std::vector<Tree>();
-    int numTreeAttempts = 2*level*level + (rand() % 3);
+    //int numTreeAttempts = 2*level + (rand() % 3);
+    int numTreeAttempts = level*1.25;
     for(int i = 0; i < numTreeAttempts; i++)
     {
         Point2D p = getRandomPoint();
-        double r = 3 + rand() % 2;
+        double r = 8 + rand() % 2;
         if(isValidTreeLocation(p, r))
         {
             Point location = {static_cast<double>(p.x), 0, static_cast<double>(p.z)};
-            double trunkHeight = 6 + (rand() % 10);
-            double leavesHeight = 5 + (rand() % 9);
-            double leavesXZRadius = r + 2 + (rand() % 6);
+            double trunkHeight = 25 + (rand() % 20) + 2*level;
+            double leavesHeight = 15 + (rand() % 14) + 3*level;
+            double leavesXZRadius = 3*r + 2 + (rand() % 20) + level;
             trees.emplace_back(location, trunkHeight, r, leavesHeight, leavesXZRadius);
         }
     }
