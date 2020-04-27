@@ -2,12 +2,16 @@
 
 ForestPlot::ForestPlot() : Plot()
 {
+    plotType = Forest;
     level = 0;
+    initializeTrees();
 }
-ForestPlot::ForestPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength) :
+ForestPlot::ForestPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength, int inputLevel) :
 Plot(inputTopLeftChunkCoords, inputCenter, inputSideLength)
 {
-    level = 0;
+    plotType = Forest;
+    level = inputLevel;
+    initializeTrees();
 }
 
 void ForestPlot::initializeTrees()

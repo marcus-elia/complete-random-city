@@ -2,12 +2,12 @@
 
 MultiPlot::MultiPlot()
 {
-    plotType = Four;
+    plotType = Multi;
 }
 MultiPlot::MultiPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength)
 : Plot(inputTopLeftChunkCoords, inputCenter, inputSideLength)
 {
-    plotType = Four;
+    plotType = Multi;
 }
 
 void MultiPlot::draw()

@@ -12,7 +12,7 @@ private:
     std::vector<Tree> trees;
 public:
     ForestPlot();
-    ForestPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength);
+    ForestPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inputSideLength, int inputLevel);
 
     // Creates a bunch of random trees based on the value of level
     void initializeTrees();

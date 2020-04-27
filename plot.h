@@ -6,7 +6,7 @@
 #include "recPrism.h"
 
 
-enum PlotType {Road, Buildings, Empty, Four};
+enum PlotType {Road, Buildings, Empty, Multi, Forest};
 
 
 // A plot of land. Each chunk is divided into square plots.
