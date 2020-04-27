@@ -32,6 +32,13 @@ void Tree::initializeSolids()
     leaves = Ellipsoid(location, leavesColor, leavesXZRadius, leavesHeight, leavesXZRadius, {1,1,1,1});
 }
 
+bool Tree::conflictsWithTree(Point otherLocation, double otherRadius) const
+{
+    return distance2d(location, otherLocation) < trunkRadius + otherRadius;
+}
+
+
+
 Point Tree::getLocation() const
 {
     return location;

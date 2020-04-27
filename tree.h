@@ -22,6 +22,9 @@ public:
 
     void initializeSolids();
 
+    // Returns true if this tree's trunk intersects the other trunk
+    bool conflictsWithTree(Point otherLocation, double otherRadius) const;
+
     Point getLocation() const;
     double getTrunkRadius() const;
 
