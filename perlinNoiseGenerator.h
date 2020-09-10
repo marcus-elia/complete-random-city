@@ -1,4 +1,5 @@
-// This is based on code from https://www.youtube.com/watch?v=6-0UaeJBumA
+// This is based on code from https://www.youtube.com/watch?v=6-0UaeJBumA,
+// a tutorial by javidx9
 
 #ifndef RANDOM_3D_CITY_PERLINNOISEGENERATOR_H
 #define RANDOM_3D_CITY_PERLINNOISEGENERATOR_H

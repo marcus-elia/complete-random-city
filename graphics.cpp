@@ -1,3 +1,9 @@
+// Much of the code in this file is based on code provided by Lisa Dion
+// in a 3D graphics tutorial.
+// The code to switch to 2D drawing mode is from https://www.youtube.com/watch?v=i1mp4zflkYo,
+// a video by The Pentamollis Project
+// The code to enable alpha is from https://www.opengl.org/archives/resources/faq/technical/transparency.htm
+
 #include "graphics.h"
 #include "gameManager.h"
 
