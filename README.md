@@ -6,22 +6,20 @@ around, and hold r and c to move up or down (respectively). Press
 then escape key to close the window. You can also get your cursor
 out of the window by moving it very suddenly to either side.
 
-This project uses OpenGL/Glut. If you are on Windows, you will
- need to create a folder called freeglut in 
- C:/Program Files/Common Files. You must download freeglut, and
- in this freeglut folder, put the include and lib folders from
- the download. Then take freeglut.dll from the bin folder in
- the download, and put the dll in your cmake-build-debug folder
- for the project. If you are on Mac, you might be able to just 
- run it. If you are on Linux, I do not know.
+## Build Instructions
+If you are on windows, you need to download freeglut, make the directory
+ C:/Program Files/Common Files/freeglut/, copy the include/ and lib/ folders 
+ from freeglut into there, and copy freeglut.dll from freeglut/bin/ into the 
+ cmake-build-debug/ folder.
+
+If you are not on windows, it should just work.
  
- If you cannot run it and you are curious to see what it looks
- like, I have put some screenshots in the repository.
-![](/screenshots/city.png)
-![](/screenshots/suburb.png)
-![](/screenshots/forest.png)
-![](/screenshots/airport.png)
-![](/screenshots/house.png)
-![](/screenshots/cars.png)
-![](/screenshots/airships.png)
-![](/screenshots/roads.png)
+## Screenshots
+![](screenshots/city.png)
+![](screenshots/suburb.png)
+![](screenshots/forest.png)
+![](screenshots/airport.png)
+![](screenshots/house.png)
+![](screenshots/cars.png)
+![](screenshots/airships.png)
+![](screenshots/roads.png)
