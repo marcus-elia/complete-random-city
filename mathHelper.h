@@ -2,10 +2,20 @@
 #define COMPLETE_RANDOM_CITY_MATHHELPER_H
 
 #include <cmath>
+#include "structs.h"
 
-double distanceFormula(double x1, double y1, double x2, double y2);
+// Number Theory
 
 // Since % can return negatives
 int mod(int a, int m);
+
+// Distance
+double distanceFormula(double x1, double y1, double x2, double y2);
+
+// Returns the distance in the xz plane
+double distance2d(Point p1, Point p2);
+
+// 2d directed distance
+double directedDistance(double A, double B, double C, double x, double y);
 
 #endif //COMPLETE_RANDOM_CITY_MATHHELPER_H

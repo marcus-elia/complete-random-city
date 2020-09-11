@@ -64,10 +64,4 @@ public:
     virtual void printDebugStats()=0;
 };
 
-// Returns the distance in the xz plane
-double distance2d(Point p1, Point p2);
-
-// 2d directed distance
-double directedDistance(double A, double B, double C, double x, double y);
-
 #endif //COMPLETE_RANDOM_CITY_SOLID_H
