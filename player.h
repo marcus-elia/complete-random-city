@@ -58,15 +58,6 @@ public:
     // Based on which keys are pressed, set the velocity
     void setVelocity(bool wKey, bool aKey, bool sKey, bool dKey, bool rKey, bool cKey);
 
-    // Rotates lookingAt around location in the xz plane
-    /*void rotateLookingAtHorizontal(double theta);
-
-    // Rotates lookingAt around location vertically
-    void rotateLookingAtVertical(double theta);
-
-    // Based on the angle of mouse movement, change the lookingat
-    void updateLookingAt(double theta);*/
-
     // Update the xzAngle and yAngle based on theta resulting from a mouse movement
     void updateAngles(double theta, double distance);
 

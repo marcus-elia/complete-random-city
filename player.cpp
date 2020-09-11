@@ -184,69 +184,6 @@ void Player::setVelocity(bool wKey, bool aKey, bool sKey, bool dKey, bool rKey, 
     velocity.z = speed * sin(angleToMove);
 }
 
-/*void Player::rotateLookingAtHorizontal(double theta)
-{
-    // Translate to the origin
-    lookingAt.x -= location.x;
-    lookingAt.z -= location.z;
-
-    // Rotate around y-axis
-    double prevX = lookingAt.x;
-    double prevZ = lookingAt.z;
-    lookingAt.x = prevX * cos(theta) - prevZ * sin(theta);
-    lookingAt.z = prevX * sin(theta) + prevZ * cos(theta);
-
-    // Translate back
-    lookingAt.x += location.x;
-    lookingAt.z += location.z;
-}
-
-void Player::rotateLookingAtVertical(double theta)
-{
-    // Rotate around the y axis to get on the +x axis
-    double xzAngle = atan2(lookingAt.z - location.z, lookingAt.x - location.x);
-    rotateLookingAtHorizontal(2*PI - xzAngle);
-
-    // Translate to origin
-    lookingAt.x -= location.x;
-    lookingAt.y -= location.y;
-
-    // Clip the angle between -Pi and Pi
-    double curAngle = atan2(lookingAt.y, lookingAt.x);
-    if(curAngle + theta > PI)
-    {
-        theta = PI - curAngle;
-    }
-    else if(curAngle + theta < -PI)
-    {
-        theta = -PI - curAngle;
-    }
-
-    // Rotate around y-axis
-    double prevX = lookingAt.x;
-    double prevY = lookingAt.y;
-    lookingAt.x = prevX * cos(theta) - prevY * sin(theta);
-    lookingAt.y = prevX * sin(theta) + prevY * cos(theta);
-
-    // Translate back
-    lookingAt.x += location.x;
-    lookingAt.y += location.y;
-
-    // Unrotate horizontally
-    rotateLookingAtHorizontal(xzAngle);
-}
-
-void Player::updateLookingAt(double theta)
-{
-    // Horizontal turning
-    double horizontalAmount = sensitivity * cos(theta);
-    rotateLookingAtHorizontal(horizontalAmount);
-
-    // Vertical turning
-    double verticalAmount = sensitivity * sin(theta);
-    rotateLookingAtVertical(-verticalAmount); // negative sign since we are rotating up from +x axis
-}*/
-
 // Update the xzAngle and yAngle based on theta resulting from a mouse movement
 void Player::updateAngles(double theta, double distance)
 {
