@@ -24,7 +24,7 @@ class Chunk
 private:
     Point2D bottomLeft; // The bottom left coordinate divided by sideLength
     int sideLength;
-    Point2D center;   // The actual center
+    Point center;   // The actual center
     int plotsPerSide;
 
     // The number of the chunk based on its location
@@ -75,7 +75,7 @@ public:
     // Getters
     Point2D getBottomLeft() const;
     int getSideLength() const;
-    Point2D getCenter() const;
+    Point getCenter() const;
     std::vector<int> getLeftRoadIndices() const;
     std::vector<int> getRightRoadIndices() const;
     std::vector<int> getTopRoadIndices() const;

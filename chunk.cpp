@@ -36,7 +36,7 @@ Chunk::Chunk(Point2D inputBottomLeft, int inputSideLength, int inputPlotsPerSide
 
 void Chunk::initializeCenter()
 {
-    center = {sideLength*bottomLeft.x + sideLength/2, sideLength*bottomLeft.z - sideLength/2};
+    center = {static_cast<double>(sideLength*bottomLeft.x + sideLength/2), 0, static_cast<double>(sideLength*bottomLeft.z - sideLength/2)};
 }
 std::vector<int> Chunk::makeRandomRoadIndices(double seed, int size)
 {
@@ -662,7 +662,7 @@ int Chunk::getSideLength() const
 {
     return sideLength;
 }
-Point2D Chunk::getCenter() const
+Point Chunk::getCenter() const
 {
     return center;
 }
