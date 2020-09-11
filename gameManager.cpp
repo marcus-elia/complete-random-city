@@ -430,15 +430,6 @@ Point GameManager::getCameraUp() const
     return player.getUp();
 }
 
-int mod(int a, int m)
-{
-    int x = a % m;
-    if(x < 0)
-    {
-        return x + m;
-    }
-    return x;
-}
 
 void GameManager::printPlayerBuildingDebug()
 {
