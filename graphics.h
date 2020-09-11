@@ -2,6 +2,7 @@
 // in a 3D graphics tutorial.
 
 #include "mathHelper.h"
+#include "structs.h"
 
 #ifndef graphics_h
 #define graphics_h
@@ -19,22 +20,9 @@
 #include <GL/glut.h>
 #endif
 
+
 const double PI = 3.14159265358979323846;
 
-struct Vector3
-{
-    double x;
-    double y;
-    double z;
-};
-
-struct Vector4
-{
-    double x;
-    double y;
-    double z;
-    double w;
-};
 
 // Program initialization NOT OpenGL/GLUT dependent,
 // as we haven't created a GLUT window yet
@@ -62,6 +50,10 @@ void timer(int dummy);
 
 // Handle mouse button pressed and released events
 void mouse(int button, int state, int x, int y);
+
+// Shortcut functions
+void drawPoint(const Point &p);
+void setGLColor(RGBAcolor color);
 
 #endif /* graphics_h */
 

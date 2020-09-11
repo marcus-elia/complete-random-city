@@ -2,70 +2,169 @@
 
 GameManager::GameManager()
 {
+    screenWidth = 1024;
+    screenHeight = 512;
+    currentStatus = Intro;
+    showMouse = true;
     tickNumberMod100 = 0;
     png = PerlinNoiseGenerator(10, 10, 1);
     renderRadius = 3;
     updateCurrentChunks();
     initializeKeys();
+    initializeButtons();
+    makeInstructions();
 }
-GameManager::GameManager(int inputRenderRadius)
+GameManager::GameManager(int inputScreenWidth, int inputScreenHeight, int inputRenderRadius)
 {
+    screenWidth = inputScreenWidth;
+    screenHeight = inputScreenHeight;
+    currentStatus = Intro;
+    showMouse = true;
     tickNumberMod100 = 0;
     renderRadius = inputRenderRadius;
     png = PerlinNoiseGenerator(PERLIN_SIZE, PERLIN_SIZE, 1);
     updateCurrentChunks();
     initializeKeys();
+    initializeButtons();
+    makeInstructions();
 }
 
-
+void GameManager::initializeButtons()
+{
+    playButton = Button(screenWidth/2, screenHeight/2, BUTTON_WIDTH, BUTTON_HEIGHT,
+                        BUTTON_RADIUS, "Play", PLAY_BUTTON_COLOR, BUTTON_TEXT_COLOR, PLAY_BUTTON_COLOR_H);
+    continueButton = Button(screenWidth/2, screenHeight/2, BUTTON_WIDTH, BUTTON_HEIGHT,
+                            BUTTON_RADIUS, "Continue", PLAY_BUTTON_COLOR, BUTTON_TEXT_COLOR, PLAY_BUTTON_COLOR_H);
+    quitButton = Button(screenWidth/2, screenHeight/2 - BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT,
+                        BUTTON_RADIUS, "Quit", QUIT_BUTTON_COLOR, BUTTON_TEXT_COLOR, QUIT_BUTTON_COLOR_H);
+}
 void GameManager::initializeKeys()
 {
     aKey = false, sKey = false, wKey = false, dKey = false, rKey = false, cKey = false;
+}
+void GameManager::makeInstructions()
+{
+    instructions.push_back("Use w,a,s,d to move and r,c to move up and down. Press p to pause.");
 }
 
 
 void GameManager::reactToMouseMovement(int mx, int my, double theta, double distance)
 {
-    double clampedDistance = fmin(distance, 50);
-    player.updateAngles(theta, clampedDistance);
-    player.updateSphericalDirectionBasedOnAngles();
-    player.setVelocity(wKey, aKey, sKey, dKey, rKey, cKey);
+    if(currentStatus == Intro)
+    {
+        playButton.setIsHighlighted(playButton.containsPoint(mx, screenHeight - my));
+
+        quitButton.setIsHighlighted(quitButton.containsPoint(mx, screenHeight - my));
+    }
+    else if(currentStatus == Playing)
+    {
+        double clampedDistance = fmin(distance, 50);
+        player.updateAngles(theta, clampedDistance);
+        player.updateSphericalDirectionBasedOnAngles();
+        player.setVelocity(wKey, aKey, sKey, dKey, rKey, cKey);
+    }
+    else if(currentStatus == Paused)
+    {
+        continueButton.setIsHighlighted(continueButton.containsPoint(mx, screenHeight - my));
+
+        quitButton.setIsHighlighted(quitButton.containsPoint(mx, screenHeight - my));
+    }
 }
 void GameManager::reactToMouseClick(int mx, int my)
 {
-    std::shared_ptr<Chunk> playerChunk = allSeenChunks[player.getCurrentChunkInt()];
-    if(playerChunk->hasAirport())
+    if(currentStatus == Intro)
     {
-        playerChunk->makeAirportCreatePlane();
+        if(playButton.containsPoint(mx, screenHeight - my))
+        {
+            showMouse = false;
+            currentStatus = Playing;
+            resetGame();
+        }
+        else if(quitButton.containsPoint(mx, screenHeight - my))
+        {
+            closeWindow = true;
+        }
     }
+    else if(currentStatus == Playing)
+    {
+        std::shared_ptr<Chunk> playerChunk = allSeenChunks[player.getCurrentChunkInt()];
+        if(playerChunk->hasAirport())
+        {
+            playerChunk->makeAirportCreatePlane();
+        }
+    }
+    else if(currentStatus == Paused)
+    {
+        if(continueButton.containsPoint(mx, screenHeight - my))
+        {
+            showMouse = false;
+            currentStatus = Playing;
+        }
+        else if(quitButton.containsPoint(mx,screenHeight -  my))
+        {
+            closeWindow = true;
+        }
+    }
+
 }
 
 
 void GameManager::draw() const
 {
-    for(auto &c : currentChunks)
+    if(currentStatus == Playing || currentStatus == Paused)
     {
-        c->draw();
-    }
+        for(auto &c : currentChunks)
+        {
+            c->draw();
+        }
 
 
-    for(std::shared_ptr<Vehicle> v : vehicles)
-    {
-        v->draw();
-    }
-    for(std::shared_ptr<Dirigible> d : dirigibles)
-    {
-        d->draw();
+        for(std::shared_ptr<Vehicle> v : vehicles)
+        {
+            v->draw();
+        }
+        for(std::shared_ptr<Dirigible> d : dirigibles)
+        {
+            d->draw();
+        }
     }
 }
 
 void GameManager::tick()
 {
-    for(auto &c : currentChunks)
+    if(currentStatus == Playing)
     {
-        c->tick();
-    }
+        for(auto &c : currentChunks)
+        {
+            c->tick();
+        }
 
+        playerTick();
+
+        // Vehicles move
+        for(std::shared_ptr<Vehicle> v : vehicles)
+        {
+            v->tick();
+        }
+        for(std::shared_ptr<Dirigible> d : dirigibles)
+        {
+            d->tick();
+        }
+
+        tickNumberMod100++;
+        if(tickNumberMod100 == 100)
+        {
+            tickNumberMod100 = 0;
+            manageCars();
+        }
+        else if(tickNumberMod100 == 50)
+        {
+            manageDirigibles();
+        }
+    }
+}
+void::GameManager::playerTick()
+{
     // The player moves
     player.tick();
 
@@ -77,33 +176,15 @@ void GameManager::tick()
     // If the player is entering a different chunk
     if(curPlayerChunk != player.getCurrentChunkCoords())
     {
-        //std::cout << pointToInt({player.whatChunk().x, player.whatChunk().z}) << std::endl;
-        //std::cout << player.getLocation().x << ", " << player.getLocation().z << std::endl;
         updateCurrentChunks();
-    }
-
-    // Vehicles move
-    for(std::shared_ptr<Vehicle> v : vehicles)
-    {
-        v->tick();
-    }
-    for(std::shared_ptr<Dirigible> d : dirigibles)
-    {
-        d->tick();
-    }
-
-    tickNumberMod100++;
-    if(tickNumberMod100 == 100)
-    {
-        tickNumberMod100 = 0;
-        manageCars();
-    }
-    else if(tickNumberMod100 == 50)
-    {
-        manageDirigibles();
     }
 }
 
+// ===================================
+//
+//             Getters
+//
+// ==================================
 Player GameManager::getPlayer() const
 {
     return player;
@@ -132,7 +213,24 @@ bool GameManager::getCKey()
 {
     return cKey;
 }
+GameStatus GameManager::getCurrentStatus() const
+{
+    return currentStatus;
+}
+bool GameManager::getCloseWindow() const
+{
+    return closeWindow;
+}
+bool GameManager::getShowMouse() const
+{
+    return showMouse;
+}
 
+// ===================================
+//
+//             Setters
+//
+// ==================================
 void GameManager::setWKey(bool input)
 {
     wKey = input;
@@ -437,4 +535,74 @@ void GameManager::printPlayerBuildingDebug()
     std::cout << std::endl<< "Player location: " << v.x << "," << v.y << "," << v.z << std::endl;
     Point2D curPlayerChunk = player.whatChunk();
     std::shared_ptr<Chunk> c = allSeenChunks[pointToInt(curPlayerChunk)];
+}
+
+void GameManager::resetGame()
+{
+    currentStatus = Playing;
+}
+void GameManager::togglePaused()
+{
+    if(currentStatus == Paused)
+    {
+        currentStatus = Playing;
+        showMouse = false;
+    }
+    else if(currentStatus == Playing)
+    {
+        currentStatus = Paused;
+        showMouse = true;
+    }
+}
+
+void GameManager::drawUI() const
+{
+    if(currentStatus == Intro)
+    {
+        playButton.draw();
+        quitButton.draw();
+        displayInstructions();
+    }
+    else if(currentStatus == Playing)
+    {
+        drawCursor();
+    }
+    else if(currentStatus == Paused)
+    {
+        continueButton.draw();
+        quitButton.draw();
+    }
+    else if(currentStatus == End)
+    {
+        quitButton.draw();
+    }
+}
+void GameManager::drawCursor() const
+{
+    setGLColor(CURSOR_COLOR);
+    glBegin(GL_QUADS);    // Draw a + shape with two quads
+    glVertex2f(screenWidth/2 - 5, screenHeight/2 + 2);
+    glVertex2f(screenWidth/2 - 5, screenHeight/2 - 2);
+    glVertex2f(screenWidth/2 + 5, screenHeight/2 - 2);
+    glVertex2f(screenWidth/2 + 5, screenHeight/2 + 2);
+
+
+    glVertex2f(screenWidth/2 - 2, screenHeight/2 + 5);
+    glVertex2f(screenWidth/2 - 2, screenHeight/2 - 5);
+    glVertex2f(screenWidth/2 + 2, screenHeight/2 - 5);
+    glVertex2f(screenWidth/2 + 2, screenHeight/2 + 5);
+    glEnd();
+}
+void GameManager::displayInstructions() const
+{
+    setGLColor(BLACK);
+    for(int i = 0; i < instructions.size(); i++)
+    {
+        std::string s = instructions[i];
+        glRasterPos2i(10, screenHeight - 15*i - 15);
+        for(const char &letter : s)
+        {
+            glutBitmapCharacter(GLUT_BITMAP_9_BY_15, letter);
+        }
+    }
 }

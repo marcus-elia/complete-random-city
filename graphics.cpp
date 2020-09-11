@@ -12,20 +12,22 @@ int wd;
 GameManager manager;
 // Mouse variables
 int prevMouseX, prevMouseY;
+bool justClicked;
 
 void init()
 {
-    width = 800;
-    height = 500;
+    width = 1024;
+    height = 512;
     prevMouseX = width/2;
     prevMouseY = height/2;
+    justClicked = false;
 }
 
 /* Initialize OpenGL Graphics */
 void initGL()
 {
     // Set "clearing" or background color
-    glClearColor(0.0f, 0.2f, 0.5f, 1.0f); // Dark blue
+    glClearColor(0.0f, 0.35f, 0.7f, 1.0f); // Blue
     glEnable(GL_DEPTH_TEST);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -94,15 +96,7 @@ void display()
     glPushMatrix();
     glLoadIdentity();
 
-    glDisable(GL_CULL_FACE);
-    glBegin(GL_QUADS);
-    glColor4f(0.8,0.1,0.1,1);
-    glVertex3f(width/2 + 5,height/2 + 5,0);
-    glVertex3f(width/2 - 5,height/2 + 5,0);
-    glVertex3f(width/2 - 5,height/2 - 5,0);
-    glVertex3f(width/2 + 5,height/2 - 5,0);
-    glEnd();
-    glEnable(GL_CULL_FACE);
+    manager.drawUI();
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -135,6 +129,9 @@ void kbd(unsigned char key, int x, int y)
         case 'r': manager.setRKey(true);
             break;
         case 'c': manager.setCKey(true);
+            break;
+        case 'p': if(manager.getCurrentStatus() == Playing)
+            {manager.togglePaused();}
             break;
     }
 
@@ -172,6 +169,11 @@ void kbdS(int key, int x, int y)
 
 void cursor(int x, int y)
 {
+    if(justClicked) // Fixes bug of turning right a few degree when clicks happen
+    {
+        justClicked = false;
+        return;
+    }
     double theta = atan2(y - prevMouseY, x - prevMouseX);
     double distance = distanceFormula(x, y, prevMouseX, prevMouseY);
     manager.reactToMouseMovement(x, y, theta, distance);
@@ -193,7 +195,24 @@ void mouse(int button, int state, int x, int y)
     if(state == GLUT_UP)
     {
         manager.reactToMouseClick(x, y);
+        if(manager.getCurrentStatus() == Playing)
+        {
+            // Make the cursor invisible
+            glutSetCursor(GLUT_CURSOR_NONE);
+        }
+        else // Keep arrow when not playing
+        {
+            // Make the arrow visible
+            glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
+            // Check for if the quit button was hit
+            if(manager.getCloseWindow())
+            {
+                glutDestroyWindow(wd);
+                exit(0);
+            }
+        }
     }
+    justClicked = true;
     glutPostRedisplay();
 }
 
@@ -202,6 +221,10 @@ void timer(int dummy)
     glutPostRedisplay();
     glutTimerFunc(30, timer, dummy);
     manager.tick();
+    if(manager.getShowMouse()) // Make the cursor show
+    {
+        glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
+    }
 }
 
 /* Main function: GLUT runs as a console application starting at main()  */
@@ -248,4 +271,13 @@ int main(int argc, char** argv)
     // Enter the event-processing loop
     glutMainLoop();
     return 0;
+}
+
+void drawPoint(const Point &p)
+{
+    glVertex3f(p.x, p.y, p.z);
+}
+void setGLColor(RGBAcolor color)
+{
+    glColor4f(color.r, color.g, color.b, color.a);
 }

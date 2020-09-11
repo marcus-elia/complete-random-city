@@ -10,6 +10,9 @@
 #include "perlinNoiseGenerator.h"
 #include "car.h"
 #include "dirigible.h"
+#include "button.h"
+
+enum GameStatus {Intro, Playing, End, Paused};
 
 class GameManager
 {
@@ -30,6 +33,18 @@ private:
     int tickNumberMod100;
     std::vector<std::shared_ptr<Dirigible>> dirigibles;
 
+    // Game management
+    GameStatus currentStatus;
+    bool showMouse = true;
+    bool closeWindow = false;
+
+    // UI
+    int screenWidth, screenHeight;
+    Button playButton;
+    Button quitButton;
+    Button continueButton;
+    std::vector<std::string> instructions;
+
     // Game parameters
     int CHUNK_SIZE = 512;
     int PERLIN_SIZE = 10; // how many chunks before perlin repeats
@@ -39,12 +54,24 @@ private:
     int MAX_NUM_PLANES = 2;
     double PLAYER_SPEED = 2;
     double MOUSE_SENSITIVITY = 0.005;
+    int BUTTON_WIDTH = 128;
+    int BUTTON_HEIGHT = 64;
+    int BUTTON_RADIUS = 16;
+    RGBAcolor PLAY_BUTTON_COLOR = {0.0, 0.0, 0.7, 1.0};   // Slightly Dark Blue
+    RGBAcolor QUIT_BUTTON_COLOR = {0.7, 0.0, 0.0, 1.0};   // Slightly Dark Red
+    RGBAcolor PLAY_BUTTON_COLOR_H = {0.0, 0.2, 1.0, 1.0}; // Lighter Blue
+    RGBAcolor QUIT_BUTTON_COLOR_H = {1.0, 0.2, 0.0, 1.0}; // Lighter Red
+    RGBAcolor BUTTON_TEXT_COLOR = {1.0,1.0,1.0,1.0};      // White
+    RGBAcolor CURSOR_COLOR = {0.3, 0.3, 0.3, 1.0};        // Dark Gray
+    RGBAcolor BLACK = {0.0, 0.0, 0.0, 1.0};
 
 public:
     GameManager();
-    GameManager(int inputRenderRadius);
+    GameManager(int inputScreenWidth, int inputScreenHeight, int inputRenderRadius);
 
-
+    // Helper functions for the constructor
+    void initializeButtons();
+    void makeInstructions();
     // All keys should initially be false.
     void initializeKeys();
 
@@ -56,6 +83,9 @@ public:
     bool getDKey();
     bool getRKey();
     bool getCKey();
+    GameStatus getCurrentStatus() const;
+    bool getCloseWindow() const;
+    bool getShowMouse() const;
 
     // Setters
     void setWKey(bool input);
@@ -91,9 +121,19 @@ public:
 
     void draw() const;
     void tick();
+    void playerTick();
 
     // Debug
     void printPlayerBuildingDebug();
+
+    // Game Management
+    void togglePaused();
+    void resetGame();
+
+    // UI
+    void drawUI() const;
+    void drawCursor() const;
+    void displayInstructions() const;
 };
 
 #endif //RANDOM_3D_CITY_GAMEMANAGER_H

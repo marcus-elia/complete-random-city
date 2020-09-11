@@ -152,8 +152,3 @@ double directedDistance(double A, double B, double C, double x, double y)
 {
     return (A*x + B*y + C) / sqrt(A*A + B*B);
 }
-
-void drawPoint(const Point &p)
-{
-    glVertex3f(p.x, p.y, p.z);
-}
