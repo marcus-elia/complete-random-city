@@ -48,7 +48,7 @@ void GameManager::makeInstructions()
 }
 void GameManager::initializePlayer()
 {
-    player = Player({0, PLAYER_HEIGHT/2, 0}, {0, 0, -1}, {0, 1, 0}, PLAYER_SPEED, MOUSE_SENSITIVITY, CHUNK_SIZE);
+    player = Player({0, PLAYER_HEIGHT/2, 0}, {0, PLAYER_HEIGHT/2, -1}, {0, 1, 0}, PLAYER_SPEED, MOUSE_SENSITIVITY, CHUNK_SIZE);
 }
 
 // ===========================================
