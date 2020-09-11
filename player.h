@@ -31,7 +31,7 @@ private:
     double VERTICAL_LIMIT = 0.01;
 public:
     Player();
-    Player(Point inputLocation, Point inputLookingAt, Point inputUp, double inputSpeed, int inputChunkSize);
+    Player(Point inputLocation, Point inputLookingAt, Point inputUp, double inputSpeed, double inputSensitivity, int inputChunkSize);
 
     void initializeAngles();
     void initializeSphericalDirection();

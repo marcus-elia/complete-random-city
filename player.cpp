@@ -14,16 +14,16 @@ Player::Player()
     chunkSize = 512;
     currentChunkCoords = whatChunk();
 }
-Player::Player(Point inputLocation, Point inputLookingAt, Point inputUp, double inputSpeed, int inputChunkSize)
+Player::Player(Point inputLocation, Point inputLookingAt, Point inputUp, double inputSpeed, double inputSensitivity, int inputChunkSize)
 {
     location = inputLocation;
     lookingAt = inputLookingAt;
     up = inputUp;
+    sensitivity = inputSensitivity;
     initializeAngles();
     initializeSphericalDirection();
     speed = inputSpeed;
     velocity = {0,0,0};
-    sensitivity = 0.02;
     chunkSize = inputChunkSize;
     currentChunkCoords = whatChunk();
 }

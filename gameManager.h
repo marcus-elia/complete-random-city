@@ -52,6 +52,8 @@ private:
     int MAX_NUM_VEHICLES = 15;
     int MAX_NUM_DIRIGIBLES = 4;
     int MAX_NUM_PLANES = 2;
+    double PLAYER_HEIGHT = 10;
+    double PLAYER_RADIUS = 3;
     double PLAYER_SPEED = 2;
     double MOUSE_SENSITIVITY = 0.005;
     int BUTTON_WIDTH = 128;
@@ -72,8 +74,8 @@ public:
     // Helper functions for the constructor
     void initializeButtons();
     void makeInstructions();
-    // All keys should initially be false.
-    void initializeKeys();
+    void initializeKeys(); // All keys should initially be false.
+    void initializePlayer();
 
     // Getters
     Player getPlayer() const;

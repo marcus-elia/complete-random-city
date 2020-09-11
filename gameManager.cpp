@@ -46,8 +46,16 @@ void GameManager::makeInstructions()
 {
     instructions.push_back("Use w,a,s,d to move and r,c to move up and down. Press p to pause.");
 }
+void GameManager::initializePlayer()
+{
+    player = Player({0, PLAYER_HEIGHT/2, 0}, {0, 0, -1}, {0, 1, 0}, PLAYER_SPEED, MOUSE_SENSITIVITY, CHUNK_SIZE);
+}
 
-
+// ===========================================
+//
+//               Mouse Events
+//
+// ===========================================
 void GameManager::reactToMouseMovement(int mx, int my, double theta, double distance)
 {
     if(currentStatus == Intro)
@@ -539,6 +547,7 @@ void GameManager::printPlayerBuildingDebug()
 
 void GameManager::resetGame()
 {
+    initializePlayer();
     currentStatus = Playing;
 }
 void GameManager::togglePaused()
