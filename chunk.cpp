@@ -9,7 +9,7 @@ Chunk::Chunk()
     propertySize = sideLength / 8;
     airport = std::experimental::nullopt;
 }
-Chunk::Chunk(Point2D inputBottomLeft, int inputSideLength, double inputPerlinSeed,
+Chunk::Chunk(Point2D inputBottomLeft, int inputSideLength, int inputPlotsPerSide, double inputPerlinSeed,
              std::experimental::optional<std::vector<int>> inputLeftRoadIndices,
              std::experimental::optional<std::vector<int>> inputRightRoadIndices,
              std::experimental::optional<std::vector<int>> inputTopRoadIndices,
@@ -18,16 +18,17 @@ Chunk::Chunk(Point2D inputBottomLeft, int inputSideLength, double inputPerlinSee
     bottomLeft = inputBottomLeft;
     sideLength = inputSideLength;
     perlinSeed = inputPerlinSeed;
+    plotsPerSide = inputPlotsPerSide;
     initializeCenter();
-    propertySize = sideLength / 8;
+    propertySize = sideLength / plotsPerSide;
     airport = std::experimental::nullopt;
 
     // If the roads entering a side are specified, use them. If not, make them randomly
     srand(time(NULL));
-    leftRoadIndices = inputLeftRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, 8));
-    rightRoadIndices = inputRightRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, 8));
-    topRoadIndices = inputTopRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, 8));
-    bottomRoadIndices = inputBottomRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, 8));
+    leftRoadIndices = inputLeftRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, plotsPerSide));
+    rightRoadIndices = inputRightRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, plotsPerSide));
+    topRoadIndices = inputTopRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, plotsPerSide));
+    bottomRoadIndices = inputBottomRoadIndices.value_or(makeRandomRoadIndices(perlinSeed, plotsPerSide));
 
     initializeRoadLocations();
     initializePlots();
@@ -61,9 +62,9 @@ std::vector<int> Chunk::makeRandomRoadIndices(double seed, int size)
 void Chunk::initializeRoadLocations()
 {
     // Initialize the whole chunk to not having roads
-    for(int i = 0; i < 8; i++)
+    for(int i = 0; i < plotsPerSide; i++)
     {
-        for(int j = 0; j < 8; j++)
+        for(int j = 0; j < plotsPerSide; j++)
         {
             roadLocations[i][j] = false;
         }
@@ -76,7 +77,7 @@ void Chunk::initializeRoadLocations()
     }
     for(int i : bottomRoadIndices)
     {
-        roadLocations[i][7] = true;
+        roadLocations[i][plotsPerSide-1] = true;
     }
     for(int j : leftRoadIndices)
     {
@@ -84,14 +85,14 @@ void Chunk::initializeRoadLocations()
     }
     for(int j : rightRoadIndices)
     {
-        roadLocations[7][j] = true;
+        roadLocations[plotsPerSide-1][j] = true;
     }
 
     // Now extend the roads as far as they go
     for(int i : topRoadIndices)
     {
         int j = 1;
-        while(j < 8 && !makesSquare(i, j, roadLocations))
+        while(j < plotsPerSide && !makesSquare(i, j, roadLocations))
         {
             roadLocations[i][j] = true;
             j++;
@@ -118,7 +119,7 @@ void Chunk::initializeRoadLocations()
     for(int j : leftRoadIndices)
     {
         int i = 0;
-        while(i < 8 && !makesSquare(i, j, roadLocations))
+        while(i < plotsPerSide && !makesSquare(i, j, roadLocations))
         {
             roadLocations[i][j] = true;
             i++;
@@ -156,7 +157,7 @@ void Chunk::tryToMakeAirport()
             {
                 Point airportTopLeft = {plots[i][j]->getCenter().x - propertySize/2.0, 0,
                                         plots[i][j]->getCenter().z - propertySize/2.0};
-                airport = Airport(airportTopLeft, sideLength/8);
+                airport = Airport(airportTopLeft, propertySize);
                 airportMade = true;
 
                 // Now turn all plots covered by the airport into MultiPlots
@@ -178,9 +179,9 @@ void Chunk::tryToMakeMultiplotBuildings()
     // Look for spots to put a MultiPlot
     bool churchMade = false;
     bool mansionMade = false;
-    for(int i = 0; i < 7; i++)
+    for(int i = 0; i < plotsPerSide-1; i++)
     {
-        for(int j = 0; j < 7; j++)
+        for(int j = 0; j < plotsPerSide-1; j++)
         {
             if(plots[i][j]->getPlotType() == Empty && plots[i+1][j]->getPlotType() == Empty &&
                plots[i+1][j+1]->getPlotType() == Empty && plots[i][j+1]->getPlotType() == Empty)
@@ -225,9 +226,9 @@ void Chunk::tryToMakeMultiplotBuildings()
 
 void Chunk::makeBuildings()
 {
-    for(int i = 0; i < 8; i++)
+    for(int i = 0; i < plotsPerSide; i++)
     {
-        for(int j = 0; j < 8; j++)
+        for(int j = 0; j < plotsPerSide; j++)
         {
             if(plots[i][j]->getPlotType() == Empty)
             {
@@ -311,9 +312,9 @@ void Chunk::makeBuildings()
 
 void Chunk::makeForests()
 {
-    for(int i = 0; i < 7; i++)
+    for(int i = 0; i < plotsPerSide-1; i++)
     {
-        for(int j = 0; j < 7; j++)
+        for(int j = 0; j < plotsPerSide-1; j++)
         {
             if(plots[i][j]->getPlotType() == Empty)
             {
@@ -350,48 +351,48 @@ void Chunk::initializePlots()
                 chunkCoordinatesToCenter(0, 0, sideLength, bottomLeft, propertySize), propertySize));
     }
     // Top right
-    if(roadLocations[7][0])
+    if(roadLocations[plotsPerSide-1][0])
     {
-        plots[7][0] = std::make_shared<RoadPlot>(RoadPlot({7, 0},
-                chunkCoordinatesToCenter(7, 0, sideLength, bottomLeft, propertySize), propertySize,
-                roadLocations[6][0], hasElement(rightRoadIndices, 0),
-                hasElement(topRoadIndices, 7), roadLocations[7][1]));
+        plots[plotsPerSide-1][0] = std::make_shared<RoadPlot>(RoadPlot({plotsPerSide-1, 0},
+                chunkCoordinatesToCenter(plotsPerSide-1, 0, sideLength, bottomLeft, propertySize), propertySize,
+                roadLocations[plotsPerSide-2][0], hasElement(rightRoadIndices, 0),
+                hasElement(topRoadIndices, plotsPerSide-1), roadLocations[plotsPerSide-1][1]));
     }
     else
     {
-        plots[7][0] = std::make_shared<EmptyPlot>(EmptyPlot({7, 0},
-                       chunkCoordinatesToCenter(7, 0, sideLength, bottomLeft, propertySize), propertySize));
+        plots[plotsPerSide-1][0] = std::make_shared<EmptyPlot>(EmptyPlot({plotsPerSide-1, 0},
+                       chunkCoordinatesToCenter(plotsPerSide-1, 0, sideLength, bottomLeft, propertySize), propertySize));
     }
     // Bottom right
-    if(roadLocations[7][7])
+    if(roadLocations[plotsPerSide-1][plotsPerSide-1])
     {
-        plots[7][7] = std::make_shared<RoadPlot>(RoadPlot({7, 7},
-                           chunkCoordinatesToCenter(7, 7, sideLength, bottomLeft, propertySize), propertySize,
-                           roadLocations[6][7], hasElement(rightRoadIndices, 7),
-                           roadLocations[7][6], hasElement(bottomRoadIndices, 7)));
+        plots[plotsPerSide-1][plotsPerSide-1] = std::make_shared<RoadPlot>(RoadPlot({plotsPerSide-1, plotsPerSide-1},
+                           chunkCoordinatesToCenter(plotsPerSide-1, plotsPerSide-1, sideLength, bottomLeft, propertySize), propertySize,
+                           roadLocations[plotsPerSide-2][plotsPerSide-1], hasElement(rightRoadIndices, plotsPerSide-1),
+                           roadLocations[plotsPerSide-1][plotsPerSide-2], hasElement(bottomRoadIndices, plotsPerSide-1)));
     }
     else
     {
-        plots[7][7] = std::make_shared<EmptyPlot>(EmptyPlot({7, 7},
-                chunkCoordinatesToCenter(7, 7, sideLength, bottomLeft, propertySize), propertySize));
+        plots[plotsPerSide-1][plotsPerSide-1] = std::make_shared<EmptyPlot>(EmptyPlot({plotsPerSide-1, plotsPerSide-1},
+                chunkCoordinatesToCenter(plotsPerSide-1, plotsPerSide-1, sideLength, bottomLeft, propertySize), propertySize));
     }
     // Bottom left
-    if(roadLocations[0][7])
+    if(roadLocations[0][plotsPerSide-1])
     {
-        plots[0][7] = std::make_shared<RoadPlot>(RoadPlot({0, 7},
-                         chunkCoordinatesToCenter(0, 7, sideLength, bottomLeft, propertySize), propertySize,
-                          hasElement(leftRoadIndices, 7),roadLocations[1][7],
-                          roadLocations[0][6], hasElement(bottomRoadIndices, 0)));
+        plots[0][plotsPerSide-1] = std::make_shared<RoadPlot>(RoadPlot({0, plotsPerSide-1},
+                         chunkCoordinatesToCenter(0, plotsPerSide-1, sideLength, bottomLeft, propertySize), propertySize,
+                          hasElement(leftRoadIndices, plotsPerSide-1),roadLocations[1][plotsPerSide-1],
+                          roadLocations[0][plotsPerSide-2], hasElement(bottomRoadIndices, 0)));
     }
     else
     {
-        plots[0][7] = std::make_shared<EmptyPlot>(EmptyPlot({0, 7},
-                chunkCoordinatesToCenter(0, 7, sideLength, bottomLeft, propertySize), propertySize));
+        plots[0][plotsPerSide-1] = std::make_shared<EmptyPlot>(EmptyPlot({0, plotsPerSide-1},
+                chunkCoordinatesToCenter(0, plotsPerSide-1, sideLength, bottomLeft, propertySize), propertySize));
     }
 
     // ----------------------- Edges ---------------------------------
     // Top row
-    for(int i = 1; i < 7; i++)
+    for(int i = 1; i < plotsPerSide-1; i++)
     {
         if(roadLocations[i][0])
         {
@@ -407,23 +408,23 @@ void Chunk::initializePlots()
         }
     }
     // Bottom row
-    for(int i = 1; i < 7; i++)
+    for(int i = 1; i < plotsPerSide-1; i++)
     {
-        if(roadLocations[i][7])
+        if(roadLocations[i][plotsPerSide-1])
         {
-            plots[i][7] = std::make_shared<RoadPlot>(RoadPlot({i, 7},
-                               chunkCoordinatesToCenter(i, 7, sideLength, bottomLeft, propertySize), propertySize,
-                               roadLocations[i-1][7], roadLocations[i+1][7],
-                               roadLocations[i][6], hasElement(bottomRoadIndices, i)));
+            plots[i][plotsPerSide-1] = std::make_shared<RoadPlot>(RoadPlot({i, plotsPerSide-1},
+                               chunkCoordinatesToCenter(i, plotsPerSide-1, sideLength, bottomLeft, propertySize), propertySize,
+                               roadLocations[i-1][plotsPerSide-1], roadLocations[i+1][plotsPerSide-1],
+                               roadLocations[i][plotsPerSide-2], hasElement(bottomRoadIndices, i)));
         }
         else
         {
-            plots[i][7] = std::make_shared<EmptyPlot>(EmptyPlot({i, 7},
-                    chunkCoordinatesToCenter(i, 7, sideLength, bottomLeft, propertySize), propertySize));
+            plots[i][plotsPerSide-1] = std::make_shared<EmptyPlot>(EmptyPlot({i, plotsPerSide-1},
+                    chunkCoordinatesToCenter(i, plotsPerSide-1, sideLength, bottomLeft, propertySize), propertySize));
         }
     }
     // Left row
-    for(int j = 1; j < 7; j++)
+    for(int j = 1; j < plotsPerSide-1; j++)
     {
         if(roadLocations[0][j])
         {
@@ -439,26 +440,26 @@ void Chunk::initializePlots()
         }
     }
     // Right row
-    for(int j = 1; j < 7; j++)
+    for(int j = 1; j < plotsPerSide-1; j++)
     {
-        if(roadLocations[7][j])
+        if(roadLocations[plotsPerSide-1][j])
         {
-            plots[7][j] = std::make_shared<RoadPlot>(RoadPlot({7, j},
-                                                          chunkCoordinatesToCenter(7, j, sideLength, bottomLeft, propertySize), propertySize,
-                                                          roadLocations[6][j], hasElement(rightRoadIndices, j),
-                                                          roadLocations[7][j-1], roadLocations[7][j+1]));
+            plots[plotsPerSide-1][j] = std::make_shared<RoadPlot>(RoadPlot({plotsPerSide-1, j},
+                                                          chunkCoordinatesToCenter(plotsPerSide-1, j, sideLength, bottomLeft, propertySize), propertySize,
+                                                          roadLocations[plotsPerSide-2][j], hasElement(rightRoadIndices, j),
+                                                          roadLocations[plotsPerSide-1][j-1], roadLocations[plotsPerSide-1][j+1]));
         }
         else
         {
-            plots[7][j] = std::make_shared<EmptyPlot>(EmptyPlot({7, j},
-                    chunkCoordinatesToCenter(7, j, sideLength, bottomLeft, propertySize), propertySize));
+            plots[plotsPerSide-1][j] = std::make_shared<EmptyPlot>(EmptyPlot({plotsPerSide-1, j},
+                    chunkCoordinatesToCenter(plotsPerSide-1, j, sideLength, bottomLeft, propertySize), propertySize));
         }
     }
 
     // ----------------------------- Inside Elements -------------------------------------------
-    for(int i = 1; i < 7; i++)
+    for(int i = 1; i < plotsPerSide-1; i++)
     {
-        for(int j = 1; j < 7; j++)
+        for(int j = 1; j < plotsPerSide-1; j++)
         {
             if(roadLocations[i][j])
             {
@@ -504,9 +505,9 @@ void Chunk::setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chun
                          std::experimental::optional<std::shared_ptr<Chunk>> topChunk,
                          std::experimental::optional<std::shared_ptr<Chunk>> bottomChunk)
 {
-    for(int i = 0; i < 8; i++)
+    for(int i = 0; i < plotsPerSide; i++)
     {
-        for(int j = 0; j < 8; j++)
+        for(int j = 0; j < plotsPerSide; j++)
         {
             if(getPlotAt(i,j)->getPlotType() == Road)
             {
@@ -517,9 +518,9 @@ void Chunk::setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chun
                 {
                     if(j == 0) // If we are in the top row, look at the chunk above
                     {
-                        if(topChunk && topChunk.value()->getPlotAt(i,7)->getPlotType() == Road)
+                        if(topChunk && topChunk.value()->getPlotAt(i,plotsPerSide-1)->getPlotType() == Road)
                         {
-                            up = topChunk.value()->getRoadPlotAt(i,7);
+                            up = topChunk.value()->getRoadPlotAt(i,plotsPerSide-1);
                         }
                         else
                         {
@@ -547,7 +548,7 @@ void Chunk::setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chun
                 // Check for a road below this one
                 if(rpl->getDown())
                 {
-                    if(j == 7) // If we are in the bottom row, look at the chunk below
+                    if(j == plotsPerSide-1) // If we are in the bottom row, look at the chunk below
                     {
                         if(bottomChunk && bottomChunk.value()->getPlotAt(i,0)->getPlotType() == Road)
                         {
@@ -581,9 +582,9 @@ void Chunk::setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chun
                 {
                     if(i == 0) // If we are in the left column, look at the chunk to the left
                     {
-                        if(leftChunk && leftChunk.value()->getPlotAt(7,j)->getPlotType() == Road)
+                        if(leftChunk && leftChunk.value()->getPlotAt(plotsPerSide-1,j)->getPlotType() == Road)
                         {
-                            left = leftChunk.value()->getRoadPlotAt(7,j);
+                            left = leftChunk.value()->getRoadPlotAt(plotsPerSide-1,j);
                         }
                         else
                         {
@@ -611,7 +612,7 @@ void Chunk::setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chun
                 // Check for a road right of this one
                 if(rpl->getRight())
                 {
-                    if(i == 7) // If we are in the right column, look at the chunk to the righ
+                    if(i == plotsPerSide-1) // If we are in the right column, look at the chunk to the righ
                     {
                         if(rightChunk && rightChunk.value()->getPlotAt(0,j)->getPlotType() == Road)
                         {
@@ -702,8 +703,8 @@ std::experimental::optional<RoadPlot*> Chunk::getRandomRoadPlot()
     int numTrials = 30;
     for(int x = 0; x < numTrials; x++)
     {
-        int i = rand() % 8;
-        int j = rand() % 8;
+        int i = rand() % plotsPerSide;
+        int j = rand() % plotsPerSide;
         if(plots[i][j]->getPlotType() == Road)
         {
             return getRoadPlotAt(i, j);
@@ -786,9 +787,9 @@ void Chunk::draw() const
 
     glEnd();
 
-    for(int i = 0; i < 8; i++)
+    for(int i = 0; i < plotsPerSide; i++)
     {
-        for(int j = 0; j < 8; j++)
+        for(int j = 0; j < plotsPerSide; j++)
         {
             plots[i][j]->draw();
         }
@@ -884,14 +885,14 @@ bool Chunk::touchesRoad(int i, int j) const
         }
     }
     // Down
-    if(j < 7)
+    if(j < plotsPerSide-1)
     {
         if(roadLocations[i][j+1])
         {
             return true;
         }
     }
-    if(i < 7)
+    if(i < plotsPerSide-1)
     {
         if(roadLocations[i+1][j])
         {
@@ -924,7 +925,7 @@ int Chunk::countForestLevel(int i, int j) const
             count++;
         }
     }
-    if(j < 7) // Down
+    if(j < plotsPerSide-1) // Down
     {
         if(plots[i][j+1]->getPlotType() == Empty || plots[i][j+1]->getPlotType() == Forest)
         {
@@ -938,21 +939,21 @@ int Chunk::countForestLevel(int i, int j) const
             count++;
         }
     }
-    if(i < 7 && j > 0) // Up right
+    if(i < plotsPerSide-1 && j > 0) // Up right
     {
         if(plots[i+1][j-1]->getPlotType() == Empty || plots[i+1][j-1]->getPlotType() == Forest)
         {
             count++;
         }
     }
-    if(i < 7 && j  < 7) // Down right
+    if(i < plotsPerSide-1 && j  < plotsPerSide-1) // Down right
     {
         if(plots[i+1][j+1]->getPlotType() == Empty || plots[i+1][j+1]->getPlotType() == Forest)
         {
             count++;
         }
     }
-    if(i > 0 && j < 7) // Down left
+    if(i > 0 && j < plotsPerSide-1) // Down left
     {
         if(plots[i-1][j+1]->getPlotType() == Empty || plots[i-1][j+1]->getPlotType() == Forest)
         {

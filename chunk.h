@@ -5,7 +5,6 @@
 
 
 #include "graphics.h"
-//#include "player.h"
 #include "roadPlot.h"
 #include "emptyPlot.h"
 #include "multiPlot.h"
@@ -26,6 +25,7 @@ private:
     Point2D bottomLeft; // The bottom left coordinate divided by sideLength
     int sideLength;
     Point2D center;   // The actual center
+    int plotsPerSide;
 
     // The number of the chunk based on its location
     int chunkID;
@@ -51,7 +51,7 @@ private:
     std::experimental::optional<Airport> airport;
 public:
     Chunk();
-    Chunk(Point2D inputBottomLeft, int inputSideLength, double inputPerlinSeed,
+    Chunk(Point2D inputBottomLeft, int inputSideLength, int inputPlotsPerSide, double inputPerlinSeed,
             std::experimental::optional<std::vector<int>> inputLeftRoadIndices,
           std::experimental::optional<std::vector<int>> inputRightRoadIndices,
           std::experimental::optional<std::vector<int>> inputTopRoadIndices,

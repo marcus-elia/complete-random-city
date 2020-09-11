@@ -3,25 +3,16 @@
 GameManager::GameManager()
 {
     tickNumberMod100 = 0;
-    perlinSize = 10;
     png = PerlinNoiseGenerator(10, 10, 1);
-    chunkSize = 512;
     renderRadius = 3;
-    maxNumVehicles = 20;
-    maxNumDirigibles = 8;
     updateCurrentChunks();
     initializeKeys();
-    //vehicles = std::vector<std::shared_ptr<Vehicle>>();
 }
-GameManager::GameManager(int inputChunkSize, int inputRenderRadius, int inputPerlinSize)
+GameManager::GameManager(int inputRenderRadius)
 {
     tickNumberMod100 = 0;
-    chunkSize = inputChunkSize;
     renderRadius = inputRenderRadius;
-    perlinSize = inputPerlinSize;
-    png = PerlinNoiseGenerator(perlinSize, perlinSize, 1);
-    maxNumVehicles = 20;
-    maxNumDirigibles = 8;
+    png = PerlinNoiseGenerator(PERLIN_SIZE, PERLIN_SIZE, 1);
     updateCurrentChunks();
     initializeKeys();
 }
@@ -180,7 +171,7 @@ void GameManager::setCKey(bool input)
 // ============================
 double GameManager::getPerlinValue(Point2D p)
 {
-    return png.getPerlinNoise()[mod(p.x, perlinSize)][mod(p.z, perlinSize)];
+    return png.getPerlinNoise()[mod(p.x, PERLIN_SIZE)][mod(p.z, PERLIN_SIZE)];
 }
 
 void GameManager::updateCurrentChunks()
@@ -244,7 +235,7 @@ void GameManager::updateCurrentChunks()
                 inputBottomRoadIndices = std::experimental::nullopt;
             }
             // Make the new chunk
-            allSeenChunks[index] = std::make_shared<Chunk>(p, chunkSize, getPerlinValue(p), inputLeftRoadIndices,
+            allSeenChunks[index] = std::make_shared<Chunk>(p, CHUNK_SIZE, PLOTS_PER_SIDE, getPerlinValue(p), inputLeftRoadIndices,
                     inputRightRoadIndices, inputTopRoadIndices, inputBottomRoadIndices);
             // Update the road pointers
             allSeenChunks[index]->setRoadPlotPointers(leftChunk, rightChunk, topChunk, bottomChunk);
@@ -254,7 +245,7 @@ void GameManager::updateCurrentChunks()
 }
 std::shared_ptr<Chunk> GameManager::pointToChunk(Point p)
 {
-    int chunkIndex = pointToInt({(int)floor(p.x / chunkSize), (int)floor(p.z / chunkSize)});
+    int chunkIndex = pointToInt({(int)floor(p.x / CHUNK_SIZE), (int)floor(p.z / CHUNK_SIZE)});
     if(allSeenChunks.count(chunkIndex) == 0)
     {
         chunkIndex = 0; // If it's out of bounds, just check the 0 chunk for now. can't hurt.
@@ -272,7 +263,7 @@ void GameManager::manageCars()
     while(i < L)
     {
         std::shared_ptr<Vehicle> v = vehicles[i];
-        if(distance2d(v->getLocation(), player.getLocation()) > 2*chunkSize)
+        if(distance2d(v->getLocation(), player.getLocation()) > 2*CHUNK_SIZE)
         {
             vehicles.erase(vehicles.begin() + i);
             L--;
@@ -282,7 +273,7 @@ void GameManager::manageCars()
     }
 
     // Add a new car if needed
-    while(vehicles.size() < maxNumVehicles)
+    while(vehicles.size() < MAX_NUM_VEHICLES)
     {
         createCar();
     }
@@ -366,7 +357,7 @@ void GameManager::manageDirigibles()
     while(i < L)
     {
         std::shared_ptr<Dirigible> d = dirigibles[i];
-        if(distance2d(d->getLocation(), player.getLocation()) > 2.25*chunkSize)
+        if(distance2d(d->getLocation(), player.getLocation()) > 2.25*CHUNK_SIZE)
         {
             dirigibles.erase(dirigibles.begin() + i);
             L--;
@@ -376,7 +367,7 @@ void GameManager::manageDirigibles()
     }
 
     // Add a new airship if needed
-    if(dirigibles.size() < maxNumDirigibles)
+    if(dirigibles.size() < MAX_NUM_DIRIGIBLES)
     {
         createDirigible();
     }
@@ -424,11 +415,6 @@ bool GameManager::createDirigible()
 
     return true;
 }
-
-
-
-
-
 
 // Camera
 Point GameManager::getCameraLocation() const

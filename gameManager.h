@@ -20,22 +20,29 @@ private:
     bool wKey, aKey, sKey, dKey, rKey, cKey;
 
     // Chunks
-    int chunkSize;
     int renderRadius;
     std::unordered_map<int, std::shared_ptr<Chunk>> allSeenChunks;
     std::vector<std::shared_ptr<Chunk>> currentChunks;
-    int perlinSize;  // how many chunks before perlin repeats
     PerlinNoiseGenerator png;
 
     // Vehicles
     std::vector<std::shared_ptr<Vehicle>> vehicles;
-    int maxNumVehicles;
     int tickNumberMod100;
     std::vector<std::shared_ptr<Dirigible>> dirigibles;
-    int maxNumDirigibles;
+
+    // Game parameters
+    int CHUNK_SIZE = 512;
+    int PERLIN_SIZE = 10; // how many chunks before perlin repeats
+    int PLOTS_PER_SIDE = 8;
+    int MAX_NUM_VEHICLES = 15;
+    int MAX_NUM_DIRIGIBLES = 4;
+    int MAX_NUM_PLANES = 2;
+    double PLAYER_SPEED = 2;
+    double MOUSE_SENSITIVITY = 0.005;
+
 public:
     GameManager();
-    GameManager(int inputChunkSize, int inputRenderRadius, int inputPerlinSize);
+    GameManager(int inputRenderRadius);
 
 
     // All keys should initially be false.
