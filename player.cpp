@@ -250,7 +250,6 @@ void Player::updateLookingAt(double theta)
 // Update the xzAngle and yAngle based on theta resulting from a mouse movement
 void Player::updateAngles(double theta, double distance)
 {
-    std::cout << distance << std::endl;
     double horizontalAmount = sensitivity * distance* cos(theta);
     xzAngle += horizontalAmount;
     if(xzAngle > 2*PI)

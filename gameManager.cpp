@@ -267,14 +267,20 @@ std::shared_ptr<Chunk> GameManager::pointToChunk(Point p)
 void GameManager::manageCars()
 {
     // Remove any cars too far away
-    for(int i = 0; i < vehicles.size(); i++)
+    int L = vehicles.size();
+    int i = 0;
+    while(i < L)
     {
-        if(distance2d(vehicles[i]->getLocation(), player.getLocation()) > 2*chunkSize && vehicles.size() > 1)
+        std::shared_ptr<Vehicle> v = vehicles[i];
+        if(distance2d(v->getLocation(), player.getLocation()) > 2*chunkSize)
         {
-            vehicles[i] = vehicles.back();
-            vehicles.pop_back();
+            vehicles.erase(vehicles.begin() + i);
+            L--;
+            i--;
         }
+        i++;
     }
+
     // Add a new car if needed
     while(vehicles.size() < maxNumVehicles)
     {
@@ -355,15 +361,21 @@ bool GameManager::createCar()
 void GameManager::manageDirigibles()
 {
     // Remove any airships too far away
-    for(int i = 0; i < dirigibles.size(); i++)
+    int L = dirigibles.size();
+    int i = 0;
+    while(i < L)
     {
-        if(distance2d(dirigibles[i]->getLocation(), player.getLocation()) > 2.25*chunkSize && dirigibles.size() > 1)
+        std::shared_ptr<Dirigible> d = dirigibles[i];
+        if(distance2d(d->getLocation(), player.getLocation()) > 2.25*chunkSize)
         {
-            dirigibles[i] = dirigibles.back();
-            dirigibles.pop_back();
+            dirigibles.erase(dirigibles.begin() + i);
+            L--;
+            i--;
         }
+        i++;
     }
-    // Add a new car if needed
+
+    // Add a new airship if needed
     if(dirigibles.size() < maxNumDirigibles)
     {
         createDirigible();
