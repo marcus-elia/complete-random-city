@@ -79,8 +79,8 @@ public:
     Point getCameraUp() const;
 
     // Mouse
-    void reactToMouseMovement(double theta);
-    void reactToMouseClick();
+    void reactToMouseMovement(int mx, int my, double theta, double distance);
+    void reactToMouseClick(int mx, int my);
 
     void draw() const;
     void tick();

@@ -33,12 +33,14 @@ void GameManager::initializeKeys()
 }
 
 
-void GameManager::reactToMouseMovement(double theta)
+void GameManager::reactToMouseMovement(int mx, int my, double theta, double distance)
 {
-    player.updateLookingAt(theta);
+    double clampedDistance = fmin(distance, 50);
+    player.updateAngles(theta, clampedDistance);
+    player.updateSphericalDirectionBasedOnAngles();
     player.setVelocity(wKey, aKey, sKey, dKey, rKey, cKey);
 }
-void GameManager::reactToMouseClick()
+void GameManager::reactToMouseClick(int mx, int my)
 {
     std::shared_ptr<Chunk> playerChunk = allSeenChunks[player.getCurrentChunkInt()];
     if(playerChunk->hasAirport())

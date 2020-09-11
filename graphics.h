@@ -1,6 +1,8 @@
 // The code in this file is based on code provided by Lisa Dion
 // in a 3D graphics tutorial.
 
+#include "mathHelper.h"
+
 #ifndef graphics_h
 #define graphics_h
 

@@ -5,14 +5,19 @@
 #include "chunk.h"
 #include "structs.h"
 
-
-
 class Player
 {
 private:
     Point location;
     Point lookingAt;
     Point up;
+
+    // The direction the player is facing in spherical coordinates
+    // Must be on the unit sphere
+    Point sphericalDirection;
+
+    double xzAngle; // Where the player is looking in the xz-plane
+    double yAngle;  // How much the player is looking up (in [-Pi/2, Pi/2])
 
     double speed;     // how fast the player can move
     Point velocity; // current x y and z velocity
@@ -21,14 +26,22 @@ private:
 
     int chunkSize;
     Point2D currentChunkCoords; // which chunk the player is in
+
+    // Can't look perfectly vertically or it will glitch
+    double VERTICAL_LIMIT = 0.01;
 public:
     Player();
     Player(Point inputLocation, Point inputLookingAt, Point inputUp, double inputSpeed, int inputChunkSize);
+
+    void initializeAngles();
+    void initializeSphericalDirection();
 
     // Getters
     Point getLocation() const;
     Point getLookingAt() const;
     Point getUp() const;
+    double getXZAngle() const;
+    double getYAngle() const;
     double getSpeed() const;
     Point2D getCurrentChunkCoords() const;
     int getCurrentChunkInt() const;
@@ -46,13 +59,19 @@ public:
     void setVelocity(bool wKey, bool aKey, bool sKey, bool dKey, bool rKey, bool cKey);
 
     // Rotates lookingAt around location in the xz plane
-    void rotateLookingAtHorizontal(double theta);
+    /*void rotateLookingAtHorizontal(double theta);
 
     // Rotates lookingAt around location vertically
     void rotateLookingAtVertical(double theta);
 
     // Based on the angle of mouse movement, change the lookingat
-    void updateLookingAt(double theta);
+    void updateLookingAt(double theta);*/
+
+    // Update the xzAngle and yAngle based on theta resulting from a mouse movement
+    void updateAngles(double theta, double distance);
+
+    // Use xzAngle, yAngle, and location to determine the spherical direction.
+    void updateSphericalDirectionBasedOnAngles();
 
 
     // Chunks

@@ -6,9 +6,11 @@ Player::Player()
     location = {0, 0, 0};
     lookingAt = {0,0,-60};
     up = {0, 1, 0};
+    initializeAngles();
+    initializeSphericalDirection();
     speed = 4;
     velocity = {0,0,0};
-    sensitivity = 0.02;
+    sensitivity = 0.005;
     chunkSize = 512;
     currentChunkCoords = whatChunk();
 }
@@ -17,12 +19,34 @@ Player::Player(Point inputLocation, Point inputLookingAt, Point inputUp, double 
     location = inputLocation;
     lookingAt = inputLookingAt;
     up = inputUp;
+    initializeAngles();
+    initializeSphericalDirection();
     speed = inputSpeed;
     velocity = {0,0,0};
     sensitivity = 0.02;
     chunkSize = inputChunkSize;
     currentChunkCoords = whatChunk();
 }
+
+void Player::initializeAngles()
+{
+    xzAngle = atan2(lookingAt.z - location.z, lookingAt.x - location.x);
+    yAngle = atan2(lookingAt.y - location.y, distance2d(location, lookingAt));
+}
+void Player::initializeSphericalDirection()
+{
+    sphericalDirection.x = cos(xzAngle);
+    sphericalDirection.z = sin(xzAngle);
+
+    // Must scale the component in the xz plane for spherical coordinates
+    double scaleAmount = cos(yAngle) / sqrt(sphericalDirection.x*sphericalDirection.x + sphericalDirection.z*sphericalDirection.z);
+    sphericalDirection.x *= scaleAmount;
+    sphericalDirection.z *= scaleAmount;
+    sphericalDirection.y = sin(yAngle);
+}
+
+
+
 
 // Getters
 Point Player::getLocation() const
@@ -36,6 +60,14 @@ Point Player::getLookingAt() const
 Point Player::getUp() const
 {
     return up;
+}
+double Player::getXZAngle() const
+{
+    return xzAngle;
+}
+double Player::getYAngle() const
+{
+    return yAngle;
 }
 double Player::getSpeed() const
 {
@@ -152,7 +184,7 @@ void Player::setVelocity(bool wKey, bool aKey, bool sKey, bool dKey, bool rKey, 
     velocity.z = speed * sin(angleToMove);
 }
 
-void Player::rotateLookingAtHorizontal(double theta)
+/*void Player::rotateLookingAtHorizontal(double theta)
 {
     // Translate to the origin
     lookingAt.x -= location.x;
@@ -213,7 +245,52 @@ void Player::updateLookingAt(double theta)
     // Vertical turning
     double verticalAmount = sensitivity * sin(theta);
     rotateLookingAtVertical(-verticalAmount); // negative sign since we are rotating up from +x axis
+}*/
+
+// Update the xzAngle and yAngle based on theta resulting from a mouse movement
+void Player::updateAngles(double theta, double distance)
+{
+    std::cout << distance << std::endl;
+    double horizontalAmount = sensitivity * distance* cos(theta);
+    xzAngle += horizontalAmount;
+    if(xzAngle > 2*PI)
+    {
+        xzAngle -= 2*PI;
+    }
+    else if(xzAngle < 0)
+    {
+        xzAngle += 2*PI;
+    }
+
+    double verticalAmount = sensitivity * distance* sin(theta);
+    yAngle -= verticalAmount; // negative sign since Glut's mouse functions treat +y as down
+    if(yAngle > PI/2 - VERTICAL_LIMIT)
+    {
+        yAngle = PI/2 - VERTICAL_LIMIT;
+    }
+    else if(yAngle < -PI/2 + VERTICAL_LIMIT)
+    {
+        yAngle = -PI/2 + VERTICAL_LIMIT;
+    }
 }
+
+// Use xzAngle, yAngle, and location to determine the spherical direction.
+void Player::updateSphericalDirectionBasedOnAngles()
+{
+    sphericalDirection.x = cos(xzAngle);
+    sphericalDirection.z = sin(xzAngle);
+
+    // Must scale the component in the xz plane for spherical coordinates
+    double scaleAmount = cos(yAngle) / sqrt(sphericalDirection.x*sphericalDirection.x + sphericalDirection.z*sphericalDirection.z);
+    sphericalDirection.x *= scaleAmount;
+    sphericalDirection.z *= scaleAmount;
+    sphericalDirection.y = sin(yAngle);
+
+    lookingAt.x = location.x + sphericalDirection.x;
+    lookingAt.y = location.y + sphericalDirection.y;
+    lookingAt.z = location.z + sphericalDirection.z;
+}
+
 
 void Player::tick()
 {

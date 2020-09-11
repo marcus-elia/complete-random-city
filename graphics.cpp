@@ -173,7 +173,8 @@ void kbdS(int key, int x, int y)
 void cursor(int x, int y)
 {
     double theta = atan2(y - prevMouseY, x - prevMouseX);
-    manager.reactToMouseMovement(theta);
+    double distance = distanceFormula(x, y, prevMouseX, prevMouseY);
+    manager.reactToMouseMovement(x, y, theta, distance);
     prevMouseX = x;
     prevMouseY = y;
 
@@ -191,7 +192,7 @@ void mouse(int button, int state, int x, int y)
 {
     if(state == GLUT_UP)
     {
-        manager.reactToMouseClick();
+        manager.reactToMouseClick(x, y);
     }
     glutPostRedisplay();
 }
