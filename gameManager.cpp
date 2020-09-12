@@ -150,7 +150,7 @@ void GameManager::tick()
         playerTick();
         carsTick();
         dirigiblesTick();
-        
+
         tickNumberMod100++;
         if(tickNumberMod100 == 100)
         {

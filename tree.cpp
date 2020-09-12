@@ -18,7 +18,7 @@ Tree::Tree(Point inputLocation, int inputTrunkHeight, double inputTrunkRadius, d
     trunkRadius = inputTrunkRadius;
     leavesHeight = inputLeavesHeight;
     leavesXZRadius = inputLeavesXZRadius;
-    double r = (rand() % 100 ) / 100.0;
+    double r = (rand() % 100) / 100.0;
     leavesColor = {r/4, 0.5 + r/2, r/4, 1};
     trunkColor = {0.2 + r/8, 0.15 + r/12, r/12, 1};
     initializeSolids();
@@ -27,8 +27,8 @@ Tree::Tree(Point inputLocation, int inputTrunkHeight, double inputTrunkRadius, d
 void Tree::initializeSolids()
 {
     Point center = {location.x, trunkHeight/2.0, location.z};
-    trunk = Cylinder(center, trunkColor, trunkRadius, trunkHeight, trunkRadius, {1,1,1,1});
-    center = {location.x, trunkHeight + leavesHeight/2.0, location.z};
+    trunk = Cylinder(center, trunkColor, trunkRadius, trunkHeight, trunkRadius, {1,1,1,1}, 12);
+    center = {location.x, trunkHeight + leavesHeight/2.0 - 5, location.z};
     leaves = Ellipsoid(center, leavesColor, leavesXZRadius, leavesHeight, leavesXZRadius, {1,1,1,1},
             true, 5, 6);
 }
@@ -52,7 +52,7 @@ double Tree::getTrunkRadius() const
 void Tree::draw() const
 {
     glLineWidth(1.0);
-    trunk.draw();
+    trunk.drawFaces();
     leaves.draw();
     glLineWidth(2.0);
 }

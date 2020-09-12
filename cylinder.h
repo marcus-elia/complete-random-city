@@ -16,7 +16,8 @@ private:
 public:
     Cylinder();
     Cylinder(Point inputCenter, RGBAcolor inputColor,
-             double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor);
+             double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
+             int inputSmoothness=25);
     Cylinder(Point inputCenter, RGBAcolor inputColor,
              double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
              double inputTopXWidth, double inputTopZWidth);

@@ -8,12 +8,12 @@ Cylinder::Cylinder() : Solid()
     initializeCorners();
 }
 Cylinder::Cylinder(Point inputCenter, RGBAcolor inputColor,
-                   double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor) :
+                   double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor, int inputSmoothness) :
         Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor)
 {
     topXWidth = xWidth;
     topZWidth = zWidth;
-    smoothness = 25;
+    smoothness = inputSmoothness;
     initializeCorners();
 }
 Cylinder::Cylinder(Point inputCenter, RGBAcolor inputColor,
