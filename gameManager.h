@@ -124,6 +124,8 @@ public:
     void draw() const;
     void tick();
     void playerTick();
+    void carsTick();
+    void dirigiblesTick();
 
     // Debug
     void printPlayerBuildingDebug();

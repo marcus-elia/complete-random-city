@@ -148,26 +148,13 @@ void GameManager::tick()
         }
 
         playerTick();
-
-        // Vehicles move
-        for(std::shared_ptr<Vehicle> v : vehicles)
-        {
-            v->tick();
-        }
-        for(std::shared_ptr<Dirigible> d : dirigibles)
-        {
-            d->tick();
-        }
-
+        carsTick();
+        dirigiblesTick();
+        
         tickNumberMod100++;
         if(tickNumberMod100 == 100)
         {
             tickNumberMod100 = 0;
-            manageCars();
-        }
-        else if(tickNumberMod100 == 50)
-        {
-            manageDirigibles();
         }
     }
 }
@@ -185,6 +172,28 @@ void::GameManager::playerTick()
     if(curPlayerChunk != player.getCurrentChunkCoords())
     {
         updateCurrentChunks();
+    }
+}
+void GameManager::carsTick()
+{
+    for(std::shared_ptr<Vehicle> v : vehicles)
+    {
+        v->tick();
+    }
+    if(tickNumberMod100 == 0)
+    {
+        manageCars();
+    }
+}
+void GameManager::dirigiblesTick()
+{
+    for(std::shared_ptr<Dirigible> d : dirigibles)
+    {
+        d->tick();
+    }
+    if(tickNumberMod100 == 50)
+    {
+        manageDirigibles();
     }
 }
 
