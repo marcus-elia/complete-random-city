@@ -178,7 +178,7 @@ void::GameManager::playerTick()
 
     // Check for the player hitting a building
     Point2D curPlayerChunk = player.whatChunk();
-    std::shared_ptr<Chunk> c = allSeenChunks[pointToInt(curPlayerChunk)];
+    std::shared_ptr<Chunk> c = allSeenChunks[point2DtoChunkID(curPlayerChunk)];
     player.checkCollisionsAndCorrect(*c, 5);
 
     // If the player is entering a different chunk
@@ -286,10 +286,10 @@ void GameManager::updateCurrentChunks()
 
     // Update the list of current chunks
     currentChunks = std::vector<std::shared_ptr<Chunk>>();
-    std::vector<Point2D> chunksInRadius = getChunksAroundPointByPoint(player.getCurrentChunkCoords(), renderRadius);
+    std::vector<Point2D> chunksInRadius = getChunkTopLeftCornersAroundPoint(player.getCurrentChunkCoords(), renderRadius);
     for(Point2D p : chunksInRadius)
     {
-        int index = pointToInt(p);
+        int index = point2DtoChunkID(p);
         if(allSeenChunks.count(index) == 0) // if the chunk has never been seen before, make a new one
         {
             // Check for adjacent chunks to get edge road indices
@@ -297,9 +297,9 @@ void GameManager::updateCurrentChunks()
             std::experimental::optional<std::vector<int>> inputLeftRoadIndices, inputRightRoadIndices,
                                                           inputTopRoadIndices, inputBottomRoadIndices;
             // Left border
-            if(allSeenChunks.count(pointToInt({p.x - 1, p.z})) > 0)
+            if(allSeenChunks.count(point2DtoChunkID({p.x - 1, p.z})) > 0)
             {
-                leftChunk = allSeenChunks[pointToInt({p.x - 1, p.z})];
+                leftChunk = allSeenChunks[point2DtoChunkID({p.x - 1, p.z})];
                 inputLeftRoadIndices = leftChunk.value()->getRightRoadIndices();
             }
             else
@@ -308,9 +308,9 @@ void GameManager::updateCurrentChunks()
                 inputLeftRoadIndices = std::experimental::nullopt;
             }
             // Right border
-            if(allSeenChunks.count(pointToInt({p.x + 1, p.z})) > 0)
+            if(allSeenChunks.count(point2DtoChunkID({p.x + 1, p.z})) > 0)
             {
-                rightChunk = allSeenChunks[pointToInt({p.x + 1, p.z})];
+                rightChunk = allSeenChunks[point2DtoChunkID({p.x + 1, p.z})];
                 inputRightRoadIndices = rightChunk.value()->getLeftRoadIndices();
             }
             else
@@ -319,9 +319,9 @@ void GameManager::updateCurrentChunks()
                 inputRightRoadIndices = std::experimental::nullopt;
             }
             // Top border
-            if(allSeenChunks.count(pointToInt({p.x, p.z - 1})) > 0)
+            if(allSeenChunks.count(point2DtoChunkID({p.x, p.z - 1})) > 0)
             {
-                topChunk = allSeenChunks[pointToInt({p.x, p.z - 1})];
+                topChunk = allSeenChunks[point2DtoChunkID({p.x, p.z - 1})];
                 inputTopRoadIndices = topChunk.value()->getBottomRoadIndices();
             }
             else
@@ -330,9 +330,9 @@ void GameManager::updateCurrentChunks()
                 inputTopRoadIndices = std::experimental::nullopt;
             }
             // Bottom border
-            if(allSeenChunks.count(pointToInt({p.x, p.z + 1})) > 0)
+            if(allSeenChunks.count(point2DtoChunkID({p.x, p.z + 1})) > 0)
             {
-                bottomChunk = allSeenChunks[pointToInt({p.x, p.z + 1})];
+                bottomChunk = allSeenChunks[point2DtoChunkID({p.x, p.z + 1})];
                 inputBottomRoadIndices = bottomChunk.value()->getTopRoadIndices();
             }
             else
@@ -351,7 +351,7 @@ void GameManager::updateCurrentChunks()
 }
 std::shared_ptr<Chunk> GameManager::pointToChunk(Point p)
 {
-    int chunkIndex = pointToInt({(int)floor(p.x / CHUNK_SIZE), (int)floor(p.z / CHUNK_SIZE)});
+    int chunkIndex = point2DtoChunkID({(int)floor(p.x / CHUNK_SIZE), (int)floor(p.z / CHUNK_SIZE)});
     if(allSeenChunks.count(chunkIndex) == 0)
     {
         chunkIndex = 0; // If it's out of bounds, just check the 0 chunk for now. can't hurt.
@@ -388,7 +388,7 @@ void GameManager::manageCars()
 bool GameManager::createCar()
 {
     // Pointer to the player's current chunk
-    Chunk* c = allSeenChunks[pointToInt(player.whatChunk())].get();
+    Chunk* c = allSeenChunks[point2DtoChunkID(player.whatChunk())].get();
     std::experimental::optional<RoadPlot*> roadPlot = c->getRandomRoadPlot();
     if(!roadPlot)
     {
@@ -542,7 +542,7 @@ void GameManager::printPlayerBuildingDebug()
     Point v = player.getLocation();
     std::cout << std::endl<< "Player location: " << v.x << "," << v.y << "," << v.z << std::endl;
     Point2D curPlayerChunk = player.whatChunk();
-    std::shared_ptr<Chunk> c = allSeenChunks[pointToInt(curPlayerChunk)];
+    std::shared_ptr<Chunk> c = allSeenChunks[point2DtoChunkID(curPlayerChunk)];
 }
 
 void GameManager::resetGame()

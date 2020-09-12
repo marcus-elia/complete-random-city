@@ -79,7 +79,7 @@ Point2D Player::getCurrentChunkCoords() const
 }
 int Player::getCurrentChunkInt() const
 {
-    return pointToInt(currentChunkCoords);
+    return point2DtoChunkID(currentChunkCoords);
 }
 
 // Setters

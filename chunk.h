@@ -22,7 +22,7 @@
 class Chunk
 {
 private:
-    Point2D bottomLeft; // The bottom left coordinate divided by sideLength
+    Point2D topLeft; // The left left coordinate divided by sideLength
     int sideLength;
     Point center;   // The actual center
     int plotsPerSide;
@@ -51,7 +51,7 @@ private:
     std::experimental::optional<Airport> airport;
 public:
     Chunk();
-    Chunk(Point2D inputBottomLeft, int inputSideLength, int inputPlotsPerSide, double inputPerlinSeed,
+    Chunk(Point2D inputTopLeft, int inputSideLength, int inputPlotsPerSide, double inputPerlinSeed,
             std::experimental::optional<std::vector<int>> inputLeftRoadIndices,
           std::experimental::optional<std::vector<int>> inputRightRoadIndices,
           std::experimental::optional<std::vector<int>> inputTopRoadIndices,
@@ -73,7 +73,7 @@ public:
                              std::experimental::optional<std::shared_ptr<Chunk>> bottomChunk);
 
     // Getters
-    Point2D getBottomLeft() const;
+    Point2D getTopLeft() const;
     int getSideLength() const;
     Point getCenter() const;
     std::vector<int> getLeftRoadIndices() const;
@@ -114,7 +114,7 @@ public:
 
 // Returns the result of mapping a 2d point in Z x Z into the
 // non-negative integers, by spiraling clockwise.
-int pointToInt(Point2D p);
+//int pointToInt(Point2D p);
 
 // Returns the ints corresponding to to all chunks that are within radius of this one,
 // using the taxicab metric
@@ -134,7 +134,7 @@ template <class Object>
 bool hasElement(std::vector<Object> vec, Object obj);
 
 // Converts indices of where a plot is the chunk to the center of the plot
-Point2D chunkCoordinatesToCenter(int i, int j, int sideLength, Point2D bottomLeft, int propertySize);
+Point2D chunkCoordinatesToCenter(int i, int j, int sideLength, Point2D topLeft, int propertySize);
 
 
 #endif //COMPLETE_RANDOM_CITY_CHUNK_H

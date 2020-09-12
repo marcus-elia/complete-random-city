@@ -2,20 +2,20 @@
 
 Chunk::Chunk()
 {
-    bottomLeft = {0,0};
+    topLeft = {0,0};
     sideLength = 1024;
     perlinSeed = 0.5;
     initializeCenter();
     propertySize = sideLength / 8;
     airport = std::experimental::nullopt;
 }
-Chunk::Chunk(Point2D inputBottomLeft, int inputSideLength, int inputPlotsPerSide, double inputPerlinSeed,
+Chunk::Chunk(Point2D inputTopLeft, int inputSideLength, int inputPlotsPerSide, double inputPerlinSeed,
              std::experimental::optional<std::vector<int>> inputLeftRoadIndices,
              std::experimental::optional<std::vector<int>> inputRightRoadIndices,
              std::experimental::optional<std::vector<int>> inputTopRoadIndices,
              std::experimental::optional<std::vector<int>> inputBottomRoadIndices)
 {
-    bottomLeft = inputBottomLeft;
+    topLeft = inputTopLeft;
     sideLength = inputSideLength;
     perlinSeed = inputPerlinSeed;
     plotsPerSide = inputPlotsPerSide;
@@ -36,7 +36,7 @@ Chunk::Chunk(Point2D inputBottomLeft, int inputSideLength, int inputPlotsPerSide
 
 void Chunk::initializeCenter()
 {
-    center = {static_cast<double>(sideLength*bottomLeft.x + sideLength/2), 0, static_cast<double>(sideLength*bottomLeft.z - sideLength/2)};
+    center = {static_cast<double>(sideLength*topLeft.x + sideLength/2), 0, static_cast<double>(sideLength*topLeft.z + sideLength/2)};
 }
 std::vector<int> Chunk::makeRandomRoadIndices(double seed, int size)
 {
@@ -166,7 +166,7 @@ void Chunk::tryToMakeAirport()
                     a = coord[0];
                     b = coord[1];
                     plots[a][b] = std::make_shared<MultiPlot>(MultiPlot({a, b},
-                                                                        chunkCoordinatesToCenter(a, b, sideLength, bottomLeft, propertySize), propertySize));
+                                                                        chunkCoordinatesToCenter(a, b, sideLength, topLeft, propertySize), propertySize));
                 }
 
             }
@@ -188,36 +188,36 @@ void Chunk::tryToMakeMultiplotBuildings()
             {
                 if(perlinSeed > 0.8 && !churchMade && rand() % 100 > 50)
                 {
-                    Point2D topLeftOfBuilding = {bottomLeft.x*sideLength + i*propertySize,
-                                                 bottomLeft.z*sideLength + j*propertySize};
+                    Point2D topLeftOfBuilding = {topLeft.x*sideLength + i*propertySize,
+                                                 topLeft.z*sideLength + j*propertySize};
                     plots[i][j] = std::make_shared<BuildingPlot>(BuildingPlot({i,j},
-                                                                              chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize,
+                                                                              chunkCoordinatesToCenter(i, j, sideLength, topLeft, propertySize), propertySize,
                                                                               Building(topLeftOfBuilding, propertySize, 60,
                                                                                        {1, 1, 1, 1},
                                                                                        {1,1,1,1}, Church)));
                     churchMade = true;
                     plots[i+1][j] = std::make_shared<MultiPlot>(MultiPlot({i + 1, j},
-                                                                          chunkCoordinatesToCenter(i+1, j, sideLength, bottomLeft, propertySize), propertySize));
+                                                                          chunkCoordinatesToCenter(i+1, j, sideLength, topLeft, propertySize), propertySize));
                     plots[i+1][j+1] = std::make_shared<MultiPlot>(MultiPlot({i + 1, j + 1},
-                                                                            chunkCoordinatesToCenter(i+1, j+1, sideLength, bottomLeft, propertySize), propertySize));
+                                                                            chunkCoordinatesToCenter(i+1, j+1, sideLength, topLeft, propertySize), propertySize));
                     plots[i][j+1] = std::make_shared<MultiPlot>(MultiPlot({i, j + 1},
-                                                                          chunkCoordinatesToCenter(i, j+1, sideLength, bottomLeft, propertySize), propertySize));
+                                                                          chunkCoordinatesToCenter(i, j+1, sideLength, topLeft, propertySize), propertySize));
                 }
                 if(perlinSeed < 0.25 && !mansionMade && rand() % 100 > 50 && touchesRoad(i, j))
                 {
-                    Point2D topLeftOfBuilding = {bottomLeft.x*sideLength + i*propertySize,
-                                                 bottomLeft.z*sideLength + j*propertySize};
+                    Point2D topLeftOfBuilding = {topLeft.x*sideLength + i*propertySize,
+                                                 topLeft.z*sideLength + j*propertySize};
                     plots[i][j] = std::make_shared<BuildingPlot>(BuildingPlot({i,j},
-                                                                              chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize,
+                                                                              chunkCoordinatesToCenter(i, j, sideLength, topLeft, propertySize), propertySize,
                                                                               Building(topLeftOfBuilding, propertySize, 60,
                                                                                        {1, 1, 1, 1}, {1,1,1,1}, Mansion)));
                     mansionMade = true;
                     plots[i+1][j] = std::make_shared<MultiPlot>(MultiPlot({i + 1, j},
-                                                                          chunkCoordinatesToCenter(i+1, j, sideLength, bottomLeft, propertySize), propertySize));
+                                                                          chunkCoordinatesToCenter(i+1, j, sideLength, topLeft, propertySize), propertySize));
                     plots[i+1][j+1] = std::make_shared<MultiPlot>(MultiPlot({i + 1, j + 1},
-                                                                            chunkCoordinatesToCenter(i+1, j+1, sideLength, bottomLeft, propertySize), propertySize));
+                                                                            chunkCoordinatesToCenter(i+1, j+1, sideLength, topLeft, propertySize), propertySize));
                     plots[i][j+1] = std::make_shared<MultiPlot>(MultiPlot({i, j + 1},
-                                                                          chunkCoordinatesToCenter(i, j+1, sideLength, bottomLeft, propertySize), propertySize));
+                                                                          chunkCoordinatesToCenter(i, j+1, sideLength, topLeft, propertySize), propertySize));
                 }
             }
         }
@@ -238,8 +238,8 @@ void Chunk::makeBuildings()
                 // Make a building if r says yes, more likely when perlin noise is high
                 if(r1 < perlinSeed && r2 > 0.2)
                 {
-                    Point2D topLeftOfBuilding = {bottomLeft.x*sideLength + i*propertySize,
-                                                 bottomLeft.z*sideLength + j*propertySize};
+                    Point2D topLeftOfBuilding = {topLeft.x*sideLength + i*propertySize,
+                                                 topLeft.z*sideLength + j*propertySize};
                     // What type of building is it? How high is it?
                     typeOfBuilding buildingType;
                     int height;
@@ -300,7 +300,7 @@ void Chunk::makeBuildings()
                         height =  (int)(perlinSeed*180 + r1*80 + r2*80);
                     }
                     plots[i][j] = std::make_shared<BuildingPlot>(BuildingPlot({i,j},
-                                                                              chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize,
+                                                                              chunkCoordinatesToCenter(i, j, sideLength, topLeft, propertySize), propertySize,
                                                                               Building(topLeftOfBuilding, propertySize, height,
                                                                                        {r1, 0, perlinSeed, 1},
                                                                                        {1,1,1,1}, buildingType)));
@@ -318,7 +318,7 @@ void Chunk::makeForests()
         {
             if(plots[i][j]->getPlotType() == Empty)
             {
-                Point2D plotCenter = chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize);
+                Point2D plotCenter = chunkCoordinatesToCenter(i, j, sideLength, topLeft, propertySize);
                 int forestLevel = countForestLevel(i, j);
                 plots[i][j] = std::make_shared<ForestPlot>(ForestPlot({i,j}, plotCenter, propertySize, forestLevel));
             }
@@ -339,55 +339,55 @@ void Chunk::initializePlots()
     //plots.push_back(std::vector<std::shared_ptr<Plot>>()); // initialize column 0
     if(roadLocations[0][0])
     {
-        //plots[0].push_back(std::make_shared<RoadPlot>(RoadPlot({0,0}, chunkCoordinatesToCenter(0, 0, bottomLeft, propertySize), propertySize,
+        //plots[0].push_back(std::make_shared<RoadPlot>(RoadPlot({0,0}, chunkCoordinatesToCenter(0, 0, topLeft, propertySize), propertySize,
         //        hasElement(leftRoadIndices, 0), roadLocations[1][0], hasElement(topRoadIndices,0), roadLocations[0][1])));
-        plots[0][0] = std::make_shared<RoadPlot>(RoadPlot({0, 0}, chunkCoordinatesToCenter(0, 0, sideLength, bottomLeft, propertySize), propertySize,
+        plots[0][0] = std::make_shared<RoadPlot>(RoadPlot({0, 0}, chunkCoordinatesToCenter(0, 0, sideLength, topLeft, propertySize), propertySize,
                          hasElement(leftRoadIndices, 0), roadLocations[1][0], hasElement(topRoadIndices, 0),
                          roadLocations[0][1]));
     }
     else
     {
         plots[0][0] = std::make_shared<EmptyPlot>(EmptyPlot({0, 0},
-                chunkCoordinatesToCenter(0, 0, sideLength, bottomLeft, propertySize), propertySize));
+                chunkCoordinatesToCenter(0, 0, sideLength, topLeft, propertySize), propertySize));
     }
     // Top right
     if(roadLocations[plotsPerSide-1][0])
     {
         plots[plotsPerSide-1][0] = std::make_shared<RoadPlot>(RoadPlot({plotsPerSide-1, 0},
-                chunkCoordinatesToCenter(plotsPerSide-1, 0, sideLength, bottomLeft, propertySize), propertySize,
+                chunkCoordinatesToCenter(plotsPerSide-1, 0, sideLength, topLeft, propertySize), propertySize,
                 roadLocations[plotsPerSide-2][0], hasElement(rightRoadIndices, 0),
                 hasElement(topRoadIndices, plotsPerSide-1), roadLocations[plotsPerSide-1][1]));
     }
     else
     {
         plots[plotsPerSide-1][0] = std::make_shared<EmptyPlot>(EmptyPlot({plotsPerSide-1, 0},
-                       chunkCoordinatesToCenter(plotsPerSide-1, 0, sideLength, bottomLeft, propertySize), propertySize));
+                       chunkCoordinatesToCenter(plotsPerSide-1, 0, sideLength, topLeft, propertySize), propertySize));
     }
     // Bottom right
     if(roadLocations[plotsPerSide-1][plotsPerSide-1])
     {
         plots[plotsPerSide-1][plotsPerSide-1] = std::make_shared<RoadPlot>(RoadPlot({plotsPerSide-1, plotsPerSide-1},
-                           chunkCoordinatesToCenter(plotsPerSide-1, plotsPerSide-1, sideLength, bottomLeft, propertySize), propertySize,
+                           chunkCoordinatesToCenter(plotsPerSide-1, plotsPerSide-1, sideLength, topLeft, propertySize), propertySize,
                            roadLocations[plotsPerSide-2][plotsPerSide-1], hasElement(rightRoadIndices, plotsPerSide-1),
                            roadLocations[plotsPerSide-1][plotsPerSide-2], hasElement(bottomRoadIndices, plotsPerSide-1)));
     }
     else
     {
         plots[plotsPerSide-1][plotsPerSide-1] = std::make_shared<EmptyPlot>(EmptyPlot({plotsPerSide-1, plotsPerSide-1},
-                chunkCoordinatesToCenter(plotsPerSide-1, plotsPerSide-1, sideLength, bottomLeft, propertySize), propertySize));
+                chunkCoordinatesToCenter(plotsPerSide-1, plotsPerSide-1, sideLength, topLeft, propertySize), propertySize));
     }
     // Bottom left
     if(roadLocations[0][plotsPerSide-1])
     {
         plots[0][plotsPerSide-1] = std::make_shared<RoadPlot>(RoadPlot({0, plotsPerSide-1},
-                         chunkCoordinatesToCenter(0, plotsPerSide-1, sideLength, bottomLeft, propertySize), propertySize,
+                         chunkCoordinatesToCenter(0, plotsPerSide-1, sideLength, topLeft, propertySize), propertySize,
                           hasElement(leftRoadIndices, plotsPerSide-1),roadLocations[1][plotsPerSide-1],
                           roadLocations[0][plotsPerSide-2], hasElement(bottomRoadIndices, 0)));
     }
     else
     {
         plots[0][plotsPerSide-1] = std::make_shared<EmptyPlot>(EmptyPlot({0, plotsPerSide-1},
-                chunkCoordinatesToCenter(0, plotsPerSide-1, sideLength, bottomLeft, propertySize), propertySize));
+                chunkCoordinatesToCenter(0, plotsPerSide-1, sideLength, topLeft, propertySize), propertySize));
     }
 
     // ----------------------- Edges ---------------------------------
@@ -397,14 +397,14 @@ void Chunk::initializePlots()
         if(roadLocations[i][0])
         {
             plots[i][0] = std::make_shared<RoadPlot>(RoadPlot({i, 0},
-                    chunkCoordinatesToCenter(i, 0, sideLength, bottomLeft, propertySize), propertySize,
+                    chunkCoordinatesToCenter(i, 0, sideLength, topLeft, propertySize), propertySize,
                           roadLocations[i-1][0], roadLocations[i+1][0],
                           hasElement(topRoadIndices, i),roadLocations[i][1]));
         }
         else
         {
             plots[i][0] = std::make_shared<EmptyPlot>(EmptyPlot({i, 0},
-                    chunkCoordinatesToCenter(i, 0, sideLength, bottomLeft, propertySize), propertySize));
+                    chunkCoordinatesToCenter(i, 0, sideLength, topLeft, propertySize), propertySize));
         }
     }
     // Bottom row
@@ -413,14 +413,14 @@ void Chunk::initializePlots()
         if(roadLocations[i][plotsPerSide-1])
         {
             plots[i][plotsPerSide-1] = std::make_shared<RoadPlot>(RoadPlot({i, plotsPerSide-1},
-                               chunkCoordinatesToCenter(i, plotsPerSide-1, sideLength, bottomLeft, propertySize), propertySize,
+                               chunkCoordinatesToCenter(i, plotsPerSide-1, sideLength, topLeft, propertySize), propertySize,
                                roadLocations[i-1][plotsPerSide-1], roadLocations[i+1][plotsPerSide-1],
                                roadLocations[i][plotsPerSide-2], hasElement(bottomRoadIndices, i)));
         }
         else
         {
             plots[i][plotsPerSide-1] = std::make_shared<EmptyPlot>(EmptyPlot({i, plotsPerSide-1},
-                    chunkCoordinatesToCenter(i, plotsPerSide-1, sideLength, bottomLeft, propertySize), propertySize));
+                    chunkCoordinatesToCenter(i, plotsPerSide-1, sideLength, topLeft, propertySize), propertySize));
         }
     }
     // Left row
@@ -429,14 +429,14 @@ void Chunk::initializePlots()
         if(roadLocations[0][j])
         {
             plots[0][j] = std::make_shared<RoadPlot>(RoadPlot({0, j},
-                                                          chunkCoordinatesToCenter(0, j, sideLength, bottomLeft, propertySize), propertySize,
+                                                          chunkCoordinatesToCenter(0, j, sideLength, topLeft, propertySize), propertySize,
                                                           hasElement(leftRoadIndices,j), roadLocations[1][j],
                                                           roadLocations[0][j-1], roadLocations[0][j+1]));
         }
         else
         {
             plots[0][j] = std::make_shared<EmptyPlot>(EmptyPlot({0, j},
-                    chunkCoordinatesToCenter(0, j, sideLength, bottomLeft, propertySize), propertySize));
+                    chunkCoordinatesToCenter(0, j, sideLength, topLeft, propertySize), propertySize));
         }
     }
     // Right row
@@ -445,14 +445,14 @@ void Chunk::initializePlots()
         if(roadLocations[plotsPerSide-1][j])
         {
             plots[plotsPerSide-1][j] = std::make_shared<RoadPlot>(RoadPlot({plotsPerSide-1, j},
-                                                          chunkCoordinatesToCenter(plotsPerSide-1, j, sideLength, bottomLeft, propertySize), propertySize,
+                                                          chunkCoordinatesToCenter(plotsPerSide-1, j, sideLength, topLeft, propertySize), propertySize,
                                                           roadLocations[plotsPerSide-2][j], hasElement(rightRoadIndices, j),
                                                           roadLocations[plotsPerSide-1][j-1], roadLocations[plotsPerSide-1][j+1]));
         }
         else
         {
             plots[plotsPerSide-1][j] = std::make_shared<EmptyPlot>(EmptyPlot({plotsPerSide-1, j},
-                    chunkCoordinatesToCenter(plotsPerSide-1, j, sideLength, bottomLeft, propertySize), propertySize));
+                    chunkCoordinatesToCenter(plotsPerSide-1, j, sideLength, topLeft, propertySize), propertySize));
         }
     }
 
@@ -464,14 +464,14 @@ void Chunk::initializePlots()
             if(roadLocations[i][j])
             {
                 plots[i][j] = std::make_shared<RoadPlot>(RoadPlot({i, j},
-                                     chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize,
+                                     chunkCoordinatesToCenter(i, j, sideLength, topLeft, propertySize), propertySize,
                                      roadLocations[i-1][j], roadLocations[i+1][j],
                                       roadLocations[i][j-1], roadLocations[i][j+1]));
             }
             else
             {
                 plots[i][j] = std::make_shared<EmptyPlot>(EmptyPlot({i, j},
-                        chunkCoordinatesToCenter(i, j, sideLength, bottomLeft, propertySize), propertySize));
+                        chunkCoordinatesToCenter(i, j, sideLength, topLeft, propertySize), propertySize));
             }
         }
     }
@@ -654,9 +654,9 @@ void Chunk::setRoadPlotPointers(std::experimental::optional<std::shared_ptr<Chun
 //                  Getters
 //
 // ==============================================
-Point2D Chunk::getBottomLeft() const
+Point2D Chunk::getTopLeft() const
 {
-    return bottomLeft;
+    return topLeft;
 }
 int Chunk::getSideLength() const
 {
@@ -763,7 +763,7 @@ void Chunk::tick()
 void Chunk::draw() const
 {
     glBegin(GL_QUADS);
-    /*if((bottomLeft.x + bottomLeft.z) % 2 == 0)
+    /*if((topLeft.x + topLeft.z) % 2 == 0)
     {
         glColor4f(1, 1, 0.3, 1);
     }
@@ -780,10 +780,10 @@ void Chunk::draw() const
     {
         glColor4f(0.7, 0.7, 0.7, 1);
     }
-    glVertex3f(sideLength*bottomLeft.x,-1, sideLength*bottomLeft.z);
-    glVertex3f(sideLength*bottomLeft.x,-1, sideLength*bottomLeft.z + sideLength);
-    glVertex3f(sideLength*bottomLeft.x + sideLength,-1, sideLength*bottomLeft.z + sideLength);
-    glVertex3f(sideLength*bottomLeft.x + sideLength,-1, sideLength*bottomLeft.z);
+    glVertex3f(sideLength*topLeft.x,-1, sideLength*topLeft.z);
+    glVertex3f(sideLength*topLeft.x,-1, sideLength*topLeft.z + sideLength);
+    glVertex3f(sideLength*topLeft.x + sideLength,-1, sideLength*topLeft.z + sideLength);
+    glVertex3f(sideLength*topLeft.x + sideLength,-1, sideLength*topLeft.z);
 
     glEnd();
 
@@ -803,66 +803,12 @@ void Chunk::draw() const
 
 int Chunk::chunkToInt() const
 {
-    return pointToInt({bottomLeft.x, bottomLeft.z});
+    return point2DtoChunkID({topLeft.x, topLeft.z});
 }
 
 std::vector<Point2D> Chunk::getChunksAround(int radius)
 {
-    return getChunksAroundPointByPoint(bottomLeft, radius);
-}
-
-int pointToInt(Point2D p)
-{
-    int a = p.x;
-    int b = p.z;
-    if(a > 0 && b <= a-1 && b > -a)
-    {
-        return 4*a*a - 3*a - b;
-    }
-    else if(b < 0 && a <= -b && a > b+1)
-    {
-        return 4*b*b + b - a;
-    }
-    else if(a < 0 && b > a-1 && b < -a)
-    {
-        return 4*a*a - a + b;
-    }
-    else if(b > -1 && a >= -b && a < b+1)
-    {
-        return 4*b*b + 3*b + a;
-    }
-    return (2*a-1)*(2*a-3); // idk why, but this works for (0,-1) and (-1,-2)
-}
-
-std::vector<int> getChunksAroundPoint(Point2D p, int radius)
-{
-    std::vector<int> result;
-
-    // Start at the top of the diamond and work down from there
-    for(int b = p.z + radius; b >= p.z - radius; b--)
-    {
-        int distanceFromZ = abs(b - p.z);
-        for(int a = p.x - (radius - distanceFromZ); a <= p.x + (radius - distanceFromZ); a++)
-        {
-            result.push_back(pointToInt({a,b}));
-        }
-    }
-    return result;
-}
-std::vector<Point2D> getChunksAroundPointByPoint(Point2D p, int radius)
-{
-    std::vector<Point2D> result;
-
-    // Start at the top of the diamond and work down from there
-    for(int b = p.z + radius; b >= p.z - radius; b--)
-    {
-        int distanceFromZ = abs(b - p.z);
-        for(int a = p.x - (radius - distanceFromZ); a <= p.x + (radius - distanceFromZ); a++)
-        {
-            result.push_back({a,b});
-        }
-    }
-    return result;
+    return getChunkTopLeftCornersAroundPoint(topLeft, radius);
 }
 
 
@@ -1032,7 +978,7 @@ bool hasElement(std::vector<Object> vec, Object obj)
     return false;
 }
 
-Point2D chunkCoordinatesToCenter(int i, int j, int sideLength, Point2D bottomLeft, int propertySize)
+Point2D chunkCoordinatesToCenter(int i, int j, int sideLength, Point2D topLeft, int propertySize)
 {
-    return {bottomLeft.x*sideLength + i*propertySize + propertySize/2, bottomLeft.z*sideLength + j*propertySize + propertySize/2};
+    return {topLeft.x*sideLength + i*propertySize + propertySize/2, topLeft.z*sideLength + j*propertySize + propertySize/2};
 }
