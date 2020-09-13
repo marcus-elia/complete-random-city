@@ -33,6 +33,10 @@ private:
     std::vector<Point2D> turnPoints;
     // How much to rotate by each frame when turning
     double deltaTheta;
+
+    // Car parameters
+    double WHEEL_WIDTH = 2;
+    double WHEEL_RADIUS = 3;
 public:
     Car();
     Car(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
