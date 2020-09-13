@@ -136,12 +136,12 @@ void GameManager::draw() const
         }
 
 
-        for(std::shared_ptr<Vehicle> v : vehicles)
+        for(std::shared_ptr<Car> c : cars)
         {
-            v->draw();
+            c->draw();
             if(showHitboxes)
             {
-                v->drawHitbox();
+                c->drawHitbox();
             }
         }
         for(std::shared_ptr<Dirigible> d : dirigibles)
@@ -201,9 +201,9 @@ void::GameManager::playerTick()
 }
 void GameManager::carsTick()
 {
-    for(std::shared_ptr<Vehicle> v : vehicles)
+    for(std::shared_ptr<Car> c : cars)
     {
-        v->tick();
+        c->tick();
     }
     if(tickNumberMod100 == 0)
     {
@@ -402,14 +402,14 @@ std::shared_ptr<Chunk> GameManager::pointToChunk(Point p)
 void GameManager::manageCars()
 {
     // Remove any cars too far away
-    int L = vehicles.size();
+    int L = cars.size();
     int i = 0;
     while(i < L)
     {
-        std::shared_ptr<Vehicle> v = vehicles[i];
+        std::shared_ptr<Vehicle> v = cars[i];
         if(distance2d(v->getLocation(), player.getLocation()) > 2*CHUNK_SIZE)
         {
-            vehicles.erase(vehicles.begin() + i);
+            cars.erase(cars.begin() + i);
             L--;
             i--;
         }
@@ -417,7 +417,7 @@ void GameManager::manageCars()
     }
 
     // Add a new car if needed
-    while(vehicles.size() < MAX_NUM_VEHICLES)
+    while(cars.size() < MAX_NUM_VEHICLES)
     {
         createCar();
     }
@@ -486,7 +486,7 @@ bool GameManager::createCar()
     {
         inputColor = {0,0,1,1}; // Blue
     }
-    vehicles.push_back(std::make_shared<Car>(Car(location, lookingAt, 2, {0,0,-1},
+    cars.push_back(std::make_shared<Car>(Car(location, lookingAt, 2, {0,0,-1},
             25, 10, rp->getLaneWidth() - 4, inputColor,
             inputCarType, rp)));
     return true;

@@ -29,7 +29,7 @@ private:
     PerlinNoiseGenerator png;
 
     // Vehicles
-    std::vector<std::shared_ptr<Vehicle>> vehicles;
+    std::vector<std::shared_ptr<Car>> cars;
     int tickNumberMod100;
     std::vector<std::shared_ptr<Dirigible>> dirigibles;
 
