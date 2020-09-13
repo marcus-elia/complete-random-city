@@ -37,12 +37,14 @@ private:
     GameStatus currentStatus;
     bool showMouse = true;
     bool closeWindow = false;
+    bool showHitboxes = false;
 
     // UI
     int screenWidth, screenHeight;
     Button playButton;
     Button quitButton;
     Button continueButton;
+    Button hitboxButton;
     std::vector<std::string> instructions;
 
     // Game parameters
@@ -62,8 +64,10 @@ private:
     int BUTTON_RADIUS = 16;
     RGBAcolor PLAY_BUTTON_COLOR = {0.0, 0.0, 0.7, 1.0};   // Slightly Dark Blue
     RGBAcolor QUIT_BUTTON_COLOR = {0.7, 0.0, 0.0, 1.0};   // Slightly Dark Red
+    RGBAcolor HITBOX_BUTTON_COLOR = {0.9, 0.6, 0.1, 1.0};   // Orange
     RGBAcolor PLAY_BUTTON_COLOR_H = {0.0, 0.2, 1.0, 1.0}; // Lighter Blue
     RGBAcolor QUIT_BUTTON_COLOR_H = {1.0, 0.2, 0.0, 1.0}; // Lighter Red
+    RGBAcolor HITBOX_BUTTON_COLOR_H = {1.0, 0.7, 0.2, 1.0}; // Lighter Orange
     RGBAcolor BUTTON_TEXT_COLOR = {1.0,1.0,1.0,1.0};      // White
     RGBAcolor CURSOR_COLOR = {0.3, 0.3, 0.3, 1.0};        // Dark Gray
     RGBAcolor BLACK = {0.0, 0.0, 0.0, 1.0};

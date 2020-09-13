@@ -37,6 +37,8 @@ void GameManager::initializeButtons()
                             BUTTON_RADIUS, "Continue", PLAY_BUTTON_COLOR, BUTTON_TEXT_COLOR, PLAY_BUTTON_COLOR_H);
     quitButton = Button(screenWidth/2, screenHeight/2 - BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT,
                         BUTTON_RADIUS, "Quit", QUIT_BUTTON_COLOR, BUTTON_TEXT_COLOR, QUIT_BUTTON_COLOR_H);
+    hitboxButton = Button(screenWidth/2, screenHeight/2 - 2*BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT,
+                          BUTTON_RADIUS, "Hitboxes", HITBOX_BUTTON_COLOR, BUTTON_TEXT_COLOR, HITBOX_BUTTON_COLOR_H);
 }
 void GameManager::initializeKeys()
 {
@@ -77,6 +79,8 @@ void GameManager::reactToMouseMovement(int mx, int my, double theta, double dist
         continueButton.setIsHighlighted(continueButton.containsPoint(mx, screenHeight - my));
 
         quitButton.setIsHighlighted(quitButton.containsPoint(mx, screenHeight - my));
+
+        hitboxButton.setIsHighlighted(hitboxButton.containsPoint(mx, screenHeight - my));
     }
 }
 void GameManager::reactToMouseClick(int mx, int my)
@@ -113,6 +117,10 @@ void GameManager::reactToMouseClick(int mx, int my)
         {
             closeWindow = true;
         }
+        else if(hitboxButton.containsPoint(mx, screenHeight - my))
+        {
+            showHitboxes = !showHitboxes;
+        }
     }
 
 }
@@ -131,11 +139,18 @@ void GameManager::draw() const
         for(std::shared_ptr<Vehicle> v : vehicles)
         {
             v->draw();
-            v->drawHitbox();
+            if(showHitboxes)
+            {
+                v->drawHitbox();
+            }
         }
         for(std::shared_ptr<Dirigible> d : dirigibles)
         {
             d->draw();
+            if(showHitboxes)
+            {
+                d->drawHitbox();
+            }
         }
     }
 }
@@ -603,6 +618,7 @@ void GameManager::drawUI() const
     {
         continueButton.draw();
         quitButton.draw();
+        hitboxButton.draw();
     }
     else if(currentStatus == End)
     {
