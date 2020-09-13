@@ -120,8 +120,9 @@ void Car::initializeSolids()
 }
 void Car::initializeHitbox()
 {
-    hitbox = RecPrism(location, {1,0.9,0.9,0.5}, width, height, length, {1,1,1,1});
-    hitbox.rotate(0, xzAngle - 3*PI/2, 0);
+    Point inputCenter = {location.x, location.y - 3, location.z};
+    hitbox = std::make_shared<RecPrism>(RecPrism(inputCenter, {.7,0.1,0.1,0.5}, width+4, height, length, {1,1,1,1}));
+    hitbox->rotate(0, xzAngle - 3*PI/2, 0);
 }
 void Car::initializeDirections()
 {
@@ -446,7 +447,7 @@ void Car::draw() const
 
 void Car::drawHitbox() const
 {
-    hitbox.draw();
+    hitbox->draw();
 }
 
 

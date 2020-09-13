@@ -13,7 +13,7 @@ class Vehicle : public Movable
 {
 protected:
     std::vector<std::shared_ptr<Solid>> solids;
-    RecPrism hitbox;
+    std::shared_ptr<RecPrism> hitbox;
 public:
     Vehicle();
     Vehicle(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity);

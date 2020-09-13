@@ -45,6 +45,7 @@ void Vehicle::setXZAngle(double inputAngle)
         //s->setXZAngle(inputAngle);
         s->rotateAroundOwner(0, thetaY, 0);
     }
+    hitbox->rotate(0, thetaY, 0);
 }
 
 
@@ -60,7 +61,7 @@ void Vehicle::move(double deltaX, double deltaY, double deltaZ)
         s->move(deltaX, deltaY, deltaZ);
         s->moveOwnerCenter(deltaX, deltaY, deltaZ);
     }
-    hitbox.move(velocity.x, velocity.y, velocity.z);
+    hitbox->move(deltaX, deltaY, deltaZ);
 }
 void Vehicle::rotate(double thetaX, double thetaY, double thetaZ)
 {
@@ -72,11 +73,11 @@ void Vehicle::rotate(double thetaX, double thetaY, double thetaZ)
     {
         s->rotateAroundOwner(thetaX, thetaY, thetaZ);
     }
-    hitbox.rotate(thetaX, thetaY, thetaZ);
+    hitbox->rotate(thetaX, thetaY, thetaZ);
 }
 
 
 std::experimental::optional<Point> Vehicle::correctCollision(Point p, double buffer) const
 {
-    return correctRectangularPrism(p, buffer, hitbox.getCenter(), hitbox.getXWidth(), hitbox.getYWidth(), hitbox.getZWidth(), hitbox.getXZAngle());
+    return correctRectangularPrism(p, buffer, hitbox->getCenter(), hitbox->getXWidth(), hitbox->getYWidth(), hitbox->getZWidth(), hitbox->getXZAngle());
 }
