@@ -133,6 +133,8 @@ void kbd(unsigned char key, int x, int y)
         case 'p': if(manager.getCurrentStatus() == Playing)
             {manager.togglePaused();}
             break;
+        case 'e': manager.setHyperSpeed(true);
+            break;
     }
 
     glutPostRedisplay();
@@ -156,6 +158,8 @@ void kbu(unsigned char key, int x, int y)
         case 'c': manager.setCKey(false);
             break;
         case 'b' : manager.printPlayerBuildingDebug();
+            break;
+        case 'e': manager.setHyperSpeed(false);
             break;
     }
 
@@ -240,7 +244,7 @@ int main(int argc, char** argv)
     glutInitWindowSize((int)width, (int)height);
     glutInitWindowPosition(100, 100); // Position the window's initial top-left corner
     /* create the window and store the handle to it */
-    wd = glutCreateWindow("Use w,a,s,d to move horizontally, and r and c to move vertically. Esc to quit." /* title */ );
+    wd = glutCreateWindow("Random City." /* title */ );
 
     // Register callback handler for window re-paint event
     glutDisplayFunc(display);

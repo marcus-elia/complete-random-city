@@ -40,11 +40,12 @@ void GameManager::initializeButtons()
 }
 void GameManager::initializeKeys()
 {
-    aKey = false, sKey = false, wKey = false, dKey = false, rKey = false, cKey = false;
+    aKey = false, sKey = false, wKey = false, dKey = false, rKey = false, cKey = false, hyperSpeed = false;
 }
 void GameManager::makeInstructions()
 {
-    instructions.push_back("Use w,a,s,d to move and r,c to move up and down. Press p to pause.");
+    instructions.emplace_back("Use w,a,s,d to move and r,c to move up and down. Press p to pause.");
+    instructions.emplace_back("Hold e to go fast.");
 }
 void GameManager::initializePlayer()
 {
@@ -163,6 +164,14 @@ void::GameManager::playerTick()
     // The player moves
     player.tick();
 
+    if(hyperSpeed)
+    {
+        for(int i = 0; i < HYPER_SPEED_FACTOR; i++)
+        {
+            player.tick();
+        }
+    }
+
     // Check for the player hitting a building
     Point2D curPlayerChunk = player.whatChunk();
     std::shared_ptr<Chunk> c = allSeenChunks[point2DtoChunkID(curPlayerChunk)];
@@ -277,6 +286,10 @@ void GameManager::setCKey(bool input)
 {
     cKey = input;
     player.setVelocity(wKey, aKey, sKey, dKey, rKey, cKey);
+}
+void GameManager::setHyperSpeed(bool input)
+{
+    hyperSpeed = input;
 }
 
 // ============================

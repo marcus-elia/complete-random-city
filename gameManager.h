@@ -20,7 +20,7 @@ private:
     Player player;
 
     // Controls
-    bool wKey, aKey, sKey, dKey, rKey, cKey;
+    bool wKey, aKey, sKey, dKey, rKey, cKey, hyperSpeed;
 
     // Chunks
     int renderRadius;
@@ -56,6 +56,7 @@ private:
     double PLAYER_RADIUS = 3;
     double PLAYER_SPEED = 2;
     double MOUSE_SENSITIVITY = 0.005;
+    int HYPER_SPEED_FACTOR = 6;
     int BUTTON_WIDTH = 128;
     int BUTTON_HEIGHT = 64;
     int BUTTON_RADIUS = 16;
@@ -96,6 +97,7 @@ public:
     void setDKey(bool input);
     void setRKey(bool input);
     void setCKey(bool input);
+    void setHyperSpeed(bool input);
 
     // Chunks
     double getPerlinValue(Point2D p); // the value of the Perlin noise map at that point
