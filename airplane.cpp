@@ -134,6 +134,11 @@ void Airplane::initializeSolids()
                                                            {1,1,1,1}, solidCenter, lookingAt, 0, {0,0,0}, location)));
 
 }
+void Airplane::initializeHitbox()
+{
+    hitbox = RecPrism(location, {1,0.9,0.9,0.5}, width, height, length, {1,1,1,1});
+    hitbox.rotate(0, xzAngle - 3*PI/2, 0);
+}
 
 void Airplane::tick()
 {
@@ -171,4 +176,8 @@ void Airplane::draw() const
         s->draw();
     }
     glLineWidth(2.0);
+}
+void Airplane::drawHitbox() const
+{
+    hitbox.draw();
 }

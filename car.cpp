@@ -17,6 +17,7 @@ RoadPlot* inputCurrentRoad) : Vehicle(inputLocation, inputLookingAt, inputSpeed,
     carType = inputCarType;
     currentRoad = inputCurrentRoad;
     initializeSolids();
+    initializeHitbox();
     initializeDirections();
 }
 
@@ -116,6 +117,11 @@ void Car::initializeSolids()
     backRightWheel->rotate(0, 0, PI/2);
     solids.push_back(backRightWheel);
 
+}
+void Car::initializeHitbox()
+{
+    hitbox = RecPrism(location, {1,0.9,0.9,0.5}, width, height, length, {1,1,1,1});
+    hitbox.rotate(0, xzAngle - 3*PI/2, 0);
 }
 void Car::initializeDirections()
 {
@@ -436,6 +442,11 @@ void Car::draw() const
     }
     glLineWidth(2.0);
     glEnable(GL_CULL_FACE);
+}
+
+void Car::drawHitbox() const
+{
+    hitbox.draw();
 }
 
 

@@ -65,7 +65,7 @@ void movePoint(Point &p, double deltaX, double deltaY, double deltaZ);
 void rotatePointAroundPoint(Point &p, const Point &pBase, double thetaX, double thetaY, double thetaZ);
 
 // Returns rotated copy of p, leaving p unchanged
-Point getRotatedPointAroundPoint(const Point &p, const Point &pBase, double thetaX, double thetaY, double thetaZ)
+Point getRotatedPointAroundPoint(const Point &p, const Point &pBase, double thetaX, double thetaY, double thetaZ);
 
 // ============= Collision =============
 // Working in the xz-plane, assume there is a rectangle centered at c that is aligned with the x,z-axes

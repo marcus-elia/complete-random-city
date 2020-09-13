@@ -26,10 +26,12 @@ public:
 
     void startOnRunway();
     void initializeSolids();
+    void initializeHitbox();
 
     void tick();
 
     void draw() const;
+    void drawHitbox() const;
 };
 
 #endif //COMPLETE_RANDOM_CITY_AIRPLANE_H

@@ -18,6 +18,7 @@ typeOfAirship inputAirshipType) : Vehicle(inputLocation, inputLookingAt, inputSp
     bodyColor = inputBodyColor;
     airshipType = inputAirshipType;
     initializeSolids();
+    initializeHitbox();
     target = location;
     turnSpeed = 0.01;
 }
@@ -80,10 +81,11 @@ void Dirigible::initializeSolids()
                             {1,1,1,1}, solidCenter, solidLookingAt, 0,
                             {0,0,-1}, location)));
     }
-    if(false)
-    {
-
-    }
+}
+void Dirigible::initializeHitbox()
+{
+    hitbox = RecPrism(location, {1,0.9,0.9,0.5}, width, height, length, {1,1,1,1});
+    hitbox.rotate(0, xzAngle - 3*PI/2, 0);
 }
 
 // Getters
@@ -122,6 +124,10 @@ void Dirigible::draw() const
         s->draw();
     }
     glLineWidth(2.0);
+}
+void Dirigible::drawHitbox() const
+{
+    hitbox.draw();
 }
 
 void Dirigible::tick()

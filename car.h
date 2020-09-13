@@ -33,6 +33,8 @@ private:
     std::vector<Point2D> turnPoints;
     // How much to rotate by each frame when turning
     double deltaTheta;
+
+    RecPrism hitbox;
 public:
     Car();
     Car(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
@@ -40,6 +42,7 @@ public:
             typeOfCar inputCarType, RoadPlot* inputCurrentRoad);
 
     void initializeSolids();
+    void initializeHitbox();
     void initializeDirections();
 
     // Getters
@@ -77,6 +80,7 @@ public:
     void checkStatusApproaching();
 
     void draw() const;
+    void drawHitbox() const;
 
     void tick();
 };

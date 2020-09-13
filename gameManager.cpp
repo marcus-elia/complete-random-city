@@ -131,6 +131,7 @@ void GameManager::draw() const
         for(std::shared_ptr<Vehicle> v : vehicles)
         {
             v->draw();
+            v->drawHitbox();
         }
         for(std::shared_ptr<Dirigible> d : dirigibles)
         {

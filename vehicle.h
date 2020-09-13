@@ -5,6 +5,7 @@
 
 #include "movable.h"
 #include "solid.h"
+#include "recPrism.h"
 #include <vector>
 #include <memory>
 
@@ -12,11 +13,13 @@ class Vehicle : public Movable
 {
 protected:
     std::vector<std::shared_ptr<Solid>> solids;
+    RecPrism hitbox;
 public:
     Vehicle();
     Vehicle(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity);
 
     virtual void initializeSolids() = 0;
+    virtual void initializeHitbox() = 0;
 
     std::vector<std::shared_ptr<Solid>> getSolids() const;
 
@@ -27,6 +30,10 @@ public:
 
     void move(double deltaX, double deltaY, double deltaZ);
     void rotate(double thetaX, double thetaY, double thetaZ);
+
+    virtual void drawHitbox() const = 0;
+
+    std::experimental::optional<Point> correctCollision(Point p, double buffer) const;
 };
 
 #endif //COMPLETE_RANDOM_CITY_VEHICLE_H

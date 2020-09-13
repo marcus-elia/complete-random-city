@@ -29,6 +29,7 @@ public:
     typeOfAirship inputAirshipType);
 
     void initializeSolids();
+    void initializeHitbox();
 
     // Getters
     double getLength() const;
@@ -41,6 +42,7 @@ public:
     void setWidth(double inputWidth);
 
     void draw() const;
+    void drawHitbox() const;
 
     void tick();
 
