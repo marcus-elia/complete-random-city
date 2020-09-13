@@ -23,10 +23,10 @@ void ForestPlot::initializeTrees()
     {
         Point2D p = getRandomPoint();
         double r = 8 + rand() % 2;
-        if(isValidTreeLocation(p, r))
+        if(isValidTreeLocation(p, r) && (rand() % 100 > 80))
         {
             Point location = {static_cast<double>(p.x), 0, static_cast<double>(p.z)};
-            double trunkHeight = 25 + (rand() % 20) + 2*level;
+            double trunkHeight = 25 + (rand() % 20) + 4*level;
             double leavesHeight = 15 + (rand() % 14) + 3*level;
             double leavesXZRadius = 3*r + 2 + (rand() % 20) + level;
             trees.emplace_back(location, trunkHeight, r, leavesHeight, leavesXZRadius);
