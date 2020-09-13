@@ -123,6 +123,11 @@ void Car::initializeHitbox()
     Point inputCenter = {location.x, location.y - WHEEL_RADIUS, location.z};
     hitbox = std::make_shared<RecPrism>(RecPrism(inputCenter, {.7,0.1,0.1,0.5}, width+2*WHEEL_WIDTH, height + WHEEL_RADIUS, length, {1,1,1,1}));
     hitbox->rotate(0, xzAngle - 3*PI/2, 0);
+    
+    frontCollisionPoint = {location.x, location.y, location.z - 7*length/16};
+    rotatePointAroundPoint(frontCollisionPoint, location, 0, xzAngle - 3*PI/2, 0);
+    backCollisionPoint = {location.x, location.y, location.z + 7*length/16};
+    rotatePointAroundPoint(backCollisionPoint, location, 0, xzAngle - 3*PI/2, 0);
 }
 void Car::initializeDirections()
 {

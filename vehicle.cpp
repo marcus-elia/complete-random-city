@@ -15,6 +15,14 @@ std::vector<std::shared_ptr<Solid>> Vehicle::getSolids() const
 {
     return solids;
 }
+Point Vehicle::getFrontCollisionPoint() const
+{
+    return frontCollisionPoint;
+}
+Point Vehicle::getBackCollisionPoint() const
+{
+    return backCollisionPoint;
+}
 
 void Vehicle::setLookingAt(Point inputLookingAt)
 {
@@ -46,6 +54,8 @@ void Vehicle::setXZAngle(double inputAngle)
         s->rotateAroundOwner(0, thetaY, 0);
     }
     hitbox->rotate(0, thetaY, 0);
+    rotatePointAroundPoint(frontCollisionPoint, location, 0, thetaY, 0);
+    rotatePointAroundPoint(backCollisionPoint, location, 0, thetaY, 0);
 }
 
 
@@ -62,6 +72,8 @@ void Vehicle::move(double deltaX, double deltaY, double deltaZ)
         s->moveOwnerCenter(deltaX, deltaY, deltaZ);
     }
     hitbox->move(deltaX, deltaY, deltaZ);
+    movePoint(frontCollisionPoint, deltaX, deltaY, deltaZ);
+    movePoint(backCollisionPoint, deltaX, deltaY, deltaZ);
 }
 void Vehicle::rotate(double thetaX, double thetaY, double thetaZ)
 {
@@ -74,6 +86,8 @@ void Vehicle::rotate(double thetaX, double thetaY, double thetaZ)
         s->rotateAroundOwner(thetaX, thetaY, thetaZ);
     }
     hitbox->rotate(thetaX, thetaY, thetaZ);
+    rotatePointAroundPoint(frontCollisionPoint, location, thetaX, thetaY, thetaZ);
+    rotatePointAroundPoint(backCollisionPoint, location, thetaX, thetaY, thetaZ);
 }
 
 

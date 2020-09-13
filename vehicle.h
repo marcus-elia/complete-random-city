@@ -14,6 +14,8 @@ class Vehicle : public Movable
 protected:
     std::vector<std::shared_ptr<Solid>> solids;
     std::shared_ptr<RecPrism> hitbox;
+
+    Point frontCollisionPoint, backCollisionPoint;
 public:
     Vehicle();
     Vehicle(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity);
@@ -22,6 +24,8 @@ public:
     virtual void initializeHitbox() = 0;
 
     std::vector<std::shared_ptr<Solid>> getSolids() const;
+    Point getFrontCollisionPoint() const;
+    Point getBackCollisionPoint() const;
 
     // Rotating needs to be overridden because the Solids also need to turn when
     // the vehicle does

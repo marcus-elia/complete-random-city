@@ -138,6 +138,11 @@ void Airplane::initializeHitbox()
 {
     hitbox = std::make_shared<RecPrism>(RecPrism(location, {.7,0.1,0.1,0.5}, width, height, length, {1,1,1,1}));
     hitbox->rotate(0, xzAngle - 3*PI/2, 0);
+
+    frontCollisionPoint = {location.x, location.y, location.z - 7*length/16};
+    rotatePointAroundPoint(frontCollisionPoint, location, 0, xzAngle - 3*PI/2, 0);
+    backCollisionPoint = {location.x, location.y, location.z + 7*length/16};
+    rotatePointAroundPoint(backCollisionPoint, location, 0, xzAngle - 3*PI/2, 0);
 }
 
 void Airplane::tick()
