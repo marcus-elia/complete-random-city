@@ -71,6 +71,8 @@ private:
     RGBAcolor BUTTON_TEXT_COLOR = {1.0,1.0,1.0,1.0};      // White
     RGBAcolor CURSOR_COLOR = {0.3, 0.3, 0.3, 1.0};        // Dark Gray
     RGBAcolor BLACK = {0.0, 0.0, 0.0, 1.0};
+    RGBAcolor HITBOX_GREEN = {0.4, 1.0, 0.4, 0.5};
+    RGBAcolor HITBOX_RED = {1.0, 0.4, 0.4, 0.5};
 
 public:
     GameManager();
@@ -114,6 +116,7 @@ public:
     // Randomly spawns a car in the chunk the player is currently in
     // Returns true if successful
     bool createCar();
+    void updateCarCollisions();
 
     void manageDirigibles();
     bool createDirigible();

@@ -16,8 +16,8 @@ Airplane::Airplane() : Vehicle()
 }
 Airplane::Airplane(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
 double inputCruisingAltitude, Point inputRunwayStart, Point inputRunwayEnd,
-double inputLength, double inputHeight, double inputWidth)
-: Vehicle(inputLocation, inputLookingAt, inputSpeed, inputVelocity)
+double inputLength, double inputHeight, double inputWidth, RGBAcolor startingHitboxColor)
+: Vehicle(inputLocation, inputLookingAt, inputSpeed, inputVelocity, startingHitboxColor)
 {
     cruisingAltitude = inputCruisingAltitude;
     runwayStart = inputRunwayStart;
@@ -28,6 +28,7 @@ double inputLength, double inputHeight, double inputWidth)
     isTakingOff = true;
     startOnRunway();
     initializeSolids();
+    initializeHitbox(startingHitboxColor);
     double runwayAngle = atan2(runwayEnd.z - runwayStart.z, runwayEnd.x - runwayStart.x);
     setXZAngle(runwayAngle);
 }
@@ -134,9 +135,9 @@ void Airplane::initializeSolids()
                                                            {1,1,1,1}, solidCenter, lookingAt, 0, {0,0,0}, location)));
 
 }
-void Airplane::initializeHitbox()
+void Airplane::initializeHitbox(RGBAcolor startingHitboxColor)
 {
-    hitbox = std::make_shared<RecPrism>(RecPrism(location, {.7,0.1,0.1,0.5}, width, height, length, {1,1,1,1}));
+    hitbox = std::make_shared<RecPrism>(RecPrism(location, startingHitboxColor, width, height, length, {1,1,1,1}));
     hitbox->rotate(0, xzAngle - 3*PI/2, 0);
 
     frontCollisionPoint = {location.x, location.y, location.z - 7*length/16};

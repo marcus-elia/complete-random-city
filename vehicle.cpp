@@ -4,7 +4,7 @@ Vehicle::Vehicle() : Movable()
 {
 
 }
-Vehicle::Vehicle(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity) :
+Vehicle::Vehicle(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity, RGBAcolor startingHitboxColor) :
 Movable(inputLocation, inputLookingAt, inputSpeed, inputVelocity)
 {
 

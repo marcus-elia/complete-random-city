@@ -26,7 +26,7 @@ public:
     void initializeControlTower();
 
     // Planes
-    void createAirplane();
+    void createAirplane(RGBAcolor startingHitboxColor);
 
     // Getters
     Point getRunwayStart() const;

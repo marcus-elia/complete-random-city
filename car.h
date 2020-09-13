@@ -41,10 +41,10 @@ public:
     Car();
     Car(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
             double inputLength, double inputHeight, double inputWidth, RGBAcolor inputBodyColor,
-            typeOfCar inputCarType, RoadPlot* inputCurrentRoad);
+            typeOfCar inputCarType, RoadPlot* inputCurrentRoad, RGBAcolor startingHitboxColor);
 
     void initializeSolids();
-    void initializeHitbox();
+    void initializeHitbox(RGBAcolor startingHitboxColor);
     void initializeDirections();
 
     // Getters
@@ -66,6 +66,7 @@ public:
     void setApproachDirection(DrivingDirection input);
     void setExitDirection(DrivingDirection input);
     void setCurrentStatus(RoadStatus input);
+    void setHitboxColor(RGBAcolor input);
 
     // Helper functions for driving
     IntersectionDirection determineIntersectionDirection(DrivingDirection approach, DrivingDirection exit) const;

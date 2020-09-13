@@ -744,7 +744,7 @@ void Chunk::makeAirportCreatePlane()
 {
     if(hasAirport())
     {
-        airport.value().createAirplane();
+        airport.value().createAirplane({0.4, 1.0, 0.4, 0.5});
     }
 }
 

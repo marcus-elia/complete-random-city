@@ -8,7 +8,7 @@ Car::Car() : Vehicle()
 }
 Car::Car(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
 double inputLength, double inputHeight, double inputWidth, RGBAcolor inputBodyColor, typeOfCar inputCarType,
-RoadPlot* inputCurrentRoad) : Vehicle(inputLocation, inputLookingAt, inputSpeed, inputVelocity)
+RoadPlot* inputCurrentRoad, RGBAcolor startingHitboxColor) : Vehicle(inputLocation, inputLookingAt, inputSpeed, inputVelocity, startingHitboxColor)
 {
     length = inputLength;
     height = inputHeight;
@@ -17,7 +17,7 @@ RoadPlot* inputCurrentRoad) : Vehicle(inputLocation, inputLookingAt, inputSpeed,
     carType = inputCarType;
     currentRoad = inputCurrentRoad;
     initializeSolids();
-    initializeHitbox();
+    initializeHitbox(startingHitboxColor);
     initializeDirections();
 }
 
@@ -118,12 +118,12 @@ void Car::initializeSolids()
     solids.push_back(backRightWheel);
 
 }
-void Car::initializeHitbox()
+void Car::initializeHitbox(RGBAcolor startingHitboxColor)
 {
     Point inputCenter = {location.x, location.y - WHEEL_RADIUS, location.z};
-    hitbox = std::make_shared<RecPrism>(RecPrism(inputCenter, {.7,0.1,0.1,0.5}, width+2*WHEEL_WIDTH, height + WHEEL_RADIUS, length, {1,1,1,1}));
+    hitbox = std::make_shared<RecPrism>(RecPrism(inputCenter, startingHitboxColor, width+2*WHEEL_WIDTH, height + WHEEL_RADIUS, length, {1,1,1,1}));
     hitbox->rotate(0, xzAngle - 3*PI/2, 0);
-    
+
     frontCollisionPoint = {location.x, location.y, location.z - 7*length/16};
     rotatePointAroundPoint(frontCollisionPoint, location, 0, xzAngle - 3*PI/2, 0);
     backCollisionPoint = {location.x, location.y, location.z + 7*length/16};
@@ -228,7 +228,10 @@ void Car::setCurrentStatus(RoadStatus input)
 {
     currentStatus = input;
 }
-
+void Car::setHitboxColor(RGBAcolor input)
+{
+    hitbox->setColor(input);
+}
 
 IntersectionDirection Car::determineIntersectionDirection(DrivingDirection approach, DrivingDirection exit) const
 {

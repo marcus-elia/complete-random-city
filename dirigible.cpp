@@ -10,7 +10,7 @@ Dirigible::Dirigible() : Vehicle()
 }
 Dirigible::Dirigible(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
 double inputLength, double inputHeight, double inputWidth, RGBAcolor inputBodyColor,
-typeOfAirship inputAirshipType) : Vehicle(inputLocation, inputLookingAt, inputSpeed, inputVelocity)
+typeOfAirship inputAirshipType, RGBAcolor startingHitboxColor) : Vehicle(inputLocation, inputLookingAt, inputSpeed, inputVelocity, startingHitboxColor)
 {
     length = inputLength;
     height = inputHeight;
@@ -18,7 +18,7 @@ typeOfAirship inputAirshipType) : Vehicle(inputLocation, inputLookingAt, inputSp
     bodyColor = inputBodyColor;
     airshipType = inputAirshipType;
     initializeSolids();
-    initializeHitbox();
+    initializeHitbox(startingHitboxColor);
     target = location;
     turnSpeed = 0.01;
 }
@@ -82,11 +82,11 @@ void Dirigible::initializeSolids()
                             {0,0,-1}, location)));
     }
 }
-void Dirigible::initializeHitbox()
+void Dirigible::initializeHitbox(RGBAcolor startingHitboxColor)
 {
-    hitbox = std::make_shared<RecPrism>(RecPrism(location, {.7,0.1,0.1,0.5}, width, height, length, {1,1,1,1}));
+    hitbox = std::make_shared<RecPrism>(RecPrism(location, startingHitboxColor, width, height, length, {1,1,1,1}));
     hitbox->rotate(0, xzAngle - 3*PI/2, 0);
-    
+
     frontCollisionPoint = {location.x, location.y, location.z - 7*length/16};
     rotatePointAroundPoint(frontCollisionPoint, location, 0, xzAngle - 3*PI/2, 0);
     backCollisionPoint = {location.x, location.y, location.z + 7*length/16};

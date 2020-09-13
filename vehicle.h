@@ -18,10 +18,10 @@ protected:
     Point frontCollisionPoint, backCollisionPoint;
 public:
     Vehicle();
-    Vehicle(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity);
+    Vehicle(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity, RGBAcolor startingHitboxColor);
 
     virtual void initializeSolids() = 0;
-    virtual void initializeHitbox() = 0;
+    virtual void initializeHitbox(RGBAcolor startingHitboxColor) = 0;
 
     std::vector<std::shared_ptr<Solid>> getSolids() const;
     Point getFrontCollisionPoint() const;

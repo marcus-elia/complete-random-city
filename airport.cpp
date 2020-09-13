@@ -11,7 +11,7 @@ Airport::Airport(Point inputTopLeft, double inputPlotSize)
     plotSize = inputPlotSize;
     initializeRunwayPoints();
     initializeControlTower();
-    createAirplane();
+    createAirplane({0.4, 1.0, 0.4, 0.0});
 }
 
 
@@ -27,10 +27,10 @@ void Airport::initializeControlTower()
 }
 
 
-void Airport::createAirplane()
+void Airport::createAirplane(RGBAcolor startingHitboxColor)
 {
     airplanes.push_back(std::make_shared<Airplane>(Airplane(runwayStart, {runwayStart.x, runwayStart.y, runwayStart.z - 10},
-            1, {0,0,0}, 300, runwayStart, runwayEnd, 80, 25, 40)));
+            1, {0,0,0}, 300, runwayStart, runwayEnd, 80, 25, 40, startingHitboxColor)));
 }
 
 

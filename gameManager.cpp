@@ -205,10 +205,7 @@ void GameManager::carsTick()
     {
         c->tick();
     }
-    if(tickNumberMod100 == 0)
-    {
-        manageCars();
-    }
+    manageCars();
 }
 void GameManager::dirigiblesTick()
 {
@@ -402,18 +399,28 @@ std::shared_ptr<Chunk> GameManager::pointToChunk(Point p)
 void GameManager::manageCars()
 {
     // Remove any cars too far away
-    int L = cars.size();
-    int i = 0;
-    while(i < L)
+    if(tickNumberMod100 % 50 == 0)
     {
-        std::shared_ptr<Vehicle> v = cars[i];
-        if(distance2d(v->getLocation(), player.getLocation()) > 2*CHUNK_SIZE)
+        int L = cars.size();
+        int i = 0;
+        while(i < L)
         {
-            cars.erase(cars.begin() + i);
-            L--;
-            i--;
+            std::shared_ptr<Vehicle> v = cars[i];
+            if(distance2d(v->getLocation(), player.getLocation()) > 2*CHUNK_SIZE)
+            {
+                cars.erase(cars.begin() + i);
+                L--;
+                i--;
+            }
+            i++;
         }
-        i++;
+    }
+
+
+    // Check for collisions
+    if(tickNumberMod100 % 10 == 0)
+    {
+        updateCarCollisions();
     }
 
     // Add a new car if needed
@@ -488,8 +495,29 @@ bool GameManager::createCar()
     }
     cars.push_back(std::make_shared<Car>(Car(location, lookingAt, 2, {0,0,-1},
             25, 10, rp->getLaneWidth() - 4, inputColor,
-            inputCarType, rp)));
+            inputCarType, rp, HITBOX_GREEN)));
     return true;
+}
+
+void GameManager::updateCarCollisions()
+{
+    for(int i = 0; i < cars.size(); i++)
+    {
+        cars[i]->setHitboxColor(HITBOX_GREEN);
+    }
+    for(int i = 0; i < (int)cars.size()-1; i++)
+    {
+        std::shared_ptr<Car> c1 = cars[i];
+        for(int j = i+1; j < cars.size(); j++)
+        {
+            std::shared_ptr<Car> c2 = cars[j];
+            if(c1->correctCollision(c2->getFrontCollisionPoint(), 0) || c1->correctCollision(c2->getBackCollisionPoint(), 0))
+            {
+                c1->setHitboxColor(HITBOX_RED);
+                c2->setHitboxColor(HITBOX_RED);
+            }
+        }
+    }
 }
 
 
@@ -548,13 +576,13 @@ bool GameManager::createDirigible()
     {
         dirigibles.push_back(std::make_shared<Dirigible>(Dirigible(location, lookingAt, 0.3, {0,0,-1},
                                                                    90, 40, 40, inputColor,
-                                                                   Blimp)));
+                                                                   Blimp, HITBOX_GREEN)));
     }
     else
     {
         dirigibles.push_back(std::make_shared<Dirigible>(Dirigible(location, lookingAt, 0.1, {0,0,-1},
                                                                    40, 40, 40, inputColor,
-                                                                   Balloon)));
+                                                                   Balloon, HITBOX_GREEN)));
     }
 
     return true;

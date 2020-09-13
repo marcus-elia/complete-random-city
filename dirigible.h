@@ -26,10 +26,10 @@ public:
     Dirigible();
     Dirigible(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
     double inputLength, double inputHeight, double inputWidth, RGBAcolor inputBodyColor,
-    typeOfAirship inputAirshipType);
+    typeOfAirship inputAirshipType, RGBAcolor startingHitboxColor);
 
     void initializeSolids();
-    void initializeHitbox();
+    void initializeHitbox(RGBAcolor startingHitboxColor);
 
     // Getters
     double getLength() const;

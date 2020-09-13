@@ -22,11 +22,11 @@ public:
     Airplane();
     Airplane(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
             double inputCruisingAltitude, Point inputRunwayStart, Point inputRunwayEnd,
-             double inputLength, double inputHeight, double inputWidth);
+             double inputLength, double inputHeight, double inputWidth, RGBAcolor startingHitboxColor);
 
     void startOnRunway();
     void initializeSolids();
-    void initializeHitbox();
+    void initializeHitbox(RGBAcolor startingHitboxColor);
 
     void tick();
 
