@@ -15,11 +15,21 @@ If you are on windows, you need to download freeglut, make the directory
 If you are not on windows, it should just work.
  
 ## Screenshots
+A city.
 ![](screenshots/city.png)
+Hitboxes detecting a collision.
+![](screenshots/hitboxes.png)
+The suburbs.
 ![](screenshots/suburb.png)
+A forest with hot air balloons.
 ![](screenshots/forest.png)
+A plane taking off from the airport.
 ![](screenshots/airport.png)
+A mansion.
 ![](screenshots/house.png)
+Cars driving on roads.
 ![](screenshots/cars.png)
+Blimps.
 ![](screenshots/airships.png)
+Roads in the city.
 ![](screenshots/roads.png)
