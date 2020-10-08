@@ -6,11 +6,13 @@ Solid::Solid()
     yWidth = 1;
     zWidth = 1;
     lineColor = {1,1,1,1};
+    linesDrawn = Normal;
     initializeCorners();
 }
 
 Solid::Solid(Point inputCenter, RGBAcolor inputColor,
-             double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor)
+             double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
+             linesDrawnEnum inputLinesDrawn)
 {
     center = inputCenter;
     color = inputColor;
@@ -18,6 +20,7 @@ Solid::Solid(Point inputCenter, RGBAcolor inputColor,
     yWidth = inputYWidth;
     zWidth = inputZWidth;
     lineColor = inputLineColor;
+    linesDrawn = inputLinesDrawn;
     initializeCorners();
     location = center;
     lookingAt = {0,0,0};
@@ -29,7 +32,8 @@ Solid::Solid(Point inputCenter, RGBAcolor inputColor,
 Solid::Solid(Point inputCenter, RGBAcolor inputColor,
              double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
              Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-             Point inputOwnerCenter) : MovableComponent(inputLocation, inputLookingAt, inputSpeed,
+             Point inputOwnerCenter, linesDrawnEnum inputLinesDrawn) :
+             MovableComponent(inputLocation, inputLookingAt, inputSpeed,
                      inputVelocity, inputOwnerCenter)
 {
     center = inputCenter;
@@ -38,6 +42,7 @@ Solid::Solid(Point inputCenter, RGBAcolor inputColor,
     yWidth = inputYWidth;
     zWidth = inputZWidth;
     lineColor = inputLineColor;
+    linesDrawn = inputLinesDrawn;
     initializeCorners();
 }
 
