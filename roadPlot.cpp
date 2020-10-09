@@ -15,6 +15,7 @@ RoadPlot::RoadPlot(Point2D inputTopLeftChunkCoords, Point2D inputCenter, int inp
     down = inputDown;
     initializeRoadCorners();
     initializeYellowLines();
+    initializeStreetLamp();
     leftRoad = std::experimental::nullopt;
     rightRoad = std::experimental::nullopt;
     upRoad = std::experimental::nullopt;
@@ -113,6 +114,27 @@ void RoadPlot::initializeYellowLines()
                                {(double)center.x, 0, center.z + sideLength/4.0}});
     }
 }
+void RoadPlot::initializeStreetLamp()
+{
+    if((rand() % 100) < 8)
+    {
+        Point location = {center.x + sideLength/4.0 + 2, 10, center.z + sideLength/4.0 + 2}; // location.y is halfway up the pole
+        double poleRadius = 0.75;
+        double poleHeight = 20;
+        double lightRadius = 0.25;
+        double lightHeight = 5;
+        double baseHeight = 5;
+        RGBAcolor poleColor = {0, 0.5, 0, 1};
+        streetLamp = StreetLamp(location, poleRadius, poleHeight, lightRadius, lightHeight, poleColor, {1,1,1,1});
+    }
+    else
+    {
+        streetLamp = std::experimental::nullopt;
+    }
+}
+
+
+
 
 // Getters
 bool RoadPlot::getLeft() const
@@ -146,6 +168,27 @@ std::experimental::optional<RoadPlot*> RoadPlot::getUpRoad() const
 std::experimental::optional<RoadPlot*> RoadPlot::getDownRoad() const
 {
     return downRoad;
+}
+int RoadPlot::getNumRoads() const
+{
+    int count = 0;
+    if(getUpRoad())
+    {
+        count++;
+    }
+    if(getDownRoad())
+    {
+        count++;
+    }
+    if(getLeftRoad())
+    {
+        count++;
+    }
+    if(getRightRoad())
+    {
+        count++;
+    }
+    return count;
 }
 
 // Setters
@@ -576,6 +619,11 @@ void RoadPlot::draw()
         }
         drawPoint(circlePoints[0]);
         glEnd();
+    }
+
+    if(streetLamp)
+    {
+        streetLamp->draw();
     }
 
 

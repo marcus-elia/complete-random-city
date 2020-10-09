@@ -2,6 +2,7 @@
 #define COMPLETE_RANDOM_CITY_ROADPLOT_H
 
 #include "plot.h"
+#include "streetLamp.h"
 #include <experimental/optional>
 #include <memory>
 #include <vector>
@@ -18,6 +19,9 @@ private:
     // The actual road in each direction, or nullopt
     std::experimental::optional<RoadPlot*> leftRoad, rightRoad, upRoad, downRoad;
 
+    // A streetlamp if conditions are met
+    std::experimental::optional<StreetLamp> streetLamp;
+
     // For drawing
     std::vector<Point> roadCorners;
     std::vector<Segment> yellowLines;
@@ -29,6 +33,7 @@ public:
 
     void initializeRoadCorners();
     void initializeYellowLines();
+    void initializeStreetLamp();
 
     // Getters
     bool getLeft() const;
@@ -39,6 +44,7 @@ public:
     std::experimental::optional<RoadPlot*> getRightRoad() const;
     std::experimental::optional<RoadPlot*> getUpRoad() const;
     std::experimental::optional<RoadPlot*> getDownRoad() const;
+    int getNumRoads() const; // The number of directions that go into this plot
 
     // Setters
     void setLeft(bool inputLeft);

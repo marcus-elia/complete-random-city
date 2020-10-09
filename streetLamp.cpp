@@ -34,17 +34,17 @@ void StreetLamp::initializeSolids()
     double baseTopRadius = 2.5*poleRadius;
     std::shared_ptr<Cylinder> base = std::make_shared<Cylinder>(Cylinder(baseCenter, poleColor,
                                                                                   2*baseRadius, baseHeight, 2*baseRadius, {1,1,1,1},
-                                                                                  2*baseTopRadius, 2*baseTopRadius,
+                                                                                  2*baseTopRadius, 2*baseTopRadius, 20,
                                                                                   NoLines));
     solids.push_back(base);
 
     // Pole
     Point poleCenter = {location.x, baseCenter.y + baseHeight/2 + poleHeight/2, location.z};
-    solids.push_back(std::make_shared<Cylinder>(Cylinder(poleCenter, poleColor, 2*poleRadius, poleHeight, 2*poleRadius, {1,1,1,1}, NoLines)));
+    solids.push_back(std::make_shared<Cylinder>(Cylinder(poleCenter, poleColor, 2*poleRadius, poleHeight, 2*poleRadius, {1,1,1,1}, 25,NoLines)));
 
     // Light bulb
     Point lightCenter = getLightLocation();
-    solids.push_back(std::make_shared<Cylinder>(Cylinder(lightCenter, lightColor, 2*lightRadius, lightHeight, 2*lightRadius, {1,1,1,1}, NoLines)));
+    solids.push_back(std::make_shared<Cylinder>(Cylinder(lightCenter, lightColor, 2*lightRadius, lightHeight, 2*lightRadius, {1,1,1,1}, 25, NoLines)));
 
     // Light covering
     RGBAcolor glass = {1.0, 1.0, 1.0, 0.5};
