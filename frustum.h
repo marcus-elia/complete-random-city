@@ -13,12 +13,14 @@ public:
     Frustum();
     Frustum(Point inputCenter, RGBAcolor inputColor,
              double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
-             double inputUpperXWidth, double inputUpperZWidth);
+             double inputUpperXWidth, double inputUpperZWidth,
+            linesDrawnEnum inputLinesDrawn=Normal);
     Frustum(Point inputCenter, RGBAcolor inputColor,
             double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
             double inputUpperXWidth, double inputUpperZWidth,
             Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-            Point inputOwnerCenter);
+            Point inputOwnerCenter,
+            linesDrawnEnum inputLinesDrawn=Normal);
 
     void initializeCorners();
 

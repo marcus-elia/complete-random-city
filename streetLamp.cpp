@@ -53,7 +53,7 @@ void StreetLamp::initializeSolids()
     // Roof
     double roofHeight = lightHeight/3;
     Point roofCenter = {location.x, lightCenter.y + lightHeight/2 + roofHeight/2, location.z};
-    solids.push_back(std::make_shared<Frustum>(Frustum(roofCenter, poleColor, 2*baseRadius+1, roofHeight, 2*baseRadius+1, {1,1,1,1}, poleRadius, poleRadius)));
+    solids.push_back(std::make_shared<Frustum>(Frustum(roofCenter, poleColor, 2*baseRadius+1, roofHeight, 2*baseRadius+1, {1,1,1,1}, poleRadius, poleRadius, NoLines)));
 }
 
 // Getters

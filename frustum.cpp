@@ -8,22 +8,26 @@ Frustum::Frustum() : Solid()
 }
 Frustum::Frustum(Point inputCenter, RGBAcolor inputColor,
 double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
-double inputUpperXWidth, double inputUpperZWidth) :
+double inputUpperXWidth, double inputUpperZWidth,
+                 linesDrawnEnum inputLinesDrawn) :
         Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor)
 {
     upperXWidth = inputUpperXWidth;
     upperZWidth = inputUpperZWidth;
+    linesDrawn = inputLinesDrawn;
     initializeCorners();
 }
 Frustum::Frustum(Point inputCenter, RGBAcolor inputColor,
         double inputXWidth, double inputYWidth, double inputZWidth, RGBAcolor inputLineColor,
         double inputUpperXWidth, double inputUpperZWidth,
         Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
-        Point inputOwnerCenter) : Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor,
+        Point inputOwnerCenter,
+        linesDrawnEnum inputLinesDrawn) : Solid(inputCenter, inputColor, inputXWidth, inputYWidth, inputZWidth, inputLineColor,
                                          inputLocation, inputLookingAt, inputSpeed, inputVelocity, inputOwnerCenter)
 {
     upperXWidth = inputUpperXWidth;
     upperZWidth = inputUpperZWidth;
+    linesDrawn = inputLinesDrawn;
     initializeCorners();
 }
 
@@ -47,7 +51,10 @@ void Frustum::lookAt(Point &p)
 
 void Frustum::draw() const
 {
-    drawLines();
+    if(linesDrawn != NoLines)
+    {
+        drawLines();
+    }
     drawFaces();
 }
 
