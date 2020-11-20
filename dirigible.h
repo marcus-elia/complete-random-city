@@ -22,6 +22,12 @@ private:
     Point target;
     double turnSpeed;
     bool needsToTurn;
+
+    // If it is a hot air balloon, it has 4 ropes
+    std::vector<Point> ropePoints;
+    // For rotating
+    Point balloonCenter;
+    Point basketTopCenter;
 public:
     Dirigible();
     Dirigible(Point inputLocation, Point inputLookingAt, double inputSpeed, Point inputVelocity,
@@ -29,6 +35,7 @@ public:
     typeOfAirship inputAirshipType, RGBAcolor startingHitboxColor);
 
     void initializeSolids();
+    void initializeRopes();
     void initializeHitbox(RGBAcolor startingHitboxColor);
 
     // Getters
@@ -40,8 +47,10 @@ public:
     void setLength(double inputLength);
     void setHeight(double inputHeight);
     void setWidth(double inputWidth);
+    void setXZAngle(double inputAngle);
 
     void draw() const;
+    void drawRopes() const;
     void drawHitbox() const;
 
     void tick();

@@ -80,7 +80,23 @@ void Dirigible::initializeSolids()
                 width/3, height/3, length/3,
                             {1,1,1,1}, solidCenter, solidLookingAt, 0,
                             {0,0,-1}, location)));
+        initializeRopes();
     }
+}
+void Dirigible::initializeRopes()
+{
+    balloonCenter = location;
+    basketTopCenter = {location.x, location.y - 1.3*height + width/6, location.z};
+    double cubeSize = width/3;
+    double sphereRadius = width/2;
+    ropePoints.push_back({basketTopCenter.x + cubeSize/2, basketTopCenter.y, basketTopCenter.z + cubeSize/2});
+    ropePoints.push_back({basketTopCenter.x - cubeSize/2, basketTopCenter.y, basketTopCenter.z + cubeSize/2});
+    ropePoints.push_back({basketTopCenter.x - cubeSize/2, basketTopCenter.y, basketTopCenter.z - cubeSize/2});
+    ropePoints.push_back({basketTopCenter.x + cubeSize/2, basketTopCenter.y, basketTopCenter.z - cubeSize/2});
+    ropePoints.push_back({balloonCenter.x + sphereRadius/sqrt(2), balloonCenter.y, balloonCenter.z + sphereRadius/sqrt(2)});
+    ropePoints.push_back({balloonCenter.x - sphereRadius/sqrt(2), balloonCenter.y, balloonCenter.z + sphereRadius/sqrt(2)});
+    ropePoints.push_back({balloonCenter.x - sphereRadius/sqrt(2), balloonCenter.y, balloonCenter.z - sphereRadius/sqrt(2)});
+    ropePoints.push_back({balloonCenter.x + sphereRadius/sqrt(2), balloonCenter.y, balloonCenter.z - sphereRadius/sqrt(2)});
 }
 void Dirigible::initializeHitbox(RGBAcolor startingHitboxColor)
 {
@@ -121,6 +137,19 @@ void Dirigible::setWidth(double inputWidth)
     width = inputWidth;
 }
 
+void Dirigible::setXZAngle(double inputAngle)
+{
+    if(airshipType == Balloon)
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            rotatePointAroundPoint(ropePoints[i], basketTopCenter, 0, inputAngle-xzAngle, 0);
+            rotatePointAroundPoint(ropePoints[i+4], balloonCenter, 0, inputAngle-xzAngle, 0);
+        }
+    }
+    Vehicle::setXZAngle(inputAngle);
+}
+
 void Dirigible::draw() const
 {
     glLineWidth(1.5);
@@ -129,6 +158,21 @@ void Dirigible::draw() const
         s->draw();
     }
     glLineWidth(2.0);
+    if(airshipType == Balloon)
+    {
+        drawRopes();
+    }
+}
+void Dirigible::drawRopes() const
+{
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+    glBegin(GL_LINES);
+    for(int i = 0; i < 4; i++)
+    {
+        drawPoint(ropePoints[i]);   // Bottom of line
+        drawPoint(ropePoints[i+4]); // Top of line
+    }
+    glEnd();
 }
 void Dirigible::drawHitbox() const
 {
@@ -138,6 +182,15 @@ void Dirigible::drawHitbox() const
 void Dirigible::tick()
 {
     move(velocity.x, velocity.y, velocity.z);
+    if(airshipType == Balloon)
+    {
+        for(int i = 0; i < 8; i++)
+        {
+            movePoint(ropePoints[i], velocity.x, velocity.y, velocity.z);
+        }
+        movePoint(basketTopCenter, velocity.x, velocity.y, velocity.z);
+        movePoint(balloonCenter, velocity.x, velocity.y, velocity.z);
+    }
     if(distance2d(target, location) < 10)
     {
         setRandomTarget();
