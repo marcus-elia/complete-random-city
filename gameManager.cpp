@@ -39,6 +39,10 @@ void GameManager::initializeButtons()
                         BUTTON_RADIUS, "Quit", QUIT_BUTTON_COLOR, BUTTON_TEXT_COLOR, QUIT_BUTTON_COLOR_H);
     hitboxButton = Button(screenWidth/2, screenHeight/2 - 2*BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT,
                           BUTTON_RADIUS, "Hitboxes", HITBOX_BUTTON_COLOR, BUTTON_TEXT_COLOR, HITBOX_BUTTON_COLOR_H);
+    incRenderRadButton = Button(screenWidth/2 + BUTTON_WIDTH, screenHeight/2 - BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT,
+                                BUTTON_RADIUS, "View++", INCRAD_BUTTON_COLOR, BUTTON_TEXT_COLOR, INCRAD_BUTTON_COLOR_H);
+    decRenderRadButton = Button(screenWidth/2 - BUTTON_WIDTH, screenHeight/2 - BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT,
+                                BUTTON_RADIUS, "View--", DECRAD_BUTTON_COLOR, BUTTON_TEXT_COLOR, DECRAD_BUTTON_COLOR_H);
 }
 void GameManager::initializeKeys()
 {
@@ -81,6 +85,10 @@ void GameManager::reactToMouseMovement(int mx, int my, double theta, double dist
         quitButton.setIsHighlighted(quitButton.containsPoint(mx, screenHeight - my));
 
         hitboxButton.setIsHighlighted(hitboxButton.containsPoint(mx, screenHeight - my));
+
+        incRenderRadButton.setIsHighlighted(incRenderRadButton.containsPoint(mx, screenHeight - my));
+
+        decRenderRadButton.setIsHighlighted(decRenderRadButton.containsPoint(mx, screenHeight - my));
     }
 }
 void GameManager::reactToMouseClick(int mx, int my)
@@ -120,6 +128,14 @@ void GameManager::reactToMouseClick(int mx, int my)
         else if(hitboxButton.containsPoint(mx, screenHeight - my))
         {
             showHitboxes = !showHitboxes;
+        }
+        else if(incRenderRadButton.containsPoint(mx, screenHeight - my))
+        {
+            updateRenderRadius(renderRadius + 1);
+        }
+        else if(decRenderRadButton.containsPoint(mx, screenHeight - my))
+        {
+            updateRenderRadius(renderRadius - 1);
         }
     }
 
@@ -394,8 +410,22 @@ std::shared_ptr<Chunk> GameManager::pointToChunk(Point p)
     return allSeenChunks[chunkIndex];
 }
 
+void GameManager::updateRenderRadius(int newRadius)
+{
+    if(newRadius > 0)
+    {
+        renderRadius = newRadius;
+        updateCurrentChunks();
+    }
+}
 
-// Vehicles
+
+
+// =============================================
+//
+//                Vehicles
+//
+// =============================================
 void GameManager::manageCars()
 {
     // Remove any cars too far away
@@ -647,6 +677,8 @@ void GameManager::drawUI() const
         continueButton.draw();
         quitButton.draw();
         hitboxButton.draw();
+        incRenderRadButton.draw();
+        decRenderRadButton.draw();
     }
     else if(currentStatus == End)
     {

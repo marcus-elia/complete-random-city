@@ -45,6 +45,8 @@ private:
     Button quitButton;
     Button continueButton;
     Button hitboxButton;
+    Button incRenderRadButton;
+    Button decRenderRadButton;
     std::vector<std::string> instructions;
 
     // Game parameters
@@ -65,9 +67,13 @@ private:
     RGBAcolor PLAY_BUTTON_COLOR = {0.0, 0.0, 0.7, 1.0};   // Slightly Dark Blue
     RGBAcolor QUIT_BUTTON_COLOR = {0.7, 0.0, 0.0, 1.0};   // Slightly Dark Red
     RGBAcolor HITBOX_BUTTON_COLOR = {0.9, 0.6, 0.1, 1.0};   // Orange
+    RGBAcolor DECRAD_BUTTON_COLOR = {0.2, 1.0, 0.2, 1.0};   // Green
+    RGBAcolor INCRAD_BUTTON_COLOR = {0.8, 0.8, 0.0, 1.0};   // Yellow
     RGBAcolor PLAY_BUTTON_COLOR_H = {0.0, 0.2, 1.0, 1.0}; // Lighter Blue
     RGBAcolor QUIT_BUTTON_COLOR_H = {1.0, 0.2, 0.0, 1.0}; // Lighter Red
     RGBAcolor HITBOX_BUTTON_COLOR_H = {1.0, 0.7, 0.2, 1.0}; // Lighter Orange
+    RGBAcolor DECRAD_BUTTON_COLOR_H = {0.5, 1.0, 0.5, 1.0}; // Lighter Green
+    RGBAcolor INCRAD_BUTTON_COLOR_H = {1.0, 1.0, 0.5, 1.0}; // Lighter Yellow
     RGBAcolor BUTTON_TEXT_COLOR = {1.0,1.0,1.0,1.0};      // White
     RGBAcolor CURSOR_COLOR = {0.3, 0.3, 0.3, 1.0};        // Dark Gray
     RGBAcolor BLACK = {0.0, 0.0, 0.0, 1.0};
@@ -110,6 +116,9 @@ public:
     void updateCurrentChunks();
     // Returns a pointer to the chunk that p is in
     std::shared_ptr<Chunk> pointToChunk(Point p);
+
+    // Changes the render radius, and updates the chunks
+    void updateRenderRadius(int newRadius);
 
     // Vehicles
     void manageCars();
